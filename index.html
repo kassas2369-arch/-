@@ -1,0 +1,1361 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="ar"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>تطبيق أبطال وعباقرة السنة الثالثة أساسي - تونس</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Cairo', sans-serif;
+      user-select: none;
+      -webkit-user-select: none;
+      background: linear-gradient(135deg, #fef3c7 0%, #fed7aa 50%, #fef08a 100%);
+      min-height: 100vh;
+      margin: 0;
+      padding: 0;
+    }
+    .word-highlight {
+      background: linear-gradient(120deg, #fef08a 0%, #fde047 100%);
+      transform: scale(1.12);
+      border-radius: 8px;
+      padding: 2px 6px;
+      color: #854d0e;
+      box-shadow: 0 4px 12px rgba(250, 204, 21, 0.45);
+      display: inline-block;
+      transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .clickable-word {
+      cursor: pointer;
+      display: inline-block;
+      padding: 2px 6px;
+      margin: 2px;
+      border-radius: 8px;
+      transition: all 0.15s ease;
+    }
+    .clickable-word:hover {
+      background-color: #e0f2fe;
+      color: #0284c7;
+      transform: translateY(-2px);
+    }
+    @keyframes bounce-gentle {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+    .animate-gentle {
+      animation: bounce-gentle 2.5s infinite ease-in-out;
+    }
+    @keyframes pulse-lungs {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.15); }
+    }
+    .animate-lungs {
+      animation: pulse-lungs 3s infinite ease-in-out;
+    }
+    .badge-flag {
+      box-shadow: 0 2px 8px rgba(220, 38, 38, 0.25);
+    }
+  </style>
+</head>
+<body class="p-2 sm:p-5 flex flex-col items-center justify-start min-h-screen">
+<!-- شريط التحكم العلوي: تونس، مشاركة وتحميل فوري -->
+<header class="w-full max-w-xl mb-3 flex items-center justify-between gap-2 px-2">
+<div class="flex items-center gap-2">
+<span class="text-3xl animate-gentle drop-shadow">🇹🇳</span>
+<div>
+<div class="flex items-center gap-1.5">
+<h1 class="text-base sm:text-lg font-black text-amber-950 leading-tight">أَبْطَالُ الثَّالِثَةِ أَسَاسِي</h1>
+<span class="badge-flag bg-red-600 text-white text-[10px] font-extrabold px-1.5 py-0.5 rounded-full">تُونِس</span>
+</div>
+<p class="text-xs text-amber-800 font-bold">المِنْهَاجُ الرَّسْمِيُّ التُّونِسِيُّ 🌟 صَوْتٌ وَتَفَاعُلٌ</p>
+</div>
+</div>
+<!-- أزرار الإجراءات والمشاركة والتحميل -->
+<div class="flex items-center gap-1.5 sm:gap-2">
+<!-- زر المشاركة -->
+<button class="bg-blue-600 hover:bg-blue-700 active:scale-95 text-white font-bold text-xs sm:text-sm px-3 py-2 rounded-2xl shadow-md transition flex items-center gap-1 cursor-pointer" onclick="shareApp()">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path>
+</svg>
+<span>مُشَارَكَة</span>
+</button>
+<!-- زر تحميل ملف HTML مباشرة على الجهاز -->
+<button class="bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-bold text-xs sm:text-sm px-3 py-2 rounded-2xl shadow-md transition flex items-center gap-1 cursor-pointer" onclick="downloadSelf()">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path>
+</svg>
+<span>تَحْمِيلٌ</span>
+</button>
+</div>
+</header>
+<!-- إطار شاشة التطبيق الرئيسية -->
+<main class="w-full max-w-xl bg-white/95 backdrop-blur rounded-3xl shadow-2xl border-4 border-amber-300 overflow-hidden flex flex-col relative mb-4">
+<!-- بطاقة بطل اليوم ورصيد النجوم -->
+<section class="bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 p-4 text-white relative shadow">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-14 h-14 bg-white/20 backdrop-blur-md rounded-2xl p-1 border-2 border-white/40 flex items-center justify-center text-3xl shadow-inner">
+            🦁
+          </div>
+<div>
+<div class="flex items-center gap-1.5">
+<span class="text-[11px] bg-black/25 px-2 py-0.5 rounded-full font-extrabold text-amber-100">السَّنَةُ الثَّالِثَةُ أَسَاسِي</span>
+<span class="text-[10px] bg-red-700/80 px-2 py-0.5 rounded-full font-extrabold text-white">تُونِس 🇹🇳</span>
+</div>
+<h2 class="text-lg font-black mt-1 tracking-tight text-white drop-shadow-sm">البَطَلُ سَلِيم المُمْتَازُ 🌟</h2>
+</div>
+</div>
+<!-- رصيد النجوم -->
+<div class="bg-white/25 backdrop-blur-md px-3.5 py-2 rounded-2xl border border-white/40 flex items-center gap-2 shadow">
+<span class="text-2xl animate-spin" style="animation-duration: 6s;">⭐</span>
+<div class="flex flex-col items-center">
+<span class="font-black text-xl text-yellow-200 leading-none" id="star-count">290</span>
+<span class="text-[10px] font-bold text-amber-100">نَجْمَة</span>
+</div>
+</div>
+</div>
+<!-- تبويبات التنقل التفاعلية - تشمل القراءة، القواعد، الإيقاظ العلمي، الحساب، التحدي -->
+<div class="grid grid-cols-5 gap-1 mt-4 text-[10px] sm:text-xs font-black">
+<button class="py-2 px-1 bg-white text-orange-600 rounded-xl shadow flex items-center justify-center gap-0.5 transition" id="tab-reading" onclick="switchTab('reading')">
+          📖 <span>القِرَاءَة</span>
+</button>
+<button class="py-2 px-1 bg-amber-800/40 hover:bg-white/20 text-white rounded-xl flex items-center justify-center gap-0.5 transition" id="tab-grammar" onclick="switchTab('grammar')">
+          ✍️ <span>القَوَاعِد</span>
+</button>
+<button class="py-2 px-1 bg-amber-800/40 hover:bg-white/20 text-white rounded-xl flex items-center justify-center gap-0.5 transition" id="tab-science" onclick="switchTab('science')">
+          🔬 <span>الإِيقَاظ</span>
+</button>
+<button class="py-2 px-1 bg-amber-800/40 hover:bg-white/20 text-white rounded-xl flex items-center justify-center gap-0.5 transition" id="tab-math" onclick="switchTab('math')">
+          📐 <span>الحِسَاب</span>
+</button>
+<button class="py-2 px-1 bg-amber-800/40 hover:bg-white/20 text-white rounded-xl flex items-center justify-center gap-0.5 transition" id="tab-quiz" onclick="switchTab('quiz')">
+          🎯 <span>التَّحَدِّي</span>
+</button>
+</div>
+</section>
+<!-- 1. قسم درس القراءة التونسي التفاعلي -->
+<div class="p-4 space-y-4" id="section-reading">
+<!-- اختيار النص التونسي المعتمد -->
+<div class="flex items-center justify-between bg-amber-50 p-2.5 rounded-2xl border border-amber-200">
+<span class="text-xs font-black text-amber-900">اخْتَرْ نَصَّ القِرَاءَةِ:</span>
+<div class="flex gap-1.5">
+<button class="story-choice-btn text-xs font-bold px-2.5 py-1 rounded-xl bg-amber-500 text-white shadow" id="story-btn-0" onclick="loadTunisianStory(0)">🌳 البَلْفِيدِير</button>
+<button class="story-choice-btn text-xs font-bold px-2.5 py-1 rounded-xl bg-white border border-amber-300 text-amber-900" id="story-btn-1" onclick="loadTunisianStory(1)">🏡 ضَيْعَةُ الجَدّ</button>
+<button class="story-choice-btn text-xs font-bold px-2.5 py-1 rounded-xl bg-white border border-amber-300 text-amber-900" id="story-btn-2" onclick="loadTunisianStory(2)">🌊 سِيدِي بُوسَعِيد</button>
+</div>
+</div>
+<!-- بطاقة المشهد البصري والصورة -->
+<div class="bg-gradient-to-b from-sky-50 to-blue-100/70 rounded-2xl p-4 border-2 border-sky-200 text-center relative overflow-hidden shadow-sm" id="story-visual-card">
+<div class="absolute top-2.5 right-2.5 bg-sky-500 text-white text-[11px] font-bold px-2.5 py-1 rounded-full flex items-center gap-1 shadow">
+          🔊 نُطْقٌ صَوْتِيٌّ نَقِيٌّ
+        </div>
+<div class="flex justify-center items-center gap-4 text-5xl py-3 filter drop-shadow" id="story-emoji-icon">
+<span class="animate-bounce">🌳</span>
+<span class="animate-gentle">🦁</span>
+<span class="animate-pulse">🌸</span>
+<span class="animate-gentle">🎈</span>
+</div>
+<h3 class="text-xl font-black text-sky-950 mt-1" id="story-title">فِي حَدِيقَةِ البَلْفِيدِير بِتُونِسَ</h3>
+<p class="text-xs text-sky-800 font-bold mt-1">اِضْغَطْ عَلَى أَيِّ كَلِمَةٍ مَشْكُولَةٍ لِسَمَاعِ نُطْقِهَا التَّعْلِيمِي الصَّحِيحِ</p>
+</div>
+<!-- بطاقة النص المشكول المتفاعل مع الصوت -->
+<div class="bg-amber-50/80 border-2 border-amber-200 rounded-2xl p-4 shadow space-y-3">
+<div class="flex items-center justify-between flex-wrap gap-2">
+<span class="text-xs font-black text-amber-900 flex items-center gap-1.5">
+            🎧 انْقُرْ عَلَى الكَلِمَاتِ أَوْ شَغِّلْ النَّصَّ:
+          </span>
+<!-- زر التشغيل الكلي Karaoke -->
+<button class="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 active:scale-95 text-white font-extrabold text-xs px-4 py-2 rounded-xl shadow-md flex items-center gap-1.5 transition cursor-pointer" id="play-full-btn" onclick="playFullText()">
+<span id="play-icon">▶️</span>
+<span id="play-text">تَشْغِيلُ النَّصِّ كَامِلًا</span>
+</button>
+</div>
+<!-- الصندوق التفاعلي للكلمات -->
+<div class="bg-white p-5 rounded-2xl border border-amber-200 text-center text-xl sm:text-2xl font-black leading-loose text-slate-800 shadow-inner min-h-[110px]" id="story-container">
+<!-- ستملأ برمجياً حسب النص المختار -->
+</div>
+<!-- أزرار سرعة النطق -->
+<div class="flex items-center justify-center gap-3 pt-2 text-xs font-extrabold text-slate-700">
+<span>سُرْعَةُ النُّطْقِ:</span>
+<button class="speed-btn px-3 py-1.5 bg-amber-100 hover:bg-amber-200 text-amber-900 rounded-xl transition" onclick="setSpeed(0.7, this)">🐢 بَطِيءٌ</button>
+<button class="speed-btn px-3 py-1.5 bg-amber-500 text-white rounded-xl shadow transition" onclick="setSpeed(1.0, this)">⭐ طَبِيعِيٌّ</button>
+</div>
+</div>
+<!-- إرشادات المساعد الحكيم ميمون -->
+<div class="bg-emerald-50 border-2 border-emerald-200 rounded-2xl p-4 flex items-center justify-between gap-3 shadow-sm">
+<div class="flex items-center gap-3">
+<span class="text-4xl animate-gentle">🦉</span>
+<div>
+<h4 class="text-sm font-black text-emerald-950">نَصِيحَةُ الحَكِيمِ مَيْمُون:</h4>
+<p class="text-xs text-emerald-800 font-semibold leading-relaxed">اِقْرَأْ بِتَمَعُّنٍ يَا بَطَل، كُلُّ كَلِمَةٍ تَنْقُرُ عَلَيْهَا تَكْتَشِفُ تَرْكِيبَهَا وَنَوْعَهَا فِي اللُّغَةِ العَرَبِيَّةِ!</p>
+</div>
+</div>
+<button class="bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white text-xs font-bold px-3.5 py-2 rounded-xl shadow transition shrink-0" onclick="speakHelper('مَرْحَبًا بِكُمْ فِي قِسْمِ القِرَاءَةِ وَقَوَاعِدِ اللُّغَةِ لِلسَّنَةِ الثَّالِثَةِ أَسَاسِي بِتُونِس!')">
+          اِسْمَعْ 🗣️
+        </button>
+</div>
+</div>
+<!-- 2. قسم قواعد اللغة (نحو وصرف) - المنهاج التونسي للسنة الثالثة أساسي -->
+<div class="p-4 space-y-5 hidden" id="section-grammar">
+<!-- بنر مقدمة قواعد اللغة التونسية -->
+<div class="bg-gradient-to-r from-emerald-500 to-teal-600 text-white p-4 rounded-2xl shadow flex items-center justify-between">
+<div>
+<span class="text-[11px] bg-emerald-800/60 px-2 py-0.5 rounded-full font-bold">بَرْنَامَجُ قَوَاعِدِ اللُّغَةِ (تُونِس)</span>
+<h3 class="text-lg font-black mt-1">أَنْشِطَةُ النَّحْوِ وَالصَّرْفِ ✍️</h3>
+<p class="text-xs text-emerald-100">أَقْسَامُ الكَلَامِ، الجُمْلَةُ الفِعْلِيَّةُ وَالاسْمِيَّةُ، وَتَصْرِيفُ الأَفْعَالِ</p>
+</div>
+<span class="text-4xl">📚</span>
+</div>
+<!-- النشاط 1: تصنيف أقسام الكلام (اسم، فعل، حرف) -->
+<div class="bg-white border-2 border-emerald-200 rounded-2xl p-4 shadow-sm space-y-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="bg-emerald-100 text-emerald-800 text-xs font-black px-2 py-1 rounded-lg">نَشَاط 1</span>
+<h4 class="text-sm font-black text-slate-900">تَصْنِيفُ أَقْسَامِ الكَلِمَةِ (اسْمٌ - فِعْلٌ - حَرْفٌ)</h4>
+</div>
+<button class="text-xs bg-emerald-50 text-emerald-700 hover:bg-emerald-100 font-bold px-2 py-1 rounded-lg border border-emerald-200 flex items-center gap-1" onclick="speakGrammarIntro()">
+<span>🔊 شَرْح</span>
+</button>
+</div>
+<p class="text-xs text-slate-600 font-bold">انْقُرْ عَلَى نَوْعِ الكَلِمَةِ الصَّحِيحِ لِتَرْبَحَ النُّجُومَ:</p>
+<!-- صندوق الكلمة المعروضة للتصنيف -->
+<div class="bg-emerald-50/70 border border-emerald-200 rounded-2xl p-3.5 text-center">
+<span class="text-xs text-emerald-800 font-bold block mb-1">الْكَلِمَةُ المَطْلُوبَةُ:</span>
+<div class="text-2xl font-black text-emerald-950 py-1 tracking-wide" id="classify-target-word">
+            البَلْفِيدِيرُ
+          </div>
+<button class="mt-1 text-xs text-emerald-600 hover:text-emerald-800 font-bold inline-flex items-center gap-1 bg-white px-2 py-0.5 rounded-full border border-emerald-200 shadow-xs" onclick="speakCurrentClassifyWord()">
+<span>🔊 اسْتَمِعْ لِلْكَلِمَةِ</span>
+</button>
+</div>
+<!-- أزرار الاختيار الثلاثة: اسم / فعل / حرف -->
+<div class="grid grid-cols-3 gap-2">
+<button class="classify-btn py-3 px-2 bg-gradient-to-b from-sky-50 to-sky-100 border-2 border-sky-300 hover:bg-sky-200 active:scale-95 text-sky-950 font-black text-sm rounded-xl transition shadow-sm text-center" onclick="handleClassifyChoice('اسم', this)">
+            🏷️ اسْمٌ
+          </button>
+<button class="classify-btn py-3 px-2 bg-gradient-to-b from-amber-50 to-amber-100 border-2 border-amber-300 hover:bg-amber-200 active:scale-95 text-amber-950 font-black text-sm rounded-xl transition shadow-sm text-center" onclick="handleClassifyChoice('فعل', this)">
+            🏃 فِعْلٌ
+          </button>
+<button class="classify-btn py-3 px-2 bg-gradient-to-b from-purple-50 to-purple-100 border-2 border-purple-300 hover:bg-purple-200 active:scale-95 text-purple-950 font-black text-sm rounded-xl transition shadow-sm text-center" onclick="handleClassifyChoice('حرف', this)">
+            🔗 حَرْفٌ
+          </button>
+</div>
+<!-- رسالة التغذية الراجعة لنشاط التصنيف -->
+<div class="text-xs font-black p-2.5 rounded-xl hidden text-center" id="classify-feedback"></div>
+<!-- مؤشر التقدم -->
+<div class="flex items-center justify-between text-[11px] font-bold text-slate-500 pt-1">
+<span id="classify-progress-text">الْكَلِمَةُ 1 مِنْ 5</span>
+<button class="text-emerald-700 underline hover:text-emerald-900 font-black cursor-pointer" onclick="nextClassifyWord()">الْكَلِمَةُ التَّالِيَةُ ⬅️</button>
+</div>
+</div>
+<!-- النشاط 2: تصريف الأفعال مع الضمائر (أنا، نحن، هو، هي، أنت) -->
+<div class="bg-white border-2 border-orange-200 rounded-2xl p-4 shadow-sm space-y-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="bg-orange-100 text-orange-800 text-xs font-black px-2 py-1 rounded-lg">نَشَاط 2</span>
+<h4 class="text-sm font-black text-slate-900">تَصْرِيفُ الأَفْعَالِ فِي المَاضِي وَالمُضَارِعِ</h4>
+</div>
+<span class="text-xl">🔄</span>
+</div>
+<p class="text-xs text-slate-600 font-bold">
+          أَكْمِلِ الجُمْلَةَ بِالفِعْلِ المُنَاسِبِ لِلضَّمِيرِ:
+        </p>
+<!-- سؤال التصريف -->
+<div class="bg-orange-50/70 border border-orange-200 rounded-2xl p-3 text-center space-y-2">
+<div class="flex items-center justify-center gap-2">
+<span class="bg-orange-500 text-white font-black text-sm px-3 py-1 rounded-xl shadow-xs" id="conjugate-pronoun">أَنَا</span>
+<span class="text-base font-bold text-slate-700">+ الفعل:</span>
+<span class="font-black text-base text-orange-950" id="conjugate-verb-display">« رَسَمَ » (فِي المَاضِي)</span>
+</div>
+<div class="text-lg font-black text-slate-800 bg-white p-2.5 rounded-xl border border-orange-100 shadow-inner" id="conjugate-sentence-template">
+<span class="text-orange-600">أَنَا</span> ............. <span class="text-slate-600">عَلَمَ تُونِسَ العَزِيزَةَ. 🇹🇳</span>
+</div>
+</div>
+<!-- خيارات تصريف الفعل -->
+<div class="grid grid-cols-3 gap-2" id="conjugate-options">
+<!-- ستملأ تفاعلياً -->
+</div>
+<div class="text-xs font-black p-2.5 rounded-xl hidden text-center" id="conjugate-feedback"></div>
+<div class="flex items-center justify-between text-[11px] font-bold text-slate-500 pt-1">
+<span id="conjugate-progress-text">سُؤَالُ الصَّرْفِ 1 مِنْ 4</span>
+<button class="text-orange-700 underline hover:text-orange-900 font-black cursor-pointer" onclick="nextConjugateQuestion()">السُّؤَالُ التَّالِي ⬅️</button>
+</div>
+</div>
+<!-- النشاط 3: الجملة الاسمية والجملة الفعلية -->
+<div class="bg-white border-2 border-indigo-200 rounded-2xl p-4 shadow-sm space-y-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="bg-indigo-100 text-indigo-800 text-xs font-black px-2 py-1 rounded-lg">نَشَاط 3</span>
+<h4 class="text-sm font-black text-slate-900">مُمَيِّزُ الجُمْلَةِ الاسْمِيَّةِ وَالجُمْلَةِ الفِعْلِيَّةِ</h4>
+</div>
+<span class="text-xl">⚖️</span>
+</div>
+<div class="bg-indigo-50 border border-indigo-200 rounded-2xl p-3 text-center space-y-2">
+<span class="text-xs text-indigo-900 font-bold">حَدِّدْ نَوْعَ هَذِهِ الجُمْلَةِ:</span>
+<div class="text-lg font-black text-indigo-950 bg-white p-2.5 rounded-xl border border-indigo-100 shadow-inner" id="sentence-target-text">
+            « يَرْكُضُ سَلِيمٌ فِي ضَيْعَةِ جَدِّهِ كَامِلٍ. »
+          </div>
+<button class="text-xs text-indigo-600 hover:text-indigo-800 font-bold inline-flex items-center gap-1 bg-white px-2 py-0.5 rounded-full border border-indigo-200 shadow-xs" onclick="speakCurrentSentence()">
+<span>🔊 اسْتَمِعْ لِلْجُمْلَةِ</span>
+</button>
+</div>
+<div class="grid grid-cols-2 gap-3" id="sentence-buttons-box">
+<button class="sentence-btn py-3 px-3 bg-gradient-to-b from-blue-50 to-blue-100 hover:bg-blue-200 border-2 border-blue-300 text-blue-950 font-black text-sm rounded-xl transition shadow-sm text-center" onclick="checkSentenceType('فعلية', this)">
+            🚀 جُمْلَةٌ فِعْلِيَّةٌ (تَبْدَأُ بِفِعْلٍ)
+          </button>
+<button class="sentence-btn py-3 px-3 bg-gradient-to-b from-emerald-50 to-emerald-100 hover:bg-emerald-200 border-2 border-emerald-300 text-emerald-950 font-black text-sm rounded-xl transition shadow-sm text-center" onclick="checkSentenceType('اسمية', this)">
+            🏛️ جُمْلَةٌ اسْمِيَّةٌ (تَبْدَأُ بِاسْمٍ)
+          </button>
+</div>
+<div class="text-xs font-black p-2.5 rounded-xl hidden text-center" id="sentence-feedback"></div>
+<div class="flex items-center justify-between text-[11px] font-bold text-slate-500 pt-1">
+<span id="sentence-progress-text">الجُمْلَةُ 1 مِنْ 5</span>
+<button class="text-indigo-700 underline hover:text-indigo-900 font-black cursor-pointer" onclick="nextSentenceQuestion()">الجُمْلَةُ التَّالِيَةُ ⬅️</button>
+</div>
+</div>
+<!-- بطاقة القاعدة الميسرة مع تونس الخضراء -->
+<div class="bg-amber-100/70 border border-amber-300 rounded-2xl p-3.5 space-y-1.5 text-xs text-amber-950 font-bold">
+<div class="flex items-center gap-1.5 text-amber-900 font-black text-sm">
+<span>💡</span>
+<span>تَذَكَّرْ دَائِمًا يَا بَطَلَ تَوْنِسَ:</span>
+</div>
+<ul class="list-disc list-inside space-y-1 pr-1 text-amber-900">
+<li><strong>الاسْمُ:</strong> يَدُلُّ عَلَى إِنْسَانٍ أَوْ حَيَوَانٍ أَوْ نَبَاتٍ أَوْ شَيْءٍ (يَقْبَلُ «الـ»).</li>
+<li><strong>الفِعْلُ:</strong> عَمَلٌ يَقَعُ فِي زَمَنٍ مُعَيَّنٍ (مَاضٍ، مُضَارِعٌ، أَمْرٌ).</li>
+<li><strong>الجُمْلَةُ الفِعْلِيَّةُ:</strong> هِيَ كُلُّ جُمْلَةٍ تَبْدَأُ بِفِعْلٍ.</li>
+</ul>
+</div>
+</div>
+<!-- 3. قسم الإيقاظ العلمي (التربية العلمية التونسية للسنة الثالثة أساسي) الجديد -->
+<div class="p-4 space-y-4 hidden" id="section-science">
+<!-- بنر الإيقاظ العلمي -->
+<div class="bg-gradient-to-r from-teal-500 via-emerald-600 to-cyan-600 text-white p-4 rounded-2xl shadow flex items-center justify-between">
+<div>
+<div class="flex items-center gap-1.5">
+<span class="text-[10px] bg-teal-800/70 px-2 py-0.5 rounded-full font-bold">المِنْهَاجُ التُّونِسِيُّ 🇹🇳</span>
+<span class="text-[10px] bg-white/20 px-2 py-0.5 rounded-full font-bold">السَّنَةُ 3 أَسَاسِي</span>
+</div>
+<h3 class="text-lg font-black mt-1">الإِيقَاظُ العِلْمِيُّ التَّفَاعُلِيُّ 🔬</h3>
+<p class="text-xs text-teal-100">التَّنَفُّسُ، أَنْمَاطُ التَّنَقُّلِ، وَالنِّظَامُ الغِذَائِيُّ لِلْحَيَوَانِ</p>
+</div>
+<span class="text-4xl animate-gentle">🫁</span>
+</div>
+<!-- المحور الأول: استكشاف حركة التنفس (الشهيق والزفير) -->
+<div class="bg-gradient-to-b from-sky-50 to-teal-50 border-2 border-teal-200 rounded-2xl p-4 shadow-sm space-y-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="bg-teal-600 text-white text-[11px] font-black px-2 py-0.5 rounded-lg">دَرْسٌ 1</span>
+<h4 class="text-sm font-black text-slate-900">حَرَكَاتُ التَّنَفُّسِ: الشَّهِيقُ وَالزَّفِيرُ</h4>
+</div>
+<button class="bg-white border border-teal-300 text-teal-700 hover:bg-teal-100 text-xs font-bold px-2 py-1 rounded-xl shadow-xs flex items-center gap-1" onclick="speakVoice('التَّنَفُّسُ ضَرُورِيٌّ لِلْحَيَاةِ، فِي الشَّهِيقِ يَدْخُلُ الهَوَاءُ النَّقِيُّ فَيَعْلُو القَفَصُ الصَّدْرِيُّ، وَفِي الزَّفِيرِ يَخْرُجُ الهَوَاءُ فَيَنْخَفِضُ القَفَصُ الصَّدْرِيُّ!')">
+<span>🔊 اسْتَمِعْ</span>
+</button>
+</div>
+<!-- تفاعلية حركة الصدر مع الرئتين -->
+<div class="bg-white p-3.5 rounded-2xl border border-teal-200 text-center space-y-2">
+<div class="flex items-center justify-center gap-6">
+<div class="flex flex-col items-center">
+<div class="text-4xl animate-lungs" id="lung-icon">🫁</div>
+<span class="text-xs font-extrabold text-teal-900 mt-1" id="breath-status-label">الهَوَاءُ النَّقِيُّ (الأُكْسِيجِين)</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-2 pt-1">
+<button class="p-2.5 rounded-xl border-2 border-teal-400 bg-teal-50 hover:bg-teal-100 text-teal-950 font-black text-xs transition active:scale-95 shadow-xs flex flex-col items-center gap-1" onclick="triggerBreathing('inhale')">
+<span class="text-xl">🌬️ ⬆️</span>
+<span>1. الشَّهِيقُ (يَدْخُلُ الهَوَاءُ وَيَعْلُو الصَّدْرُ)</span>
+</button>
+<button class="p-2.5 rounded-xl border-2 border-cyan-400 bg-cyan-50 hover:bg-cyan-100 text-cyan-950 font-black text-xs transition active:scale-95 shadow-xs flex flex-col items-center gap-1" onclick="triggerBreathing('exhale')">
+<span class="text-xl">💨 ⬇️</span>
+<span>2. الزَّفِيرُ (يَخْرُجُ الهَوَاءُ وَيَنْخَفِضُ الصَّدْرُ)</span>
+</button>
+</div>
+<div class="text-xs font-black p-2 rounded-xl bg-teal-50 text-teal-900 border border-teal-200" id="breathing-explanation">
+اِضْغَطْ عَلَى الشَّهِيقِ أَوْ الزَّفِيرِ لِمُشَاهَدَةِ حَرَكَةِ القَفَصِ الصَّدْرِيِّ!
+</div>
+</div>
+</div>
+<!-- المحور الثاني: أنماط التنقل عند الحيوانات (المشي، العدو، القفز، السباحة، الطيران) -->
+<div class="bg-white border-2 border-teal-200 rounded-2xl p-4 shadow-sm space-y-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="bg-emerald-600 text-white text-[11px] font-black px-2 py-0.5 rounded-lg">دَرْسٌ 2</span>
+<h4 class="text-sm font-black text-slate-900">أَنْمَاطُ التَّنَقُّلِ وَأَعْضَاؤُهَا عِنْدَ الحَيَوَانَاتِ</h4>
+</div>
+<span class="text-xs text-emerald-700 font-black bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">صَوْتٌ 🔊</span>
+</div>
+<p class="text-xs text-slate-600 font-bold">اِضْغَطْ عَلَى أَيِّ حَيَوَانٍ لِسَمَاعِ نَمَطِ تَنَقُّلِهِ وَعُضْوِ الحَرَكَةِ:</p>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+<button class="p-2.5 rounded-xl border-2 border-amber-200 bg-amber-50 hover:bg-amber-100 text-amber-950 text-center transition active:scale-95 shadow-xs flex flex-col items-center" onclick="speakScienceCard('الأَرْنَبُ يَتَنَقَّلُ بِالقَفْزِ، وَيَسْتَعْمِلُ طَرَفَيْنِ خَلْفِيَّيْنِ طَوِيلَيْنِ عَلَى شَكْلِ زِد!')">
+<span class="text-3xl">🐇</span>
+<span class="text-xs font-black mt-1">الأَرْنَبُ</span>
+<span class="text-[10px] text-amber-800 font-bold">نَمَطُهُ: القَفْزُ 🦘</span>
+</button>
+<button class="p-2.5 rounded-xl border-2 border-sky-200 bg-sky-50 hover:bg-sky-100 text-sky-950 text-center transition active:scale-95 shadow-xs flex flex-col items-center" onclick="speakScienceCard('السَّمَكَةُ تَتَنَقَّلُ بِالسِّبَاحَةِ فِي المَاءِ، وَعُضْوُ الحَرَكَةِ هُوَ الزَّعَانِفُ!')">
+<span class="text-3xl">🐟</span>
+<span class="text-xs font-black mt-1">السَّمَكَةُ</span>
+<span class="text-[10px] text-sky-800 font-bold">نَمَطُهَا: السِّبَاحَةُ 🌊</span>
+</button>
+<button class="p-2.5 rounded-xl border-2 border-blue-200 bg-blue-50 hover:bg-blue-100 text-blue-950 text-center transition active:scale-95 shadow-xs flex flex-col items-center" onclick="speakScienceCard('الحَمَامَةُ تَتَنَقَّلُ بِالطَّيَرَانِ فِي الهَوَاءِ، وَعُضْوُ الحَرَكَةِ هُوَ الجَنَاحَانِ المَكْسُوَّانِ بِالرِّيشِ!')">
+<span class="text-3xl">🕊️</span>
+<span class="text-xs font-black mt-1">الحَمَامَةُ</span>
+<span class="text-[10px] text-blue-800 font-bold">نَمَطُهَا: الطَّيَرَانُ 🪶</span>
+</button>
+<button class="p-2.5 rounded-xl border-2 border-orange-200 bg-orange-50 hover:bg-orange-100 text-orange-950 text-center transition active:scale-95 shadow-xs flex flex-col items-center" onclick="speakScienceCard('الحِصَانُ يَتَنَقَّلُ بِالمَشْيِ وَالعَدْوِ، وَلَهُ قَوَائِمُ قَوِيَّةٌ تَنْتَهِي بِحَوَافِرَ!')">
+<span class="text-3xl">🐎</span>
+<span class="text-xs font-black mt-1">الحِصَانُ</span>
+<span class="text-[10px] text-orange-800 font-bold">نَمَطُهُ: العَدْوُ 🐎</span>
+</button>
+</div>
+</div>
+<!-- المحور الثالث: نشاط تفاعلي اختباري في الإيقاظ العلمي -->
+<div class="bg-white border-2 border-purple-200 rounded-2xl p-4 shadow-sm space-y-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="bg-purple-600 text-white text-[11px] font-black px-2 py-0.5 rounded-lg">تَحَدٍّ عِلْمِيٌّ</span>
+<h4 class="text-sm font-black text-slate-900">اخْتَبِرْ مَعَارِفَكَ العِلْمِيَّةَ يَا عَبْقَرِي</h4>
+</div>
+<span class="text-xl">💡</span>
+</div>
+<div class="bg-purple-50 border border-purple-200 rounded-2xl p-3.5 text-center space-y-2">
+<span class="text-xs font-extrabold text-purple-900 block" id="science-q-category">النِّظَامُ الغِذَائِيُّ وَأَعْضَاءُ الحَرَكَةِ</span>
+<div class="text-base sm:text-lg font-black text-purple-950 bg-white p-2.5 rounded-xl border border-purple-100 shadow-inner" id="science-q-text">
+مَا هُوَ عُضْوُ الحَرَكَةِ الرَّئِيسِيُّ الَّذِي يُسَاعِدُ الأَرْنَبَ عَلَى القَفْزِ؟
+</div>
+<button class="text-xs text-purple-700 hover:text-purple-900 font-bold inline-flex items-center gap-1 bg-white px-2 py-0.5 rounded-full border border-purple-200 shadow-xs" onclick="speakScienceCurrentQ()">
+<span>🔊 اسْتَمِعْ لِلسُّؤَالِ</span>
+</button>
+</div>
+<!-- خيارات التحدي العلمي -->
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-2" id="science-options-box">
+<!-- ستملأ بالأزرار برمجياً -->
+</div>
+<div class="text-xs font-black p-2.5 rounded-xl hidden text-center" id="science-feedback"></div>
+<div class="flex items-center justify-between text-[11px] font-bold text-slate-500 pt-1">
+<span id="science-progress-text">السُّؤَالُ 1 مِنْ 5</span>
+<button class="text-purple-700 underline hover:text-purple-900 font-black cursor-pointer" onclick="nextScienceQuestion()">السُّؤَالُ التَّالِي ⬅️</button>
+</div>
+</div>
+<!-- نصيحة الحكيم ميمون للإيقاظ العلمي -->
+<div class="bg-emerald-50 border-2 border-emerald-200 rounded-2xl p-4 flex items-center justify-between gap-3 shadow-sm">
+<div class="flex items-center gap-3">
+<span class="text-4xl animate-gentle">🦉</span>
+<div>
+<h4 class="text-sm font-black text-emerald-950">نَصِيحَةُ العَالِمِ مَيْمُون:</h4>
+<p class="text-xs text-emerald-800 font-semibold leading-relaxed">تُونِسُنَا خَضْرَاءُ غَنِيَّةٌ بِالأَشْجَارِ كَالزَّيْتُونِ، وَالنَّبَاتَاتُ تُعْطِينَا الأُكْسِيجِينَ النَّقِيَّ الَّذِي نَتَنَفَّسُهُ فِي الشَّهِيقِ.. حَافِظُوا عَلَى الطَّبِيعَةِ!</p>
+</div>
+</div>
+<button class="bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white text-xs font-bold px-3 py-2 rounded-xl shadow transition shrink-0" onclick="speakVoice('تُونِسُنَا خَضْرَاءُ غَنِيَّةٌ بِالأَشْجَارِ كَالزَّيْتُونِ، وَالنَّبَاتَاتُ تُعْطِينَا الأُكْسِيجِينَ النَّقِيَّ الَّذِي نَتَنَفَّسُهُ فِي الشَّهِيقِ.. حَافِظُوا عَلَى الطَّبِيعَةِ!')">
+          اِسْمَعْ 🗣️
+</button>
+</div>
+</div>
+<!-- 4. قسم الرياضيات التفاعلي (جداول الضرب والأعداد) -->
+<div class="p-4 space-y-4 hidden" id="section-math">
+<div class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white p-4 rounded-2xl shadow flex items-center justify-between">
+<div>
+<span class="text-[11px] bg-blue-800/60 px-2 py-0.5 rounded-full font-bold">السَّنَةُ الثَّالِثَةُ أَسَاسِي</span>
+<h3 class="text-lg font-black mt-1">الرِّيَاضِيَّاتُ وَالحِسَابُ الذِّهْنِي 📐</h3>
+<p class="text-xs text-blue-100">جَدَاوِلُ الضَّرْبِ (2، 3، 4، 5) وَتَحَدِّي الأَعْدَادِ</p>
+</div>
+<span class="text-4xl">🔢</span>
+</div>
+<!-- تمرين جدول الضرب السريع -->
+<div class="bg-white border-2 border-blue-200 rounded-2xl p-4 shadow-sm space-y-3 text-center">
+<span class="text-xs font-black text-blue-900 block">احْسِبْ بِسُرْعَةٍ يَا عَبْقَرِي:</span>
+<div class="bg-blue-50 border border-blue-200 rounded-2xl p-4 text-3xl font-black text-blue-950 flex items-center justify-center gap-3">
+<span id="math-num1">5</span>
+<span class="text-orange-500">×</span>
+<span id="math-num2">4</span>
+<span>=</span>
+<span class="text-orange-600 font-extrabold">؟</span>
+</div>
+<div class="grid grid-cols-3 gap-2 pt-2" id="math-options">
+<!-- ستملأ بالأرقام تفاعلياً -->
+</div>
+<div class="text-xs font-black p-2.5 rounded-xl hidden text-center" id="math-feedback"></div>
+<button class="text-xs font-bold text-blue-700 hover:text-blue-900 underline mt-2 cursor-pointer" onclick="newMathProblem()">
+          عَمَلِيَّةٌ حِسَابِيَّةٌ جَدِيدَةٌ 🔄
+        </button>
+</div>
+<!-- بطاقات سريعة للمواد الإضافية -->
+<div class="grid grid-cols-2 gap-3">
+<div class="bg-green-50 border-2 border-green-200 p-3 rounded-2xl cursor-pointer hover:scale-102 transition text-center shadow-xs" onclick="switchTab('science')">
+<span class="text-3xl">🔬</span>
+<h4 class="font-black text-sm text-green-900 mt-1">إِيقَاظٌ عِلْمِيٌّ</h4>
+<p class="text-[10px] text-green-700 font-bold">التَّنَفُّسُ وَالتَّنَقُّلُ عِنْدَ الحَيَوَانِ</p>
+</div>
+<div class="bg-emerald-50 border-2 border-emerald-200 p-3 rounded-2xl cursor-pointer hover:scale-102 transition text-center shadow-xs" onclick="speakSubject('التربية الإسلامية: سورة الإخلاص والتراحم وحسن الخلق')">
+<span class="text-3xl">🕌</span>
+<h4 class="font-black text-sm text-emerald-900 mt-1">تَرْبِيَةٌ إِسْلَامِيَّةٌ</h4>
+<p class="text-[10px] text-emerald-700 font-bold">السُّوَرُ وَالأَخْلَاقُ الحَمِيدَةُ</p>
+</div>
+</div>
+</div>
+<!-- 5. قسم التحدي الشامل والاختبار السريع (Quiz) -->
+<div class="p-4 space-y-4 hidden" id="section-quiz">
+<div class="bg-purple-50 border-2 border-purple-200 rounded-2xl p-4 text-center shadow-sm">
+<div class="flex items-center justify-between mb-2">
+<span class="bg-purple-200 text-purple-900 text-xs font-black px-2.5 py-0.5 rounded-full" id="quiz-progress-text">السُّؤَالُ 1 مِنْ 5</span>
+<span class="text-xs font-bold text-purple-700">تَحَدِّي الأَبْطَال 🌟</span>
+</div>
+<span class="text-4xl animate-bounce inline-block mb-1">🎯</span>
+<h3 class="text-lg font-black text-purple-950">تَحَدِّي البَطَلِ التُّونِسِي الذَّكِيِّ</h3>
+<p class="text-sm text-purple-900 font-bold mt-1 bg-white/80 py-2.5 px-3 rounded-xl border border-purple-200" id="quiz-question-text">
+          مَا هُوَ نَوْعُ كَلِمَةِ «يَرْكُضُ» فِي جُمْلَةِ: يَرْكُضُ الأَطْفَالُ فِي المُنْتَزَهِ؟
+        </p>
+<!-- خيارات الإجابة -->
+<div class="grid grid-cols-1 gap-2.5 mt-4" id="quiz-buttons-container">
+<!-- تملأ بالأزرار برمجياً -->
+</div>
+<div class="mt-4 text-xs font-black hidden py-3 px-4 rounded-xl" id="quiz-feedback"></div>
+<div class="flex items-center justify-between text-[11px] font-bold text-slate-500 pt-3">
+<button class="text-purple-700 underline hover:text-purple-900 font-black cursor-pointer mr-auto" onclick="nextQuizQuestion()">السُّؤَالُ التَّالِي ⬅️</button>
+</div>
+</div>
+</div>
+<!-- شريط التنقل السفلي الثابت والمتناسق يشمل الإيقاظ العلمي -->
+<nav class="bg-amber-100/90 border-t-2 border-amber-200 px-2 py-2 flex items-center justify-around text-xs font-black text-amber-900">
+<button class="bottom-nav-item flex flex-col items-center gap-1 text-orange-600 hover:scale-105 transition cursor-pointer" id="bnav-reading" onclick="switchTab('reading')">
+<span class="text-xl">📖</span>
+<span class="text-[10px] sm:text-[11px]">القِرَاءَة</span>
+</button>
+<button class="bottom-nav-item flex flex-col items-center gap-1 text-slate-700 hover:text-orange-600 hover:scale-105 transition cursor-pointer" id="bnav-grammar" onclick="switchTab('grammar')">
+<span class="text-xl">✍️</span>
+<span class="text-[10px] sm:text-[11px]">القَوَاعِد</span>
+</button>
+<button class="bottom-nav-item flex flex-col items-center gap-1 text-slate-700 hover:text-orange-600 hover:scale-105 transition cursor-pointer" id="bnav-science" onclick="switchTab('science')">
+<span class="text-xl">🔬</span>
+<span class="text-[10px] sm:text-[11px]">الإِيقَاظ</span>
+</button>
+<button class="bottom-nav-item flex flex-col items-center gap-1 text-slate-700 hover:text-orange-600 hover:scale-105 transition cursor-pointer" id="bnav-math" onclick="switchTab('math')">
+<span class="text-xl">📐</span>
+<span class="text-[10px] sm:text-[11px]">الحِسَاب</span>
+</button>
+<button class="bottom-nav-item flex flex-col items-center gap-1 text-slate-700 hover:text-orange-600 hover:scale-105 transition cursor-pointer" id="bnav-quiz" onclick="switchTab('quiz')">
+<span class="text-xl">⭐</span>
+<span class="text-[10px] sm:text-[11px]">التَّحَدِّي</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-blue-700 hover:scale-105 transition cursor-pointer" onclick="shareApp()">
+<span class="text-xl">🔗</span>
+<span class="text-[10px] sm:text-[11px]">مُشَارَكَة</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-emerald-700 hover:scale-105 transition cursor-pointer" onclick="downloadSelf()">
+<span class="text-xl">📥</span>
+<span class="text-[10px] sm:text-[11px]">تَحْمِيل</span>
+</button>
+</nav>
+</main>
+<footer class="text-center text-xs text-amber-900 font-black space-y-1 pb-4">
+<p>💡 صُمم هذا التطبيق التفاعلي للمنهاج التونسي - السنة الثالثة من التعليم الأساسي (قراءة، نحو وصرف، إيقاظ علمي، حساب)</p>
+<p class="text-[11px] text-amber-800/80 font-bold">يعمل دون اتصال إنترنت عند تحميله على الهاتف أو الحاسوب 🇹🇳</p>
+</footer>
+<!-- الأكواد البرمجية والتفاعلية للنطق وقواعد اللغة والتمارين والإيقاظ العلمي -->
+<script>
+    let speechRate = 1.0;
+    let isPlaying = false;
+    let stars = 290;
+
+    // 1. نصوص القراءة المستوحاة من المنهاج التونسي للسنة الثالثة
+    const tunisianStories = [
+      {
+        title: "فِي حَدِيقَةِ البَلْفِيدِير بِتُونِسَ",
+        emojis: ["🌳", "🦁", "🌸", "🎈"],
+        text: "زَارَ سَلِيمٌ حَدِيقَةَ البَلْفِيدِير مَعَ عَائِلَتِهِ، فَشَاهَدَ الأَسَدَ الشُّجَاعَ وَالأَشْجَارَ البَاسِقَةَ، ثُمَّ تَنَاوَلَ لَمْجَةً شَهِيَّةً وَهُوَ فَرِحٌ مَسْرُورٌ."
+      },
+      {
+        title: "ضَيْعَةُ الجَدِّ كَامِلٍ فِي الرِّيفِ",
+        emojis: ["🏡", "🐑", "🌿", "🚜"],
+        text: "اسْتَيْقَظَ الجَدُّ كَامِلٌ بَاكِرًا، وَسَقَى شُجَيْرَاتِ الزَّيْتُونِ المُبَارَكَةِ، ثُمَّ رَعَى الخِرَافَ فِي المَرْعَى الخَصِيبِ بِهِمَّةٍ وَنَشَاطٍ."
+      },
+      {
+        title: "جَوْلَةٌ سَاحِرَةٌ فِي سِيدِي بُوسَعِيد",
+        emojis: ["🌊", "⛵", "🏛️", "☕"],
+        text: "صَعِدَ الأَطْفَالُ هَضْبَةَ سِيدِي بُوسَعِيد العَالِيَةِ، فَأَعْجَبَهُمْ بَيَاضُ الجُدْرَانِ وَزُرْقَةُ الأَبْوَابِ وَمَنْظَرُ البَحْرِ الهَادِئِ الجَمِيلِ."
+      }
+    ];
+
+    let currentStoryIndex = 0;
+
+    function loadTunisianStory(index) {
+      currentStoryIndex = index;
+      const s = tunisianStories[index];
+      
+      document.querySelectorAll('.story-choice-btn').forEach((btn, i) => {
+        if (i === index) {
+          btn.className = 'story-choice-btn text-xs font-bold px-2.5 py-1 rounded-xl bg-amber-500 text-white shadow';
+        } else {
+          btn.className = 'story-choice-btn text-xs font-bold px-2.5 py-1 rounded-xl bg-white border border-amber-300 text-amber-900';
+        }
+      });
+
+      document.getElementById('story-title').innerText = s.title;
+      document.getElementById('story-emoji-icon').innerHTML = s.emojis.map(e => `<span class="animate-gentle">${e}</span>`).join('');
+      
+      // تفكيك الكلمات
+      const words = s.text.split(' ');
+      const container = document.getElementById('story-container');
+      container.innerHTML = words.map(w => `<span class="clickable-word" onclick="speakSingleWord(this)">${w}</span>`).join(' ');
+
+      if (isPlaying) resetFullPlay();
+    }
+
+    // 2. بنك بيانات أنشطة قواعد اللغة (النحو والصرف)
+    // النشاط 1: تصنيف أقسام الكلام
+    const classifyList = [
+      { word: "البَلْفِيدِيرُ", type: "اسم", reason: "اسْمُ مَكَانٍ عَرِيقٍ يَبْدَأُ بِـ 'الـ'" },
+      { word: "يَرْكُضُ", type: "فعل", reason: "فِعْلٌ مُضَارِعٌ يَدُلُّ عَلَى عَمَلٍ فِي الحَاضِرِ" },
+      { word: "فِي", type: "حرف", reason: "حَرْفُ جَرٍّ يَرْبِطُ بَيْنَ الكَلِمَاتِ" },
+      { word: "أَشْجَارٌ", type: "اسم", reason: "اسْمٌ يَدُلُّ عَلَى نَبَاتٍ وَيَقْبَلُ التَّنْوِينَ" },
+      { word: "يُشَاهِدُ", type: "فعل", reason: "فِعْلٌ مُضَارِعٌ يَدُلُّ عَلَى الرُّؤْيَةِ وَالعَمَلِ" },
+      { word: "عَلَى", type: "حرف", reason: "حَرْفُ جَرٍّ يُفِيدُ الاسْتِعْلَاءَ" },
+      { word: "سَلِيمٌ", type: "اسم", reason: "اسْمُ عَلَمٍ لِإِنْسَانٍ مُنَوَّنٌ" }
+    ];
+    let classifyIndex = 0;
+    let classifyAutoTimer = null;
+
+    function renderClassifyCard() {
+      if (classifyAutoTimer) clearTimeout(classifyAutoTimer);
+      const item = classifyList[classifyIndex];
+      document.getElementById('classify-target-word').innerText = item.word;
+      document.getElementById('classify-progress-text').innerText = `الْكَلِمَةُ ${classifyIndex + 1} مِنْ ${classifyList.length}`;
+      const fb = document.getElementById('classify-feedback');
+      fb.classList.add('hidden');
+      fb.innerHTML = '';
+      
+      // إعادة تعيين ألوان أزرار التصنيف
+      document.querySelectorAll('.classify-btn').forEach(btn => {
+        btn.classList.remove('ring-4', 'ring-emerald-400', 'ring-rose-400');
+      });
+    }
+
+    function handleClassifyChoice(chosenType, btn) {
+      const current = classifyList[classifyIndex];
+      const fb = document.getElementById('classify-feedback');
+      fb.classList.remove('hidden', 'bg-emerald-100', 'text-emerald-900', 'bg-rose-100', 'text-rose-900');
+
+      if (chosenType === current.type) {
+        if (btn) btn.classList.add('ring-4', 'ring-emerald-400');
+        fb.classList.add('bg-emerald-100', 'text-emerald-900');
+        fb.innerHTML = `🎉 مُمْتَازٌ! كَلِمَةُ <strong>«${current.word}»</strong> هِيَ <strong>${current.type}</strong>. ${current.reason}! (+10 نُجُوم)`;
+        addStars(10);
+        speakVoice(`أَحْسَنْتَ! كَلِمَةُ ${current.word} هِيَ ${current.type}`);
+        confettiEffect();
+
+        // انتقال تلقائي بعد ثانية ونصف
+        if (classifyAutoTimer) clearTimeout(classifyAutoTimer);
+        classifyAutoTimer = setTimeout(() => {
+          nextClassifyWord();
+        }, 1600);
+      } else {
+        if (btn) btn.classList.add('ring-4', 'ring-rose-400');
+        fb.classList.add('bg-rose-100', 'text-rose-900');
+        fb.innerHTML = `حَاوِلْ مُجَدَّدًا يَا بَطَل! كَلِمَةُ «${current.word}» لَيْسَتْ ${chosenType}. تَذَكَّرْ: ${current.reason}.`;
+        speakVoice('حَاوِلْ مَرَّةً أُخْرَى يَا بَطَل!');
+      }
+    }
+
+    function nextClassifyWord() {
+      if (classifyAutoTimer) clearTimeout(classifyAutoTimer);
+      classifyIndex = (classifyIndex + 1) % classifyList.length;
+      renderClassifyCard();
+    }
+
+    function speakCurrentClassifyWord() {
+      speakVoice(classifyList[classifyIndex].word);
+    }
+
+    // النشاط 2: تصريف الفعل
+    const conjugateQuestions = [
+      {
+        pronoun: "أَنَا",
+        verb: "« رَسَمَ » (فِي المَاضِي)",
+        sentenceTemplate: `<span class="text-orange-600">أَنَا</span> ............. <span class="text-slate-600">عَلَمَ تُونِسَ العَزِيزَةَ. 🇹🇳</span>`,
+        correct: "رَسَمْتُ",
+        options: ["رَسَمْتُ", "يَرْسُمُ", "رَسَمْنَا"]
+      },
+      {
+        pronoun: "نَحْنُ",
+        verb: "« غَرَسَ » (فِي المَاضِي)",
+        sentenceTemplate: `<span class="text-orange-600">نَحْنُ</span> ............. <span class="text-slate-600">شَجَرَةَ زَيْتُونٍ جَمِيلَةً. 🌿</span>`,
+        correct: "غَرَسْنَا",
+        options: ["تَغْرِسُ", "غَرَسْنَا", "غَرَسَ"]
+      },
+      {
+        pronoun: "هُوَ",
+        verb: "« قَرَأَ » (فِي المُضَارِعِ)",
+        sentenceTemplate: `<span class="text-orange-600">هُوَ</span> ............. <span class="text-slate-600">قِصَّةَ سِيدِي بُوسَعِيد. 📖</span>`,
+        correct: "يَقْرَأُ",
+        options: ["تَقْرَأُ", "يَقْرَأُ", "قَرَأْتُ"]
+      },
+      {
+        pronoun: "هِيَ",
+        verb: "« عَمِلَ » (فِي المُضَارِعِ)",
+        sentenceTemplate: `<span class="text-orange-600">هِيَ</span> ............. <span class="text-slate-600">بِنَشَاطٍ فِي المَدْرَسَةِ. 🎒</span>`,
+        correct: "تَعْمَلُ",
+        options: ["يَعْمَلُ", "عَمِلْتُ", "تَعْمَلُ"]
+      },
+      {
+        pronoun: "أَنْتَ",
+        verb: "« كَتَبَ » (فِي المَاضِي)",
+        sentenceTemplate: `<span class="text-orange-600">أَنْتَ</span> ............. <span class="text-slate-600">الدَّرْسَ بِخَطٍّ جَمِيلٍ. ✍️</span>`,
+        correct: "كَتَبْتَ",
+        options: ["كَتَبْتَ", "تَكْتُبُ", "كَتَبُوا"]
+      }
+    ];
+    let conjugateIndex = 0;
+    let conjugateAutoTimer = null;
+
+    function renderConjugateCard() {
+      if (conjugateAutoTimer) clearTimeout(conjugateAutoTimer);
+      const q = conjugateQuestions[conjugateIndex];
+      document.getElementById('conjugate-pronoun').innerText = q.pronoun;
+      document.getElementById('conjugate-verb-display').innerText = q.verb;
+      document.getElementById('conjugate-sentence-template').innerHTML = q.sentenceTemplate;
+      document.getElementById('conjugate-progress-text').innerText = `سُؤَالُ الصَّرْفِ ${conjugateIndex + 1} مِنْ ${conjugateQuestions.length}`;
+      
+      const optContainer = document.getElementById('conjugate-options');
+      optContainer.innerHTML = q.options.map(opt => `
+        <button onclick="checkConjugateAnswer('${opt}', this)" class="conj-btn py-2.5 px-2 bg-amber-50 hover:bg-orange-100 border-2 border-orange-200 text-orange-950 font-black text-sm rounded-xl transition shadow-xs cursor-pointer">
+          ${opt}
+        </button>
+      `).join('');
+
+      const fb = document.getElementById('conjugate-feedback');
+      fb.classList.add('hidden');
+      fb.innerHTML = '';
+    }
+
+    function checkConjugateAnswer(chosen, btn) {
+      const q = conjugateQuestions[conjugateIndex];
+      const fb = document.getElementById('conjugate-feedback');
+      fb.classList.remove('hidden', 'bg-emerald-100', 'text-emerald-900', 'bg-rose-100', 'text-rose-900');
+
+      if (chosen === q.correct) {
+        btn.classList.add('bg-emerald-500', 'text-white', 'border-emerald-600');
+        fb.classList.add('bg-emerald-100', 'text-emerald-900');
+        fb.innerHTML = `🌟 رَائِعٌ! مَعَ الضَّمِيرِ (${q.pronoun}) نَقُولُ: <strong>${q.correct}</strong>. (+10 نُجُوم)`;
+        addStars(10);
+        speakVoice(`أَحْسَنْتَ! ${q.pronoun} ${q.correct}`);
+        confettiEffect();
+
+        if (conjugateAutoTimer) clearTimeout(conjugateAutoTimer);
+        conjugateAutoTimer = setTimeout(() => {
+          nextConjugateQuestion();
+        }, 1700);
+      } else {
+        btn.classList.add('bg-rose-200', 'border-rose-400');
+        fb.classList.add('bg-rose-100', 'text-rose-900');
+        fb.innerHTML = `إِجَابَةٌ غَيْرُ صَحِيحَةٍ. حَاوِلْ مَرَّةً أُخْرَى مَعَ الضَّمِيرِ (${q.pronoun})!`;
+        speakVoice('حَاوِلْ مَرَّةً أُخْرَى يَا بَطَل!');
+      }
+    }
+
+    function nextConjugateQuestion() {
+      if (conjugateAutoTimer) clearTimeout(conjugateAutoTimer);
+      conjugateIndex = (conjugateIndex + 1) % conjugateQuestions.length;
+      renderConjugateCard();
+    }
+
+    // النشاط 3: الجملة الاسمية والجملة الفعلية
+    const sentenceList = [
+      {
+        text: "« يَرْكُضُ سَلِيمٌ فِي ضَيْعَةِ جَدِّهِ كَامِلٍ. »",
+        clean: "يَرْكُضُ سَلِيمٌ فِي ضَيْعَةِ جَدِّهِ كَامِلٍ",
+        type: "فعلية",
+        reason: "لِأَنَّهَا تَبْدَأُ بِالفِعْلِ: (يَرْكُضُ)"
+      },
+      {
+        text: "« تُونِسُ خَضْرَاءُ وَجَمِيلَةٌ. »",
+        clean: "تُونِسُ خَضْرَاءُ وَجَمِيلَةٌ",
+        type: "اسمية",
+        reason: "لِأَنَّهَا تَبْدَأُ بِاسْمِ: (تُونِس)"
+      },
+      {
+        text: "« سَقَى الفَلَّاحُ شَجَرَةَ الزَّيْتُونِ. »",
+        clean: "سَقَى الفَلَّاحُ شَجَرَةَ الزَّيْتُونِ",
+        type: "فعلية",
+        reason: "لِأَنَّهَا تَبْدَأُ بِالفِعْلِ المَاضِي: (سَقَى)"
+      },
+      {
+        text: "« البَحْرُ فِي سِيدِي بُوسَعِيد هَادِئٌ. »",
+        clean: "البحر في سيدي بوسعيد هادئ",
+        type: "اسمية",
+        reason: "لِأَنَّهَا تَبْدَأُ بِاسْمِ: (البَحْرُ)"
+      },
+      {
+        text: "« شَاهَدَ الأَطْفَالُ الحَيَوَانَاتِ فِي البَلْفِيدِير. »",
+        clean: "شاهد الأطفال الحيوانات في البلفيدير",
+        type: "فعلية",
+        reason: "لِأَنَّهَا تَبْدَأُ بِالفِعْلِ المَاضِي: (شَاهَدَ)"
+      }
+    ];
+    let sentenceIndex = 0;
+    let sentenceAutoTimer = null;
+
+    function renderSentenceCard() {
+      if (sentenceAutoTimer) clearTimeout(sentenceAutoTimer);
+      const s = sentenceList[sentenceIndex];
+      document.getElementById('sentence-target-text').innerText = s.text;
+      document.getElementById('sentence-progress-text').innerText = `الجُمْلَةُ ${sentenceIndex + 1} مِنْ ${sentenceList.length}`;
+      const fb = document.getElementById('sentence-feedback');
+      fb.classList.add('hidden');
+      fb.innerHTML = '';
+
+      // إعادة تهيئة أزرار الجملة
+      document.querySelectorAll('#sentence-buttons-box .sentence-btn').forEach(btn => {
+        btn.classList.remove('ring-4', 'ring-emerald-400', 'ring-rose-400', 'bg-emerald-500', 'text-white');
+      });
+    }
+
+    function checkSentenceType(chosen, btn) {
+      const s = sentenceList[sentenceIndex];
+      const fb = document.getElementById('sentence-feedback');
+      fb.classList.remove('hidden', 'bg-emerald-100', 'text-emerald-900', 'bg-rose-100', 'text-rose-900');
+
+      if (chosen === s.type) {
+        if (btn) btn.classList.add('ring-4', 'ring-emerald-400');
+        fb.classList.add('bg-emerald-100', 'text-emerald-900');
+        fb.innerHTML = `🎉 إِجَابَةٌ صَحِيحَةٌ! هِيَ <strong>جُمْلَةٌ ${s.type === 'فعلية' ? 'فِعْلِيَّةٌ' : 'اسْمِيَّةٌ'}</strong> ${s.reason}. (+10 نُجُوم)`;
+        addStars(10);
+        speakVoice(`إِجَابَةٌ صَحِيحَةٌ! هِيَ جُمْلَةٌ ${s.type === 'فعلية' ? 'فِعْلِيَّةٌ' : 'اسْمِيَّةٌ'}`);
+        confettiEffect();
+
+        if (sentenceAutoTimer) clearTimeout(sentenceAutoTimer);
+        sentenceAutoTimer = setTimeout(() => {
+          nextSentenceQuestion();
+        }, 1700);
+      } else {
+        if (btn) btn.classList.add('ring-4', 'ring-rose-400');
+        fb.classList.add('bg-rose-100', 'text-rose-900');
+        fb.innerHTML = `انْتَبِهْ يَا بَطَل! هِيَ جُمْلَةٌ ${s.type === 'فعلية' ? 'فِعْلِيَّةٌ' : 'اسْمِيَّةٌ'} ${s.reason}.`;
+        speakVoice('فَكِّرْ جَيِّدًا فِي الكَلِمَةِ الأُولَى مِنَ الجُمْلَةِ!');
+      }
+    }
+
+    function nextSentenceQuestion() {
+      if (sentenceAutoTimer) clearTimeout(sentenceAutoTimer);
+      sentenceIndex = (sentenceIndex + 1) % sentenceList.length;
+      renderSentenceCard();
+    }
+
+    function speakCurrentSentence() {
+      speakVoice(sentenceList[sentenceIndex].clean);
+    }
+
+    function speakGrammarIntro() {
+      speakVoice("فِي قَوَاعِدِ اللُّغَةِ التُّونِسِيَّةِ لِلسَّنَةِ الثَّالِثَةِ، نُمَيِّزُ بَيْنَ الِاسْمِ، وَالفِعْلِ، وَالحَرْفِ. وَنُمَيِّزُ بَيْنَ الجُمْلَةِ الاسْمِيَّةِ وَالجُمْلَةِ الفِعْلِيَّةِ!");
+    }
+
+    // 3. بنك الإيقاظ العلمي (التربية العلمية التونسية)
+    function triggerBreathing(type) {
+      const icon = document.getElementById('lung-icon');
+      const label = document.getElementById('breath-status-label');
+      const expl = document.getElementById('breathing-explanation');
+
+      if (type === 'inhale') {
+        icon.style.transform = 'scale(1.4)';
+        label.innerText = 'شَهِيقٌ: يَدْخُلُ الهَوَاءُ وَيَعْلُو الصَّدْرُ! 🫁⬆️';
+        expl.innerHTML = '✨ <strong>الشَّهِيقُ:</strong> يَدْخُلُ الأُكْسِيجِينُ النَّقِيُّ إِلَى الرِّئَتَيْنِ فَيَتَّسِعُ القَفَصُ الصَّدْرِيُّ وَيَعْلُو.';
+        speakVoice('شَهِيق: يَدْخُلُ الهَوَاءُ النَّقِيُّ فَيَعْلُو القَفَصُ الصَّدْرِيُّ');
+      } else {
+        icon.style.transform = 'scale(0.85)';
+        label.innerText = 'زَفِيرٌ: يَخْرُجُ الهَوَاءُ وَيَنْخَفِضُ الصَّدْرُ! 💨⬇️';
+        expl.innerHTML = '✨ <strong>الزَّفِيرُ:</strong> يَخْرُجُ الهَوَاءُ المُحَمَّلُ بِثَانِي أُكْسِيدِ الكَرْبُونِ فَيَنْخَفِضُ القَفَصُ الصَّدْرِيُّ.';
+        speakVoice('زَفِير: يَخْرُجُ الهَوَاءُ فَيَنْخَفِضُ القَفَصُ الصَّدْرِيُّ');
+      }
+      setTimeout(() => {
+        icon.style.transform = '';
+      }, 1800);
+    }
+
+    function speakScienceCard(text) {
+      speakVoice(text);
+    }
+
+    const scienceQuestions = [
+      {
+        category: "أَعْضَاءُ الحَرَكَةِ عِنْدَ الحَيَوَانَاتِ",
+        q: "مَا هُوَ عُضْوُ الحَرَكَةِ الرَّئِيسِيُّ الَّذِي يُسَاعِدُ الأَرْنَبَ عَلَى القَفْزِ؟",
+        clean: "ما هو عضو الحركة الرئيسي الذي يساعد الأرنب على القفز",
+        correct: "طَرَفَانِ خَلْفِيَّانِ طَوِيلَانِ 🦘",
+        options: ["طَرَفَانِ خَلْفِيَّانِ طَوِيلَانِ 🦘", "الزَّعَانِفُ وَالذَّيْلُ 🐟", "أَجْنِحَةٌ طَوِيلَةٌ 🕊️"],
+        reason: "لِأَنَّ الطَّرَفَيْنِ الخَلْفِيَّيْنِ لِلْأَرْنَبِ مَثْنِيَّانِ عَلَى شَكْلِ زِد (Z) لِلدَّفْعِ القَوِيِّ!"
+      },
+      {
+        category: "حَرَكَاتُ التَّنَفُّسِ",
+        q: "مَاذَا يَحْدُثُ لِلْقَفَصِ الصَّدْرِيِّ أَثْنَاءَ عَمَلِيَّةِ «الشَّهِيقِ»؟",
+        clean: "ماذا يحدث للقفص الصدري أثناء عملية الشهيق",
+        correct: "يَعْلُو وَيَتَّسِعُ الصَّدْرُ 🫁",
+        options: ["يَنْخَفِضُ الصَّدْرُ ⬇️", "يَعْلُو وَيَتَّسِعُ الصَّدْرُ 🫁", "يَبْقَى دُونَ حَرَكَةٍ ⏸️"],
+        reason: "لِأَنَّ الهَوَاءَ يَدْخُلُ الرِّئَتَيْنِ فَيَمْلَأُهُمَا وَيَرْفَعُ الصَّدْرَ!"
+      },
+      {
+        category: "أَنْظِمَةُ التَّغْذِيَةِ عِنْدَ الحَيَوَانِ",
+        q: "الخَرُوفُ وَالبَقَرَةُ فِي الرِّيفِ التُّونِسِيِّ هُمَا مِنْ آكِلَاتِ:",
+        clean: "الخروف والبقرة في الريف التونسي هما من آكلات",
+        correct: "العُشْبِ (عَاشِبٌ) 🌿",
+        options: ["اللُّحُومِ (لَاحِمٌ) 🥩", "العُشْبِ (عَاشِبٌ) 🌿", "الحُبُوبِ فَقَطْ 🌾"],
+        reason: "لِأَنَّهُمَا يَتَغَذَّيَانِ عَلَى الأَعْشَابِ وَالنَّبَاتَاتِ الخَضْرَاءِ!"
+      },
+      {
+        category: "أَنْسَاقُ التَّنَقُّلِ فِي المَاءِ",
+        q: "تَتَنَقَّلُ السَّمَكَةُ فِي مِيَاهِ سِيدِي بُوسَعِيد عَنْ طَرِيقِ:",
+        clean: "تتنقل السمكة في المياه عن طريق",
+        correct: "السِّبَاحَةِ بِالزَّعَانِفِ 🐟",
+        options: ["القَفْزِ عَلَى الشَّاطِئِ 🏖️", "السِّبَاحَةِ بِالزَّعَانِفِ 🐟", "المَشْيِ بِالقَوَائِمِ 🚶"],
+        reason: "لِأَنَّ الزَّعَانِفَ وَجِسْمَهَا الإِنْسِيَابِيَّ يُسَاعِدَانِهَا عَلَى دَفْعِ المَاءِ!"
+      },
+      {
+        category: "التَّنَفُّسُ عِنْدَ الإِنْسَانِ",
+        q: "الهَوَاءُ الَّذِي يَخْرُجُ أَثْنَاءَ الزَّفِيرِ يَكُونُ مُحَمَّلًا بِـ:",
+        clean: "الهواء الذي يخرج أثناء الزفير يكون محملا بـ",
+        correct: "ثَانِي أُكْسِيدِ الكَرْبُونِ 💨",
+        options: ["الأُكْسِيجِينِ النَّقِيِّ 🌬️", "ثَانِي أُكْسِيدِ الكَرْبُونِ 💨", "بُخَارِ العِطْرِ 🌸"],
+        reason: "لِأَنَّ الجِسْمَ يَطْرُدُ ثَانِي أُكْسِيدِ الكَرْبُونِ عِنْدَ انْخِفَاضِ القَفَصِ الصَّدْرِيِّ!"
+      }
+    ];
+    let scienceQIndex = 0;
+    let scienceAutoTimer = null;
+
+    function renderScienceQuiz() {
+      if (scienceAutoTimer) clearTimeout(scienceAutoTimer);
+      const q = scienceQuestions[scienceQIndex];
+      document.getElementById('science-q-category').innerText = q.category;
+      document.getElementById('science-q-text').innerText = q.q;
+      document.getElementById('science-progress-text').innerText = `السُّؤَالُ ${scienceQIndex + 1} مِنْ ${scienceQuestions.length}`;
+
+      const box = document.getElementById('science-options-box');
+      box.innerHTML = q.options.map(opt => `
+        <button onclick="checkScienceAnswer('${opt}', this)" class="sci-btn py-3 px-2 bg-purple-50 hover:bg-purple-100 border-2 border-purple-200 text-purple-950 font-black text-xs sm:text-sm rounded-xl transition shadow-xs active:scale-95 text-center cursor-pointer">
+          ${opt}
+        </button>
+      `).join('');
+
+      const fb = document.getElementById('science-feedback');
+      fb.classList.add('hidden');
+      fb.innerHTML = '';
+    }
+
+    function checkScienceAnswer(chosen, btn) {
+      const q = scienceQuestions[scienceQIndex];
+      const fb = document.getElementById('science-feedback');
+      fb.classList.remove('hidden', 'bg-emerald-100', 'text-emerald-900', 'bg-rose-100', 'text-rose-900');
+
+      if (chosen === q.correct) {
+        btn.classList.add('bg-emerald-500', 'text-white', 'border-emerald-600');
+        fb.classList.add('bg-emerald-100', 'text-emerald-900');
+        fb.innerHTML = `🎉 عَالِمٌ بَطَلٌ! إِجَابَةٌ صَحِيحَةٌ: <strong>${q.correct}</strong>. ${q.reason} (+10 نُجُوم)`;
+        addStars(10);
+        speakVoice(`مُمْتَازٌ! إِجَابَةٌ عِلْمِيَّةٌ صَحِيحَةٌ!`);
+        confettiEffect();
+
+        if (scienceAutoTimer) clearTimeout(scienceAutoTimer);
+        scienceAutoTimer = setTimeout(() => {
+          nextScienceQuestion();
+        }, 1800);
+      } else {
+        btn.classList.add('bg-rose-200', 'border-rose-400');
+        fb.classList.add('bg-rose-100', 'text-rose-900');
+        fb.innerHTML = `حَاوِلْ مَرَّةً أُخْرَى يَا بَاحِث! تَذَكَّرْ دَرْسَ الإِيقَاظِ العِلْمِيِّ.`;
+        speakVoice('فَكِّرْ جَيِّدًا ثُمَّ حَاوِلْ مَرَّةً أُخْرَى!');
+      }
+    }
+
+    function nextScienceQuestion() {
+      if (scienceAutoTimer) clearTimeout(scienceAutoTimer);
+      scienceQIndex = (scienceQIndex + 1) % scienceQuestions.length;
+      renderScienceQuiz();
+    }
+
+    function speakScienceCurrentQ() {
+      speakVoice(scienceQuestions[scienceQIndex].clean);
+    }
+
+    // 4. قسم الرياضيات
+    let currentMathAns = 20;
+
+    function newMathProblem() {
+      const n1 = Math.floor(Math.random() * 4) + 2; // 2 to 5
+      const n2 = Math.floor(Math.random() * 9) + 2; // 2 to 10
+      currentMathAns = n1 * n2;
+      document.getElementById('math-num1').innerText = n1;
+      document.getElementById('math-num2').innerText = n2;
+
+      // إنشاء 3 خيارات فريدة
+      const diff1 = (Math.random() > 0.5 ? 2 : -2);
+      let wrong1 = currentMathAns + diff1;
+      if (wrong1 <= 0) wrong1 = currentMathAns + 3;
+      let wrong2 = currentMathAns + (Math.random() > 0.5 ? 4 : -4);
+      if (wrong2 <= 0 || wrong2 === wrong1) wrong2 = currentMathAns + 5;
+      
+      const choices = [currentMathAns, wrong1, wrong2].sort(() => Math.random() - 0.5);
+
+      const box = document.getElementById('math-options');
+      box.innerHTML = choices.map(val => `
+        <button onclick="checkMathAns(${val}, this)" class="math-choice-btn py-3 px-2 bg-blue-50 hover:bg-blue-200 border-2 border-blue-300 text-blue-950 font-black text-lg rounded-xl transition shadow-sm cursor-pointer">
+          ${val}
+        </button>
+      `).join('');
+
+      const fb = document.getElementById('math-feedback');
+      fb.classList.add('hidden');
+      fb.innerHTML = '';
+    }
+
+    function checkMathAns(val, btn) {
+      const fb = document.getElementById('math-feedback');
+      fb.classList.remove('hidden', 'bg-emerald-100', 'text-emerald-900', 'bg-rose-100', 'text-rose-900');
+
+      if (val === currentMathAns) {
+        btn.classList.add('bg-emerald-500', 'text-white', 'border-emerald-600');
+        fb.classList.add('bg-emerald-100', 'text-emerald-900');
+        fb.innerHTML = `🎉 عَبْقَرِيُّ الحِسَابِ! النَّتِيجَةُ صَحِيحَةٌ (${currentMathAns}) (+10 نُجُوم)`;
+        addStars(10);
+        speakVoice(`أَحْسَنْتَ! النَّتِيجَةُ هِيَ ${currentMathAns}`);
+        confettiEffect();
+
+        setTimeout(() => {
+          newMathProblem();
+        }, 1500);
+      } else {
+        btn.classList.add('bg-rose-200', 'border-rose-400');
+        fb.classList.add('bg-rose-100', 'text-rose-900');
+        fb.innerHTML = `حَاوِلْ مَرَّةً أُخْرَى، اسْتَعْمِلْ جَدْوَلَ الضَّرْبِ بِتَأَنٍّ! 💪`;
+        speakVoice('حَاوِلْ مُجَدَّدًا فِي الحِسَابِ!');
+      }
+    }
+
+    // 5. قسم التحدي الشامل (Quiz) مع إمكانية الانتقال المباشر
+    const allQuizQuestions = [
+      {
+        q: "مَا هُوَ نَوْعُ كَلِمَةِ «يَرْكُضُ» فِي جُمْلَةِ: يَرْكُضُ الأَطْفَالُ فِي المُنْتَزَهِ؟",
+        answers: [
+          { text: "1. اسْمٌ مَجْرُورٌ 🏷️", correct: false },
+          { text: "2. فِعْلٌ مُضَارِعٌ يَدُلُّ عَلَى الحَرَكَةِ 🏃", correct: true },
+          { text: "3. حَرْفُ عَطْفٍ 🔗", correct: false }
+        ]
+      },
+      {
+        q: "عِنْدَمَا يَتَنَفَّسُ البَطَلُ هَوَاءً نَقِيًّا، مَاذَا نُسَمِّي عَمَلِيَّةَ دُخُولِ الهَوَاءِ؟",
+        answers: [
+          { text: "1. الشَّهِيقُ (يَعْلُو الصَّدْرُ) 🫁", correct: true },
+          { text: "2. الزَّفِيرُ (يَنْخَفِضُ الصَّدْرُ) 💨", correct: false },
+          { text: "3. النَّوْمُ العَمِيقُ 😴", correct: false }
+        ]
+      },
+      {
+        q: "أَيُّ الحَيَوَانَاتِ التَّالِيَةِ يَتَنَقَّلُ بِالقَفْزِ بِفَضْلِ طَرَفَيْهِ الخَلْفِيَّيْنِ؟",
+        answers: [
+          { text: "1. الأَرْنَبُ السَّرِيعُ 🐇", correct: true },
+          { text: "2. السَّمَكَةُ الصَّغِيرَةُ 🐟", correct: false },
+          { text: "3. الحِمَارُ الأَهْلِيُّ 🐴", correct: false }
+        ]
+      },
+      {
+        q: "كَيْفَ نُصَرِّفُ الفِعْلَ (كَتَبَ) مَعَ الضَّمِيرِ (نَحْنُ) فِي المَاضِي؟",
+        answers: [
+          { text: "1. نَحْنُ كَتَبْنَا 📝", correct: true },
+          { text: "2. نَحْنُ يَكْتُبُ ✏️", correct: false },
+          { text: "3. نَحْنُ كَتَبْتَ 📄", correct: false }
+        ]
+      },
+      {
+        q: "حَاصِلُ ضَرْبِ العَدَدَيْنِ 5 × 6 فِي الرِّيَاضِيَّاتِ يُسَاوِي:",
+        answers: [
+          { text: "1. 25 🔢", correct: false },
+          { text: "2. 30 🌟", correct: true },
+          { text: "3. 35 📐", correct: false }
+        ]
+      }
+    ];
+    let quizQuestionIndex = 0;
+    let quizAutoTimer = null;
+
+    function renderQuizQuestion() {
+      if (quizAutoTimer) clearTimeout(quizAutoTimer);
+      const qObj = allQuizQuestions[quizQuestionIndex];
+      document.getElementById('quiz-question-text').innerText = qObj.q;
+      document.getElementById('quiz-progress-text').innerText = `السُّؤَالُ ${quizQuestionIndex + 1} مِنْ ${allQuizQuestions.length}`;
+      
+      const container = document.getElementById('quiz-buttons-container');
+      container.innerHTML = qObj.answers.map(ans => `
+        <button class="quiz-btn bg-white hover:bg-purple-100 border-2 border-purple-200 text-purple-950 font-black py-2.5 px-4 rounded-xl text-sm transition shadow-sm cursor-pointer text-right" onclick="checkAnswer(${ans.correct}, this)">
+          ${ans.text}
+        </button>
+      `).join('');
+
+      const feedback = document.getElementById('quiz-feedback');
+      feedback.classList.add('hidden');
+      feedback.innerHTML = '';
+    }
+
+    function nextQuizQuestion() {
+      if (quizAutoTimer) clearTimeout(quizAutoTimer);
+      quizQuestionIndex = (quizQuestionIndex + 1) % allQuizQuestions.length;
+      renderQuizQuestion();
+    }
+
+    // تصحيح إجابة الاختبار
+    function checkAnswer(isCorrect, btn) {
+      const feedback = document.getElementById('quiz-feedback');
+      feedback.classList.remove('hidden', 'bg-emerald-100', 'text-emerald-900', 'bg-rose-100', 'text-rose-900');
+
+      if (isCorrect) {
+        btn.classList.add('bg-emerald-500', 'text-white', 'border-emerald-600');
+        feedback.classList.add('bg-emerald-100', 'text-emerald-900');
+        feedback.innerHTML = '🎉 أَحْسَنْتَ صُنْعًا يَا بَطَلَ تَوْنِس! إِجَابَةٌ صَحِيحَةٌ وَمُمْتَازَةٌ! (+10 نُجُوم)';
+        addStars(10);
+        confettiEffect();
+        speakVoice('أَحْسَنْتَ صُنْعًا يَا بَطَل! إِجَابَةٌ مُمْتَازَةٌ!');
+
+        if (quizAutoTimer) clearTimeout(quizAutoTimer);
+        quizAutoTimer = setTimeout(() => {
+          nextQuizQuestion();
+        }, 1800);
+      } else {
+        btn.classList.add('bg-rose-200', 'border-rose-400');
+        feedback.classList.add('bg-rose-100', 'text-rose-900');
+        feedback.innerHTML = 'حَاوِلْ مُجَدَّدًا يَا ذَكِي، أَعِدْ قِرَاءَةَ النَّصِّ وَالقَوَاعِدِ لِتَعْرِفَ الإِجَابَةَ! 💪';
+        speakVoice('حَاوِلْ مَرَّةً أُخْرَى يَا بَطَل!');
+      }
+    }
+
+    // ضبط سرعة النطق
+    function setSpeed(rate, btn) {
+      speechRate = rate;
+      document.querySelectorAll('.speed-btn').forEach(b => {
+        b.className = 'speed-btn px-3 py-1.5 bg-amber-100 hover:bg-amber-200 text-amber-900 rounded-xl transition';
+      });
+      btn.className = 'speed-btn px-3 py-1.5 bg-amber-500 text-white rounded-xl shadow transition';
+    }
+
+    // صوت عام
+    function speakVoice(text) {
+      if (!('speechSynthesis' in window)) return;
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'ar-TN' in window ? 'ar-TN' : 'ar-SA';
+      utterance.rate = speechRate;
+      window.speechSynthesis.speak(utterance);
+    }
+
+    // نطق كلمة واحدة عند النقر عليها
+    function speakSingleWord(element) {
+      if (!('speechSynthesis' in window)) {
+        alert('خاصية النطق الصوتي غير مدعومة في متصفحك.');
+        return;
+      }
+      window.speechSynthesis.cancel();
+      const text = element.innerText.replace(/[.,،]/g, '');
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'ar-SA';
+      utterance.rate = speechRate;
+
+      element.classList.add('word-highlight');
+      utterance.onend = () => element.classList.remove('word-highlight');
+      utterance.onerror = () => element.classList.remove('word-highlight');
+
+      window.speechSynthesis.speak(utterance);
+    }
+
+    // نطق المادة التعليمية
+    function speakSubject(title) {
+      speakVoice(title);
+    }
+
+    // القراءة المتسلسلة التفاعلية (Karaoke)
+    function playFullText() {
+      if (!('speechSynthesis' in window)) {
+        alert('خاصية النطق غير مدعومة في هذا المتصفح');
+        return;
+      }
+
+      if (isPlaying) {
+        window.speechSynthesis.cancel();
+        resetFullPlay();
+        return;
+      }
+
+      const words = Array.from(document.querySelectorAll('#story-container .clickable-word'));
+      let index = 0;
+      isPlaying = true;
+      document.getElementById('play-icon').innerText = '⏹️';
+      document.getElementById('play-text').innerText = 'إِيقَافُ القِرَاءَةِ';
+
+      function speakNextWord() {
+        if (!isPlaying || index >= words.length) {
+          resetFullPlay();
+          return;
+        }
+
+        words.forEach(w => w.classList.remove('word-highlight'));
+        const currentWord = words[index];
+        currentWord.classList.add('word-highlight');
+
+        const cleanWord = currentWord.innerText.replace(/[.,،]/g, '');
+        const utterance = new SpeechSynthesisUtterance(cleanWord);
+        utterance.lang = 'ar-SA';
+        utterance.rate = speechRate;
+
+        utterance.onend = () => {
+          currentWord.classList.remove('word-highlight');
+          index++;
+          speakNextWord();
+        };
+
+        utterance.onerror = () => {
+          currentWord.classList.remove('word-highlight');
+          resetFullPlay();
+        };
+
+        window.speechSynthesis.speak(utterance);
+      }
+
+      speakNextWord();
+    }
+
+    function resetFullPlay() {
+      isPlaying = false;
+      document.getElementById('play-icon').innerText = '▶️';
+      document.getElementById('play-text').innerText = 'تَشْغِيلُ النَّصِّ كَامِلًا';
+      document.querySelectorAll('#story-container .clickable-word').forEach(w => w.classList.remove('word-highlight'));
+    }
+
+    // نصيحة الحكيم ميمون
+    function speakHelper(customMsg) {
+      const text = customMsg || "مَرْحَبًا يَا بَطَلَ تَوْنِس! اِضْغَطْ عَلَى أَيِّ كَلِمَةٍ لِتَسْمَعَ نُطْقَهَا وَتَتَعَرَّفَ عَلَى مَعْنَاهَا!";
+      speakVoice(text);
+    }
+
+    // إضافة نجوم وكونفيتي
+    function addStars(num) {
+      stars += num;
+      document.getElementById('star-count').innerText = stars;
+    }
+
+    function confettiEffect() {
+      if (typeof confetti === 'function') {
+        confetti({ particleCount: 80, spread: 65, origin: { y: 0.6 } });
+      }
+    }
+
+    // التبديل بين التبويبات الخمسة (قراءة، قواعد لغة، إيقاظ علمي، رياضيات، تحدي)
+    function switchTab(tab) {
+      const readSec = document.getElementById('section-reading');
+      const gramSec = document.getElementById('section-grammar');
+      const sciSec = document.getElementById('section-science');
+      const mathSec = document.getElementById('section-math');
+      const quizSec = document.getElementById('section-quiz');
+
+      const tabRead = document.getElementById('tab-reading');
+      const tabGram = document.getElementById('tab-grammar');
+      const tabSci = document.getElementById('tab-science');
+      const tabMath = document.getElementById('tab-math');
+      const tabQuiz = document.getElementById('tab-quiz');
+
+      const bRead = document.getElementById('bnav-reading');
+      const bGram = document.getElementById('bnav-grammar');
+      const bSci = document.getElementById('bnav-science');
+      const bMath = document.getElementById('bnav-math');
+      const bQuiz = document.getElementById('bnav-quiz');
+
+      const activeClass = 'py-2 px-1 bg-white text-orange-600 rounded-xl shadow flex items-center justify-center gap-0.5 transition';
+      const inactiveClass = 'py-2 px-1 bg-amber-800/40 hover:bg-white/20 text-white rounded-xl flex items-center justify-center gap-0.5 transition';
+
+      const bActiveClass = 'bottom-nav-item flex flex-col items-center gap-1 text-orange-600 hover:scale-105 transition cursor-pointer';
+      const bInactiveClass = 'bottom-nav-item flex flex-col items-center gap-1 text-slate-700 hover:text-orange-600 hover:scale-105 transition cursor-pointer';
+
+      readSec.classList.add('hidden');
+      gramSec.classList.add('hidden');
+      sciSec.classList.add('hidden');
+      mathSec.classList.add('hidden');
+      quizSec.classList.add('hidden');
+
+      tabRead.className = inactiveClass;
+      tabGram.className = inactiveClass;
+      tabSci.className = inactiveClass;
+      tabMath.className = inactiveClass;
+      tabQuiz.className = inactiveClass;
+
+      bRead.className = bInactiveClass;
+      bGram.className = bInactiveClass;
+      bSci.className = bInactiveClass;
+      bMath.className = bInactiveClass;
+      bQuiz.className = bInactiveClass;
+
+      if (tab === 'reading') {
+        readSec.classList.remove('hidden');
+        tabRead.className = activeClass;
+        bRead.className = bActiveClass;
+      } else if (tab === 'grammar') {
+        gramSec.classList.remove('hidden');
+        tabGram.className = activeClass;
+        bGram.className = bActiveClass;
+      } else if (tab === 'science') {
+        sciSec.classList.remove('hidden');
+        tabSci.className = activeClass;
+        bSci.className = bActiveClass;
+      } else if (tab === 'math') {
+        mathSec.classList.remove('hidden');
+        tabMath.className = activeClass;
+        bMath.className = bActiveClass;
+      } else if (tab === 'quiz') {
+        quizSec.classList.remove('hidden');
+        tabQuiz.className = activeClass;
+        bQuiz.className = bActiveClass;
+      }
+    }
+
+    // زر المشاركة الذكية Partager
+    async function shareApp() {
+      const shareData = {
+        title: 'تطبيق أبطال وعباقرة السنة الثالثة أساسي (المنهاج التونسي)',
+        text: 'تطبيق تعليمي تونسي تفاعلي للسنة 3 أساسي: قراءة مشكولة بالصوت، قواعد اللغة، الإيقاظ العلمي، وحساب ذهني مع تحميل فوري!',
+        url: window.location.href
+      };
+
+      if (navigator.share) {
+        try {
+          await navigator.share(shareData);
+        } catch (err) {
+          console.log('Share canceled or error', err);
+        }
+      } else {
+        navigator.clipboard.writeText(window.location.href).then(() => {
+          alert('تم نسخ رابط التطبيق بنجاح! يمكنك الآن لصقه ومشاركته مع الأولياء والمعلمين في تونس.');
+        }).catch(() => {
+          alert('رابط المشاركة: ' + window.location.href);
+        });
+      }
+    }
+
+    // زر التحميل الفوري والمباشر لملف الـ HTML كاملاً
+    function downloadSelf() {
+      const htmlDoc = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+      const blob = new Blob([htmlDoc], { type: 'text/html;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('link');
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'تطبيق_ابطال_السنة_الثالثة_اساسي_تونس.html';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    // تهيئة التطبيق عند التشغيل
+    window.addEventListener('DOMContentLoaded', () => {
+      loadTunisianStory(0);
+      renderClassifyCard();
+      renderConjugateCard();
+      renderSentenceCard();
+      renderScienceQuiz();
+      renderQuizQuestion();
+      newMathProblem();
+    });
+  </script>
+</body></html>
