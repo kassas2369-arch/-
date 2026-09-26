@@ -1,13 +1,12 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>تطبيق أبطال الثالثة أساسي - دفتر الدروس اليومية المصورة</title>
-  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-  <style>
+<html dir="rtl" lang="ar"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>تطبيق أبطال الثالثة أساسي - المزامنة السحابية والمشاركة الفورية</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<style>
     * { box-sizing: border-box; }
     body {
       font-family: 'Cairo', sans-serif;
@@ -18,559 +17,1163 @@
       margin: 0;
       padding: 0;
     }
-    .word-highlight {
-      background: #fde047;
-      transform: scale(1.1);
-      border-radius: 6px;
-      padding: 1px 5px;
-      color: #854d0e;
-      display: inline-block;
-      transition: all 0.15s ease;
+    .pulsing-dot {
+      animation: pulse-ring 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
     }
-    .clickable-word {
-      cursor: pointer;
-      display: inline-block;
-      padding: 2px 4px;
-      border-radius: 6px;
-      transition: all 0.15s ease;
+    @keyframes pulse-ring {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(1.3); }
+    }
+    .lesson-card-hover {
+      transition: all 0.2s ease;
+    }
+    .lesson-card-hover:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px -5px rgba(0,0,0,0.1);
     }
     .clickable-word:hover {
       background-color: #e0f2fe;
       color: #0284c7;
     }
-    .card-hover {
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-    .card-hover:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 16px -4px rgba(0,0,0,0.1);
-    }
   </style>
-</head>
-<body class="p-2 sm:p-4 flex flex-col items-center justify-start min-h-screen">
-
-<!-- شريط التحكم العلوي -->
-<header class="w-full max-w-xl mb-3 flex items-center justify-between gap-2 px-2">
-  <div class="flex items-center gap-2">
-    <span class="text-3xl drop-shadow">🇹🇳</span>
-    <div>
-      <div class="flex items-center gap-1.5">
-        <h1 class="text-base sm:text-lg font-black text-amber-950 leading-tight">أَبْطَالُ الثَّالِثَةِ أَسَاسِي</h1>
-        <span class="bg-red-600 text-white text-[10px] font-extrabold px-1.5 py-0.5 rounded-full shadow-xs">تُونِس</span>
-      </div>
-      <p class="text-xs text-amber-800 font-bold">دَفْتَرُ الدُّرُوسِ اليَوْمِيَّةِ بِالصُّوَرِ 📸 وَالمَوَادُّ التَّفَاعُلِيَّةُ</p>
-    </div>
-  </div>
-  <div class="flex items-center gap-1.5">
-    <button class="bg-blue-600 hover:bg-blue-700 active:scale-95 text-white font-bold text-xs px-3 py-2 rounded-2xl shadow transition flex items-center gap-1 cursor-pointer" onclick="shareApp()">
-      <span>🔗 مُشَارَكَة</span>
-    </button>
-    <button class="bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-bold text-xs px-3 py-2 rounded-2xl shadow transition flex items-center gap-1 cursor-pointer" onclick="downloadSelf()">
-      <span>📥 تَحْمِيل</span>
-    </button>
-  </div>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}[type='text'],input:where(:not([type])),[type='email'],[type='url'],[type='password'],[type='number'],[type='date'],[type='datetime-local'],[type='month'],[type='search'],[type='tel'],[type='time'],[type='week'],[multiple],textarea,select{-webkit-appearance:none;appearance:none;background-color:#fff;border-color:#6b7280;border-width:1px;border-radius:0px;padding-top:0.5rem;padding-right:0.75rem;padding-bottom:0.5rem;padding-left:0.75rem;font-size:1rem;line-height:1.5rem;--tw-shadow:0 0 #0000;}[type='text']:focus, input:where(:not([type])):focus, [type='email']:focus, [type='url']:focus, [type='password']:focus, [type='number']:focus, [type='date']:focus, [type='datetime-local']:focus, [type='month']:focus, [type='search']:focus, [type='tel']:focus, [type='time']:focus, [type='week']:focus, [multiple]:focus, textarea:focus, select:focus{outline:2px solid transparent;outline-offset:2px;--tw-ring-inset:var(--tw-empty,/*!*/ /*!*/);--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:#2563eb;--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);border-color:#2563eb}input::placeholder,textarea::placeholder{color:#6b7280;opacity:1}::-webkit-datetime-edit-fields-wrapper{padding:0}::-webkit-date-and-time-value{min-height:1.5em;text-align:inherit}::-webkit-datetime-edit{display:inline-flex}::-webkit-datetime-edit,::-webkit-datetime-edit-year-field,::-webkit-datetime-edit-month-field,::-webkit-datetime-edit-day-field,::-webkit-datetime-edit-hour-field,::-webkit-datetime-edit-minute-field,::-webkit-datetime-edit-second-field,::-webkit-datetime-edit-millisecond-field,::-webkit-datetime-edit-meridiem-field{padding-top:0;padding-bottom:0}select{background-image:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");background-position:right 0.5rem center;background-repeat:no-repeat;background-size:1.5em 1.5em;padding-right:2.5rem;print-color-adjust:exact}[multiple],[size]:where(select:not([size="1"])){background-image:initial;background-position:initial;background-repeat:unset;background-size:initial;padding-right:0.75rem;print-color-adjust:unset}[type='checkbox'],[type='radio']{-webkit-appearance:none;appearance:none;padding:0;print-color-adjust:exact;display:inline-block;vertical-align:middle;background-origin:border-box;-webkit-user-select:none;user-select:none;flex-shrink:0;height:1rem;width:1rem;color:#2563eb;background-color:#fff;border-color:#6b7280;border-width:1px;--tw-shadow:0 0 #0000}[type='checkbox']{border-radius:0px}[type='radio']{border-radius:100%}[type='checkbox']:focus,[type='radio']:focus{outline:2px solid transparent;outline-offset:2px;--tw-ring-inset:var(--tw-empty,/*!*/ /*!*/);--tw-ring-offset-width:2px;--tw-ring-offset-color:#fff;--tw-ring-color:#2563eb;--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow)}[type='checkbox']:checked,[type='radio']:checked{border-color:transparent;background-color:currentColor;background-size:100% 100%;background-position:center;background-repeat:no-repeat}[type='checkbox']:checked{background-image:url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z'/%3e%3c/svg%3e");}@media (forced-colors: active) {[type='checkbox']:checked{-webkit-appearance:auto;appearance:auto}}[type='radio']:checked{background-image:url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3ccircle cx='8' cy='8' r='3'/%3e%3c/svg%3e");}@media (forced-colors: active) {[type='radio']:checked{-webkit-appearance:auto;appearance:auto}}[type='checkbox']:checked:hover,[type='checkbox']:checked:focus,[type='radio']:checked:hover,[type='radio']:checked:focus{border-color:transparent;background-color:currentColor}[type='checkbox']:indeterminate{background-image:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 16 16'%3e%3cpath stroke='white' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M4 8h8'/%3e%3c/svg%3e");border-color:transparent;background-color:currentColor;background-size:100% 100%;background-position:center;background-repeat:no-repeat;}@media (forced-colors: active) {[type='checkbox']:indeterminate{-webkit-appearance:auto;appearance:auto}}[type='checkbox']:indeterminate:hover,[type='checkbox']:indeterminate:focus{border-color:transparent;background-color:currentColor}[type='file']{background:unset;border-color:inherit;border-width:0;border-radius:0;padding:0;font-size:unset;line-height:inherit}[type='file']:focus{outline:1px solid ButtonText;outline:1px auto -webkit-focus-ring-color}.pointer-events-none{pointer-events:none}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.inset-0{inset:0px}.inset-x-4{left:1rem;right:1rem}.bottom-6{bottom:1.5rem}.right-2{right:0.5rem}.top-2{top:0.5rem}.z-50{z-index:50}.mx-auto{margin-left:auto;margin-right:auto}.my-2{margin-top:0.5rem;margin-bottom:0.5rem}.mb-1{margin-bottom:0.25rem}.mb-2{margin-bottom:0.5rem}.mb-3{margin-bottom:0.75rem}.mb-4{margin-bottom:1rem}.mt-0\.5{margin-top:0.125rem}.mt-1{margin-top:0.25rem}.mt-4{margin-top:1rem}.block{display:block}.inline-block{display:inline-block}.flex{display:flex}.grid{display:grid}.hidden{display:none}.h-10{height:2.5rem}.h-12{height:3rem}.h-16{height:4rem}.h-3{height:0.75rem}.h-40{height:10rem}.h-44{height:11rem}.h-7{height:1.75rem}.h-8{height:2rem}.h-full{height:100%}.max-h-\[94vh\]{max-height:94vh}.min-h-\[110px\]{min-height:110px}.min-h-screen{min-height:100vh}.w-10{width:2.5rem}.w-12{width:3rem}.w-16{width:4rem}.w-3{width:0.75rem}.w-7{width:1.75rem}.w-8{width:2rem}.w-full{width:100%}.max-w-lg{max-width:32rem}.max-w-md{max-width:28rem}.max-w-xl{max-width:36rem}.flex-1{flex:1 1 0%}.shrink-0{flex-shrink:0}.translate-y-32{--tw-translate-y:8rem;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.translate-y-0{--tw-translate-y:0px;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.transform{transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}@keyframes bounce{0%, 100%{transform:translateY(-25%);animation-timing-function:cubic-bezier(0.8,0,1,1)}50%{transform:none;animation-timing-function:cubic-bezier(0,0,0.2,1)}}.animate-bounce{animation:bounce 1s infinite}@keyframes pulse{50%{opacity:.5}}.animate-pulse{animation:pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite}@keyframes spin{to{transform:rotate(360deg)}}.animate-spin{animation:spin 1s linear infinite}.cursor-pointer{cursor:pointer}.select-all{-webkit-user-select:all;user-select:all}.grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.grid-cols-6{grid-template-columns:repeat(6, minmax(0, 1fr))}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-start{align-items:flex-start}.items-center{align-items:center}.justify-start{justify-content:flex-start}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.justify-around{justify-content:space-around}.gap-0\.5{gap:0.125rem}.gap-1{gap:0.25rem}.gap-1\.5{gap:0.375rem}.gap-2{gap:0.5rem}.gap-2\.5{gap:0.625rem}.gap-3{gap:0.75rem}.space-y-1 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.25rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.25rem * var(--tw-space-y-reverse))}.space-y-2 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.5rem * var(--tw-space-y-reverse))}.space-y-3 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.75rem * var(--tw-space-y-reverse))}.space-y-3\.5 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.875rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.875rem * var(--tw-space-y-reverse))}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.space-y-2\.5 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.625rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.625rem * var(--tw-space-y-reverse))}.overflow-hidden{overflow:hidden}.overflow-x-auto{overflow-x:auto}.overflow-y-auto{overflow-y:auto}.whitespace-nowrap{white-space:nowrap}.rounded-2xl{border-radius:1rem}.rounded-3xl{border-radius:1.5rem}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:0.5rem}.rounded-xl{border-radius:0.75rem}.border{border-width:1px}.border-2{border-width:2px}.border-4{border-width:4px}.border-b{border-bottom-width:1px}.border-t-2{border-top-width:2px}.border-amber-100{--tw-border-opacity:1;border-color:rgb(254 243 199 / var(--tw-border-opacity, 1))}.border-amber-200{--tw-border-opacity:1;border-color:rgb(253 230 138 / var(--tw-border-opacity, 1))}.border-amber-300{--tw-border-opacity:1;border-color:rgb(252 211 77 / var(--tw-border-opacity, 1))}.border-amber-400{--tw-border-opacity:1;border-color:rgb(251 191 36 / var(--tw-border-opacity, 1))}.border-blue-200{--tw-border-opacity:1;border-color:rgb(191 219 254 / var(--tw-border-opacity, 1))}.border-blue-400{--tw-border-opacity:1;border-color:rgb(96 165 250 / var(--tw-border-opacity, 1))}.border-cyan-300{--tw-border-opacity:1;border-color:rgb(103 232 249 / var(--tw-border-opacity, 1))}.border-emerald-200{--tw-border-opacity:1;border-color:rgb(167 243 208 / var(--tw-border-opacity, 1))}.border-emerald-300{--tw-border-opacity:1;border-color:rgb(110 231 183 / var(--tw-border-opacity, 1))}.border-emerald-400{--tw-border-opacity:1;border-color:rgb(52 211 153 / var(--tw-border-opacity, 1))}.border-emerald-500\/40{border-color:rgb(16 185 129 / 0.4)}.border-purple-300{--tw-border-opacity:1;border-color:rgb(216 180 254 / var(--tw-border-opacity, 1))}.border-sky-200{--tw-border-opacity:1;border-color:rgb(186 230 253 / var(--tw-border-opacity, 1))}.border-sky-300{--tw-border-opacity:1;border-color:rgb(125 211 252 / var(--tw-border-opacity, 1))}.border-slate-300{--tw-border-opacity:1;border-color:rgb(203 213 225 / var(--tw-border-opacity, 1))}.border-teal-200{--tw-border-opacity:1;border-color:rgb(153 246 228 / var(--tw-border-opacity, 1))}.border-teal-300{--tw-border-opacity:1;border-color:rgb(94 234 212 / var(--tw-border-opacity, 1))}.border-white{--tw-border-opacity:1;border-color:rgb(255 255 255 / var(--tw-border-opacity, 1))}.border-white\/40{border-color:rgb(255 255 255 / 0.4)}.border-blue-300{--tw-border-opacity:1;border-color:rgb(147 197 253 / var(--tw-border-opacity, 1))}.bg-amber-100{--tw-bg-opacity:1;background-color:rgb(254 243 199 / var(--tw-bg-opacity, 1))}.bg-amber-100\/95{background-color:rgb(254 243 199 / 0.95)}.bg-amber-50{--tw-bg-opacity:1;background-color:rgb(255 251 235 / var(--tw-bg-opacity, 1))}.bg-amber-500{--tw-bg-opacity:1;background-color:rgb(245 158 11 / var(--tw-bg-opacity, 1))}.bg-amber-600{--tw-bg-opacity:1;background-color:rgb(217 119 6 / var(--tw-bg-opacity, 1))}.bg-amber-800\/40{background-color:rgb(146 64 14 / 0.4)}.bg-amber-950{--tw-bg-opacity:1;background-color:rgb(69 26 3 / var(--tw-bg-opacity, 1))}.bg-black\/25{background-color:rgb(0 0 0 / 0.25)}.bg-black\/75{background-color:rgb(0 0 0 / 0.75)}.bg-black\/80{background-color:rgb(0 0 0 / 0.8)}.bg-blue-100{--tw-bg-opacity:1;background-color:rgb(219 234 254 / var(--tw-bg-opacity, 1))}.bg-blue-50{--tw-bg-opacity:1;background-color:rgb(239 246 255 / var(--tw-bg-opacity, 1))}.bg-blue-600{--tw-bg-opacity:1;background-color:rgb(37 99 235 / var(--tw-bg-opacity, 1))}.bg-blue-800{--tw-bg-opacity:1;background-color:rgb(30 64 175 / var(--tw-bg-opacity, 1))}.bg-blue-800\/60{background-color:rgb(30 64 175 / 0.6)}.bg-cyan-50\/60{background-color:rgb(236 254 255 / 0.6)}.bg-emerald-100{--tw-bg-opacity:1;background-color:rgb(209 250 229 / var(--tw-bg-opacity, 1))}.bg-emerald-400{--tw-bg-opacity:1;background-color:rgb(52 211 153 / var(--tw-bg-opacity, 1))}.bg-emerald-50{--tw-bg-opacity:1;background-color:rgb(236 253 245 / var(--tw-bg-opacity, 1))}.bg-emerald-50\/70{background-color:rgb(236 253 245 / 0.7)}.bg-emerald-500{--tw-bg-opacity:1;background-color:rgb(16 185 129 / var(--tw-bg-opacity, 1))}.bg-emerald-500\/80{background-color:rgb(16 185 129 / 0.8)}.bg-emerald-600{--tw-bg-opacity:1;background-color:rgb(5 150 105 / var(--tw-bg-opacity, 1))}.bg-emerald-800{--tw-bg-opacity:1;background-color:rgb(6 95 70 / var(--tw-bg-opacity, 1))}.bg-emerald-800\/60{background-color:rgb(6 95 70 / 0.6)}.bg-purple-100{--tw-bg-opacity:1;background-color:rgb(243 232 255 / var(--tw-bg-opacity, 1))}.bg-red-500{--tw-bg-opacity:1;background-color:rgb(239 68 68 / var(--tw-bg-opacity, 1))}.bg-red-600{--tw-bg-opacity:1;background-color:rgb(220 38 38 / var(--tw-bg-opacity, 1))}.bg-red-700\/80{background-color:rgb(185 28 28 / 0.8)}.bg-sky-100{--tw-bg-opacity:1;background-color:rgb(224 242 254 / var(--tw-bg-opacity, 1))}.bg-sky-50{--tw-bg-opacity:1;background-color:rgb(240 249 255 / var(--tw-bg-opacity, 1))}.bg-slate-100{--tw-bg-opacity:1;background-color:rgb(241 245 249 / var(--tw-bg-opacity, 1))}.bg-slate-50{--tw-bg-opacity:1;background-color:rgb(248 250 252 / var(--tw-bg-opacity, 1))}.bg-slate-800{--tw-bg-opacity:1;background-color:rgb(30 41 59 / var(--tw-bg-opacity, 1))}.bg-slate-900{--tw-bg-opacity:1;background-color:rgb(15 23 42 / var(--tw-bg-opacity, 1))}.bg-teal-50\/60{background-color:rgb(240 253 250 / 0.6)}.bg-teal-600{--tw-bg-opacity:1;background-color:rgb(13 148 136 / var(--tw-bg-opacity, 1))}.bg-teal-800\/70{background-color:rgb(17 94 89 / 0.7)}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.bg-white\/20{background-color:rgb(255 255 255 / 0.2)}.bg-white\/25{background-color:rgb(255 255 255 / 0.25)}.bg-white\/80{background-color:rgb(255 255 255 / 0.8)}.bg-white\/95{background-color:rgb(255 255 255 / 0.95)}.bg-yellow-300{--tw-bg-opacity:1;background-color:rgb(253 224 71 / var(--tw-bg-opacity, 1))}.bg-yellow-400{--tw-bg-opacity:1;background-color:rgb(250 204 21 / var(--tw-bg-opacity, 1))}.bg-amber-50\/60{background-color:rgb(255 251 235 / 0.6)}.bg-teal-100{--tw-bg-opacity:1;background-color:rgb(204 251 241 / var(--tw-bg-opacity, 1))}.bg-gradient-to-b{background-image:linear-gradient(to bottom, var(--tw-gradient-stops))}.bg-gradient-to-r{background-image:linear-gradient(to right, var(--tw-gradient-stops))}.bg-gradient-to-tr{background-image:linear-gradient(to top right, var(--tw-gradient-stops))}.from-amber-400{--tw-gradient-from:#fbbf24 var(--tw-gradient-from-position);--tw-gradient-to:rgb(251 191 36 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-amber-500{--tw-gradient-from:#f59e0b var(--tw-gradient-from-position);--tw-gradient-to:rgb(245 158 11 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-amber-600{--tw-gradient-from:#d97706 var(--tw-gradient-from-position);--tw-gradient-to:rgb(217 119 6 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-blue-500{--tw-gradient-from:#3b82f6 var(--tw-gradient-from-position);--tw-gradient-to:rgb(59 130 246 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-emerald-500{--tw-gradient-from:#10b981 var(--tw-gradient-from-position);--tw-gradient-to:rgb(16 185 129 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-emerald-950{--tw-gradient-from:#022c22 var(--tw-gradient-from-position);--tw-gradient-to:rgb(2 44 34 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-sky-50{--tw-gradient-from:#f0f9ff var(--tw-gradient-from-position);--tw-gradient-to:rgb(240 249 255 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-teal-500{--tw-gradient-from:#14b8a6 var(--tw-gradient-from-position);--tw-gradient-to:rgb(20 184 166 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.via-orange-400{--tw-gradient-to:rgb(251 146 60 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), #fb923c var(--tw-gradient-via-position), var(--tw-gradient-to)}.via-orange-500{--tw-gradient-to:rgb(249 115 22 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), #f97316 var(--tw-gradient-via-position), var(--tw-gradient-to)}.via-slate-900{--tw-gradient-to:rgb(15 23 42 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), #0f172a var(--tw-gradient-via-position), var(--tw-gradient-to)}.via-teal-500{--tw-gradient-to:rgb(20 184 166 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), #14b8a6 var(--tw-gradient-via-position), var(--tw-gradient-to)}.to-amber-500{--tw-gradient-to:#f59e0b var(--tw-gradient-to-position)}.to-blue-100{--tw-gradient-to:#dbeafe var(--tw-gradient-to-position)}.to-cyan-600{--tw-gradient-to:#0891b2 var(--tw-gradient-to-position)}.to-emerald-600{--tw-gradient-to:#059669 var(--tw-gradient-to-position)}.to-indigo-600{--tw-gradient-to:#4f46e5 var(--tw-gradient-to-position)}.to-orange-500{--tw-gradient-to:#f97316 var(--tw-gradient-to-position)}.to-red-500{--tw-gradient-to:#ef4444 var(--tw-gradient-to-position)}.to-red-600{--tw-gradient-to:#dc2626 var(--tw-gradient-to-position)}.to-teal-600{--tw-gradient-to:#0d9488 var(--tw-gradient-to-position)}.to-teal-950{--tw-gradient-to:#042f2e var(--tw-gradient-to-position)}.object-cover{object-fit:cover}.p-1{padding:0.25rem}.p-2{padding:0.5rem}.p-2\.5{padding:0.625rem}.p-3{padding:0.75rem}.p-3\.5{padding:0.875rem}.p-4{padding:1rem}.p-5{padding:1.25rem}.px-1{padding-left:0.25rem;padding-right:0.25rem}.px-1\.5{padding-left:0.375rem;padding-right:0.375rem}.px-2{padding-left:0.5rem;padding-right:0.5rem}.px-2\.5{padding-left:0.625rem;padding-right:0.625rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-3\.5{padding-left:0.875rem;padding-right:0.875rem}.px-4{padding-left:1rem;padding-right:1rem}.py-0\.5{padding-top:0.125rem;padding-bottom:0.125rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-1\.5{padding-top:0.375rem;padding-bottom:0.375rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-2\.5{padding-top:0.625rem;padding-bottom:0.625rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.py-3\.5{padding-top:0.875rem;padding-bottom:0.875rem}.pb-2{padding-bottom:0.5rem}.pb-3{padding-bottom:0.75rem}.pb-4{padding-bottom:1rem}.pt-1{padding-top:0.25rem}.pt-2{padding-top:0.5rem}.text-center{text-align:center}.text-right{text-align:right}.font-mono{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace}.text-2xl{font-size:1.5rem;line-height:2rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-4xl{font-size:2.25rem;line-height:2.5rem}.text-\[10px\]{font-size:10px}.text-\[11px\]{font-size:11px}.text-base{font-size:1rem;line-height:1.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:0.75rem;line-height:1rem}.font-black{font-weight:900}.font-bold{font-weight:700}.font-extrabold{font-weight:800}.font-semibold{font-weight:600}.leading-loose{line-height:2}.leading-none{line-height:1}.leading-relaxed{line-height:1.625}.leading-snug{line-height:1.375}.leading-tight{line-height:1.25}.text-amber-100{--tw-text-opacity:1;color:rgb(254 243 199 / var(--tw-text-opacity, 1))}.text-amber-800{--tw-text-opacity:1;color:rgb(146 64 14 / var(--tw-text-opacity, 1))}.text-amber-800\/80{color:rgb(146 64 14 / 0.8)}.text-amber-900{--tw-text-opacity:1;color:rgb(120 53 15 / var(--tw-text-opacity, 1))}.text-amber-950{--tw-text-opacity:1;color:rgb(69 26 3 / var(--tw-text-opacity, 1))}.text-amber-950\/90{color:rgb(69 26 3 / 0.9)}.text-blue-100{--tw-text-opacity:1;color:rgb(219 234 254 / var(--tw-text-opacity, 1))}.text-blue-900{--tw-text-opacity:1;color:rgb(30 58 138 / var(--tw-text-opacity, 1))}.text-blue-950{--tw-text-opacity:1;color:rgb(23 37 84 / var(--tw-text-opacity, 1))}.text-cyan-700{--tw-text-opacity:1;color:rgb(14 116 144 / var(--tw-text-opacity, 1))}.text-cyan-800{--tw-text-opacity:1;color:rgb(21 94 117 / var(--tw-text-opacity, 1))}.text-cyan-900{--tw-text-opacity:1;color:rgb(22 78 99 / var(--tw-text-opacity, 1))}.text-emerald-100{--tw-text-opacity:1;color:rgb(209 250 229 / var(--tw-text-opacity, 1))}.text-emerald-200{--tw-text-opacity:1;color:rgb(167 243 208 / var(--tw-text-opacity, 1))}.text-emerald-700{--tw-text-opacity:1;color:rgb(4 120 87 / var(--tw-text-opacity, 1))}.text-emerald-800{--tw-text-opacity:1;color:rgb(6 95 70 / var(--tw-text-opacity, 1))}.text-emerald-900{--tw-text-opacity:1;color:rgb(6 78 59 / var(--tw-text-opacity, 1))}.text-emerald-950{--tw-text-opacity:1;color:rgb(2 44 34 / var(--tw-text-opacity, 1))}.text-orange-500{--tw-text-opacity:1;color:rgb(249 115 22 / var(--tw-text-opacity, 1))}.text-orange-600{--tw-text-opacity:1;color:rgb(234 88 12 / var(--tw-text-opacity, 1))}.text-purple-950{--tw-text-opacity:1;color:rgb(59 7 100 / var(--tw-text-opacity, 1))}.text-sky-800{--tw-text-opacity:1;color:rgb(7 89 133 / var(--tw-text-opacity, 1))}.text-sky-950{--tw-text-opacity:1;color:rgb(8 47 73 / var(--tw-text-opacity, 1))}.text-slate-300{--tw-text-opacity:1;color:rgb(203 213 225 / var(--tw-text-opacity, 1))}.text-slate-500{--tw-text-opacity:1;color:rgb(100 116 139 / var(--tw-text-opacity, 1))}.text-slate-600{--tw-text-opacity:1;color:rgb(71 85 105 / var(--tw-text-opacity, 1))}.text-slate-700{--tw-text-opacity:1;color:rgb(51 65 85 / var(--tw-text-opacity, 1))}.text-slate-800{--tw-text-opacity:1;color:rgb(30 41 59 / var(--tw-text-opacity, 1))}.text-slate-900{--tw-text-opacity:1;color:rgb(15 23 42 / var(--tw-text-opacity, 1))}.text-teal-100{--tw-text-opacity:1;color:rgb(204 251 241 / var(--tw-text-opacity, 1))}.text-teal-800{--tw-text-opacity:1;color:rgb(17 94 89 / var(--tw-text-opacity, 1))}.text-teal-900{--tw-text-opacity:1;color:rgb(19 78 74 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.text-white\/80{color:rgb(255 255 255 / 0.8)}.text-yellow-200{--tw-text-opacity:1;color:rgb(254 240 138 / var(--tw-text-opacity, 1))}.text-blue-800{--tw-text-opacity:1;color:rgb(30 64 175 / var(--tw-text-opacity, 1))}.text-sky-700{--tw-text-opacity:1;color:rgb(3 105 161 / var(--tw-text-opacity, 1))}.underline{-webkit-text-decoration-line:underline;text-decoration-line:underline}.opacity-0{opacity:0}.opacity-100{opacity:1}.shadow{--tw-shadow:0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px -1px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-2xl{--tw-shadow:0 25px 50px -12px rgb(0 0 0 / 0.25);--tw-shadow-colored:0 25px 50px -12px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-inner{--tw-shadow:inset 0 2px 4px 0 rgb(0 0 0 / 0.05);--tw-shadow-colored:inset 0 2px 4px 0 var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-lg{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-md{--tw-shadow:0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-sm{--tw-shadow:0 1px 2px 0 rgb(0 0 0 / 0.05);--tw-shadow-colored:0 1px 2px 0 var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-xl{--tw-shadow:0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.ring-2{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000)}.ring-white\/80{--tw-ring-color:rgb(255 255 255 / 0.8)}.drop-shadow{--tw-drop-shadow:drop-shadow(0 1px 2px rgb(0 0 0 / 0.1)) drop-shadow(0 1px 1px rgb(0 0 0 / 0.06));filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.drop-shadow-sm{--tw-drop-shadow:drop-shadow(0 1px 1px rgb(0 0 0 / 0.05));filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.backdrop-blur{--tw-backdrop-blur:blur(8px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.backdrop-blur-md{--tw-backdrop-blur:blur(12px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.backdrop-blur-sm{--tw-backdrop-blur:blur(4px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.transition{transition-property:color, background-color, border-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.duration-300{transition-duration:300ms}.ease-out{transition-timing-function:cubic-bezier(0, 0, 0.2, 1)}.hover\:bg-amber-700:hover{--tw-bg-opacity:1;background-color:rgb(180 83 9 / var(--tw-bg-opacity, 1))}.hover\:bg-blue-700:hover{--tw-bg-opacity:1;background-color:rgb(29 78 216 / var(--tw-bg-opacity, 1))}.hover\:bg-emerald-600:hover{--tw-bg-opacity:1;background-color:rgb(5 150 105 / var(--tw-bg-opacity, 1))}.hover\:bg-emerald-700:hover{--tw-bg-opacity:1;background-color:rgb(4 120 87 / var(--tw-bg-opacity, 1))}.hover\:bg-slate-200:hover{--tw-bg-opacity:1;background-color:rgb(226 232 240 / var(--tw-bg-opacity, 1))}.hover\:bg-slate-700:hover{--tw-bg-opacity:1;background-color:rgb(51 65 85 / var(--tw-bg-opacity, 1))}.hover\:bg-teal-700:hover{--tw-bg-opacity:1;background-color:rgb(15 118 110 / var(--tw-bg-opacity, 1))}.hover\:bg-white\/20:hover{background-color:rgb(255 255 255 / 0.2)}.hover\:bg-amber-200:hover{--tw-bg-opacity:1;background-color:rgb(253 230 138 / var(--tw-bg-opacity, 1))}.hover\:bg-sky-100:hover{--tw-bg-opacity:1;background-color:rgb(224 242 254 / var(--tw-bg-opacity, 1))}.hover\:from-amber-600:hover{--tw-gradient-from:#d97706 var(--tw-gradient-from-position);--tw-gradient-to:rgb(217 119 6 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.hover\:from-emerald-600:hover{--tw-gradient-from:#059669 var(--tw-gradient-from-position);--tw-gradient-to:rgb(5 150 105 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.hover\:to-teal-600:hover{--tw-gradient-to:#0d9488 var(--tw-gradient-to-position)}.hover\:text-white:hover{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.focus\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}.active\:scale-95:active{--tw-scale-x:.95;--tw-scale-y:.95;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}@media (min-width: 640px){.sm\:inset-x-auto{left:auto;right:auto}.sm\:right-6{right:1.5rem}.sm\:max-w-md{max-width:28rem}.sm\:p-4{padding:1rem}.sm\:p-5{padding:1.25rem}.sm\:text-2xl{font-size:1.5rem;line-height:2rem}.sm\:text-base{font-size:1rem;line-height:1.5rem}.sm\:text-lg{font-size:1.125rem;line-height:1.75rem}.sm\:text-sm{font-size:0.875rem;line-height:1.25rem}.sm\:text-xs{font-size:0.75rem;line-height:1rem}}</style></head>
+<body class="p-2 sm:p-5 flex flex-col items-center justify-start min-h-screen">
+<!-- رأس الصفحة والتحكم العلوي السحابي -->
+<header class="w-full max-w-xl mb-3 flex flex-col gap-2 px-2">
+<div class="flex items-center justify-between gap-2">
+<div class="flex items-center gap-2">
+<span class="text-3xl drop-shadow">🇹🇳</span>
+<div>
+<div class="flex items-center gap-1.5">
+<h1 class="text-base sm:text-lg font-black text-amber-950 leading-tight">أَبْطَالُ الثَّالِثَةِ أَسَاسِي</h1>
+<span class="bg-red-600 text-white text-[10px] font-extrabold px-1.5 py-0.5 rounded-full shadow-xs">تُونِس</span>
+</div>
+<p class="text-xs text-amber-800 font-bold">المِنْهَاجُ الرَّسْمِيُّ 🌟 سَحَابَةُ الدُّرُوسِ الحَيَّةُ وَالمُشَارَكَةُ الفَوْرِيَّةُ</p>
+</div>
+</div>
+<div class="flex items-center gap-1.5">
+<button class="bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-black text-xs px-3 py-2 rounded-2xl shadow-md transition flex items-center gap-1 cursor-pointer" onclick="downloadSelfIndexHtml()" title="تحميل ملف index.html المحدث لرفعه على GitHub بضغطة واحدة">
+<span>📥</span>
+<span>تَحْمِيل index.html</span>
+</button>
+<button class="bg-slate-800 hover:bg-slate-700 active:scale-95 text-white font-bold text-xs px-2.5 py-2 rounded-2xl shadow-md transition flex items-center gap-1 cursor-pointer" onclick="copySourceCode()" title="نسخ الكود الكامل">
+<span>📋</span>
+<span>نَسْخ</span>
+</button>
+</div>
+</div>
+<!-- شريط المزامنة السحابية المزدوجة (Live Cloud Hub Bar) -->
+<div class="bg-gradient-to-r from-emerald-950 via-slate-900 to-teal-950 text-white p-2.5 rounded-2xl flex items-center justify-between gap-2 shadow-md border-2 border-emerald-500/40 text-xs">
+<div class="flex items-center gap-2 overflow-hidden">
+<span class="w-3 h-3 rounded-full bg-emerald-400 pulsing-dot shrink-0"></span>
+<div class="text-right">
+<div class="font-black text-[11px] text-emerald-200 flex items-center gap-1">
+<span id="cloud-status-title">📡 السَّحَابَةُ الحَيَّةُ: مُتَّصِلَةٌ تِلْقَائِيًّا (مُزَامَنَةٌ فَوْرِيَّةٌ)</span>
+</div>
+<div class="text-[10px] text-slate-300 font-bold" id="cloud-status-sub">
+          الدروس تظهر مباشرة بين جميع الأجهزة + مشاركة بروابط سريعة
+        </div>
+</div>
+</div>
+<button class="bg-emerald-500 hover:bg-emerald-600 active:scale-95 text-emerald-950 font-black px-2.5 py-1.5 rounded-xl shadow transition flex items-center gap-1 shrink-0 cursor-pointer text-[11px]" onclick="manualSyncCloud(true)">
+<span id="sync-icon">🔄</span>
+<span>مُزَامَنَةُ الآنَ</span>
+</button>
+</div>
 </header>
-
 <!-- الإطار الرئيسي للتطبيق -->
 <main class="w-full max-w-xl bg-white/95 backdrop-blur rounded-3xl shadow-2xl border-4 border-amber-300 overflow-hidden flex flex-col relative mb-4">
-  
-  <!-- بطاقة بطل اليوم ورصيد النجوم -->
-  <section class="bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 p-4 text-white relative shadow">
-    <div class="flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <div class="w-13 h-13 bg-white/20 backdrop-blur rounded-2xl p-1 border-2 border-white/40 flex items-center justify-center text-3xl shadow-inner">
+<!-- بطاقة بطل اليوم ورصيد النجوم -->
+<section class="bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 p-4 text-white relative shadow">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-13 h-13 bg-white/20 backdrop-blur-md rounded-2xl p-1 border-2 border-white/40 flex items-center justify-center text-3xl shadow-inner">
           🦁
         </div>
-        <div>
-          <div class="flex items-center gap-1.5">
-            <span class="text-[11px] bg-black/25 px-2 py-0.5 rounded-full font-extrabold text-amber-100">السَّنَةُ 3 أَسَاسِي</span>
-            <span class="text-[10px] bg-red-700/80 px-2 py-0.5 rounded-full font-extrabold text-white">تُونِس 🇹🇳</span>
-          </div>
-          <h2 class="text-lg font-black mt-0.5 tracking-tight text-white drop-shadow-sm">البَطَلُ سَلِيم المُمْتَازُ 🌟</h2>
-        </div>
-      </div>
-      <!-- رصيد النجوم -->
-      <div class="bg-white/25 backdrop-blur px-3.5 py-1.5 rounded-2xl border border-white/40 flex items-center gap-2 shadow">
-        <span class="text-2xl animate-spin" style="animation-duration: 6s;">⭐</span>
-        <div class="flex flex-col items-center">
-          <span class="font-black text-xl text-yellow-200 leading-none" id="star-count">310</span>
-          <span class="text-[10px] font-bold text-amber-100">نَجْمَة</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- شريط التبويبات الرئيسي المباشر -->
-    <div class="grid grid-cols-6 gap-1 mt-3 text-[10px] sm:text-xs font-black">
-      <button class="py-2 px-1 bg-white text-rose-600 rounded-xl shadow flex items-center justify-center gap-0.5 transition cursor-pointer" id="tab-dailylessons" onclick="switchTab('dailylessons')">
-        📸 <span>دُرُوسِي</span>
-      </button>
-      <button class="py-2 px-1 bg-amber-800/40 hover:bg-white/20 text-white rounded-xl flex items-center justify-center gap-0.5 transition cursor-pointer" id="tab-reading" onclick="switchTab('reading')">
+<div>
+<div class="flex items-center gap-1.5">
+<span class="text-[10px] bg-black/25 px-2 py-0.5 rounded-full font-extrabold text-amber-100">السَّنَةُ الثَّالِثَةُ أَسَاسِي</span>
+<span class="text-[10px] bg-red-700/80 px-2 py-0.5 rounded-full font-extrabold text-white">تُونِس 🇹🇳</span>
+</div>
+<h2 class="text-lg font-black mt-1 text-white drop-shadow-sm">البَطَلُ سَلِيم المُمْتَازُ 🌟</h2>
+</div>
+</div>
+<!-- رصيد النجوم -->
+<div class="bg-white/25 backdrop-blur-md px-3.5 py-2 rounded-2xl border border-white/40 flex items-center gap-2 shadow">
+<span class="text-2xl animate-spin" style="animation-duration: 6s;">⭐</span>
+<div class="flex flex-col items-center">
+<span class="font-black text-xl text-yellow-200 leading-none" id="star-count">310</span>
+<span class="text-[10px] font-bold text-amber-100">نَجْمَة</span>
+</div>
+</div>
+</div>
+<!-- أزرار التبويبات -->
+<div class="grid grid-cols-6 gap-1 mt-4 text-[10px] sm:text-xs font-black">
+<button class="py-2 px-1 bg-yellow-300 text-amber-950 font-black rounded-xl ring-2 ring-white/80 shadow flex items-center justify-center gap-0.5 transition cursor-pointer" id="tab-notebook" onclick="switchTab('notebook')">
+        📝 <span>دُرُوسِي</span>
+</button>
+<button class="py-2 px-1 bg-amber-800/40 hover:bg-white/20 text-white rounded-xl flex items-center justify-center gap-0.5 transition cursor-pointer" id="tab-reading" onclick="switchTab('reading')">
         📖 <span>القِرَاءَة</span>
-      </button>
-      <button class="py-2 px-1 bg-amber-800/40 hover:bg-white/20 text-white rounded-xl flex items-center justify-center gap-0.5 transition cursor-pointer" id="tab-grammar" onclick="switchTab('grammar')">
+</button>
+<button class="py-2 px-1 bg-amber-800/40 hover:bg-white/20 text-white rounded-xl flex items-center justify-center gap-0.5 transition cursor-pointer" id="tab-grammar" onclick="switchTab('grammar')">
         ✍️ <span>القَوَاعِد</span>
-      </button>
-      <button class="py-2 px-1 bg-amber-800/40 hover:bg-white/20 text-white rounded-xl flex items-center justify-center gap-0.5 transition cursor-pointer" id="tab-science" onclick="switchTab('science')">
+</button>
+<button class="py-2 px-1 bg-amber-800/40 hover:bg-white/20 text-white rounded-xl flex items-center justify-center gap-0.5 transition cursor-pointer" id="tab-science" onclick="switchTab('science')">
         🔬 <span>الإِيقَاظ</span>
-      </button>
-      <button class="py-2 px-1 bg-amber-800/40 hover:bg-white/20 text-white rounded-xl flex items-center justify-center gap-0.5 transition cursor-pointer" id="tab-math" onclick="switchTab('math')">
+</button>
+<button class="py-2 px-1 bg-amber-800/40 hover:bg-white/20 text-white rounded-xl flex items-center justify-center gap-0.5 transition cursor-pointer" id="tab-math" onclick="switchTab('math')">
         📐 <span>الحِسَاب</span>
-      </button>
-      <button class="py-2 px-1 bg-amber-800/40 hover:bg-white/20 text-white rounded-xl flex items-center justify-center gap-0.5 transition cursor-pointer" id="tab-materials" onclick="switchTab('materials')">
+</button>
+<button class="py-2 px-1 bg-amber-800/40 hover:bg-white/20 text-white rounded-xl flex items-center justify-center gap-0.5 transition cursor-pointer" id="tab-materials" onclick="switchTab('materials')">
         🎒 <span>الحَقِيبَة</span>
+</button>
+</div>
+</section>
+<!-- ============================================== -->
+<!-- 1. قسم دفتر دروسي اليومية (القسم المخصص للتلميذ) -->
+<!-- ============================================== -->
+<div class="p-4 space-y-4" id="section-notebook">
+<!-- لافتة التوضيح للطريقتين المدمجتين -->
+<div class="bg-gradient-to-r from-amber-400 via-orange-400 to-amber-500 text-amber-950 p-3.5 rounded-2xl shadow-sm border-2 border-amber-300">
+<div class="flex items-center justify-between">
+<div class="space-y-1">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="text-[10px] bg-amber-950 text-yellow-200 px-2 py-0.5 rounded-full font-black">
+              ⚡ طَرِيقَتَانِ مُدْمَجَتَانِ لِلتَّحْدِيثِ
+            </span>
+<span class="text-[10px] bg-emerald-800 text-white px-2 py-0.5 rounded-full font-bold">
+              1. مَزَامَنَةٌ سَحَابِيَّةٌ حَيَّةٌ ☁️
+            </span>
+<span class="text-[10px] bg-blue-800 text-white px-2 py-0.5 rounded-full font-bold">
+              2. رَوَابِطُ وَاتْسَاب مُبَاشِرَةٌ 🔗
+            </span>
+</div>
+<h3 class="text-sm sm:text-base font-black mt-1">دَفْتَرُ دُرُوسِي اليَوْمِيَّةِ المَزْمُونِ 📝📸</h3>
+<p class="text-xs text-amber-950/90 font-bold">
+            صَوِّرْ أَوْ أَضِفْ كُرَّاسَكَ؛ يُحْفَظُ فِي جِهَازِكَ وَيُرْفَعُ تِلْقَائِيًّا لِلسَّحَابَةِ، كَمَا يُمْكِنُكَ إِرْسَالُ أَيِّ دَرْسٍ لِزُمَلَائِكَ بِرَابِطٍ فَوْرِيٍّ!
+          </p>
+</div>
+<span class="text-4xl animate-bounce">📔</span>
+</div>
+</div>
+<!-- زر فتح نموذج تصوير الكراس الجديد -->
+<button class="w-full bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-600 hover:from-emerald-600 hover:to-teal-600 text-white font-black py-3.5 px-4 rounded-2xl shadow-xl border-3 border-amber-300 flex items-center justify-between active:scale-98 transition cursor-pointer" onclick="openNewLessonModal()">
+<div class="flex items-center gap-2.5">
+<span class="text-3xl bg-white/20 p-2 rounded-xl">📷</span>
+<div class="text-right">
+<div class="text-sm sm:text-base font-black flex items-center gap-1.5">
+<span>إِضَافَةُ دَرْسٍ جَدِيدٍ بِالصُّورَةِ وَالصَّوْتِ</span>
+<span class="bg-red-500 text-white text-[10px] px-1.5 py-0.5 rounded-full animate-pulse">سَحَابِيٌّ 🔴</span>
+</div>
+<span class="text-[11px] text-teal-100 font-bold">صَوِّرْ بِالكَمِيرَا 📸 أَوْ ارْفَعْ صُورَةَ كُرَّاسِكَ 📁 (تَحْدِيثٌ فَوْرِيٌّ لِلْكُلِّ)</span>
+</div>
+</div>
+<span class="bg-yellow-400 text-amber-950 text-xs px-3 py-1.5 rounded-xl font-black shadow-md shrink-0">+25 ⭐</span>
+</button>
+<!-- شريط تصفية الدروس وإدارة النسخ -->
+<div class="flex items-center justify-between bg-amber-50 p-2 rounded-2xl border border-amber-200 gap-1 overflow-x-auto text-[10px] sm:text-xs font-black">
+<button class="filter-btn flex-1 py-1.5 px-2 rounded-xl bg-amber-600 text-white shadow-xs text-center whitespace-nowrap cursor-pointer" onclick="filterNotebook('all', this)">
+        كُلُّ الدُّرُوسِ (<span id="notebook-count-all">3</span>)
       </button>
-    </div>
-  </section>
-
-  <!-- ============================================== -->
-  <!-- 1. القسم المخصص الرئيسي: دَفْتَرُ الدُّرُوسِ اليَوْمِيَّةِ بِالصُّوَرِ -->
-  <!-- ============================================== -->
-  <div class="p-3 sm:p-4 space-y-4" id="section-dailylessons">
-    <!-- لافتة الترحيب الملونة -->
-    <div class="bg-gradient-to-r from-rose-500 via-pink-500 to-purple-600 text-white p-3.5 rounded-2xl shadow flex items-center justify-between">
-      <div>
-        <div class="flex items-center gap-1.5">
-          <span class="text-[10px] bg-white/20 px-2 py-0.5 rounded-full font-bold">دَفْتَرُ البَطَلِ اليَوْمِيُّ 📸</span>
-          <span class="text-[10px] bg-yellow-400 text-purple-950 px-2 py-0.5 rounded-full font-extrabold">مُعَايَنَةٌ بِالصُّوَرِ</span>
-        </div>
-        <h3 class="text-base sm:text-lg font-black mt-1">دُرُوسُ اليَوْمِ المُصَوَّرَةُ 📅</h3>
-        <p class="text-xs text-rose-100">وثِّقْ دُرُوسَ كُرَّاسِكَ وَكِتَابِكَ، وَرَاجِعْهَا بِالصُّورَةِ وَالصَّوْتِ كُلَّ يَوْمٍ!</p>
-      </div>
-      <span class="text-3xl sm:text-4xl animate-bounce">📷</span>
-    </div>
-
-    <!-- نموذج إضافة درس مصور جديد (مكان مخصص لإضافة الدروس بالصور) -->
-    <div class="bg-gradient-to-br from-amber-50 to-rose-50 border-2 border-rose-300 rounded-2xl p-3.5 shadow-sm space-y-3">
-      <div class="flex items-center justify-between cursor-pointer" onclick="toggleAddLessonForm()">
-        <div class="flex items-center gap-2">
-          <span class="w-8 h-8 rounded-full bg-rose-500 text-white flex items-center justify-center font-black text-lg shadow-xs">+</span>
+<button class="filter-btn flex-1 py-1.5 px-2 rounded-xl bg-white text-slate-700 border border-amber-200 text-center whitespace-nowrap cursor-pointer" onclick="filterNotebook('قراءة', this)">
+        📖 قراءة
+      </button>
+<button class="filter-btn flex-1 py-1.5 px-2 rounded-xl bg-white text-slate-700 border border-amber-200 text-center whitespace-nowrap cursor-pointer" onclick="filterNotebook('قواعد لغة', this)">
+        ✍️ قواعد
+      </button>
+<button class="filter-btn flex-1 py-1.5 px-2 rounded-xl bg-white text-slate-700 border border-amber-200 text-center whitespace-nowrap cursor-pointer" onclick="filterNotebook('إيقاظ علمي', this)">
+        🔬 إيقاظ
+      </button>
+<button class="filter-btn flex-1 py-1.5 px-2 rounded-xl bg-white text-slate-700 border border-amber-200 text-center whitespace-nowrap cursor-pointer" onclick="filterNotebook('رياضيات', this)">
+        📐 رياضيات
+      </button>
+</div>
+<!-- قائمة وبطاقات الدروس الموثقة في الدفتر -->
+<div class="space-y-3.5" id="notebook-lessons-container">
+        <div class="lesson-card-hover bg-white border-2 border-amber-200 rounded-2xl p-3.5 shadow-sm space-y-2.5 ">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <span class="px-2 py-0.5 rounded-lg border text-xs font-black bg-emerald-100 text-emerald-800 border-emerald-300">
+                <span>✍️</span>
+                <span>قواعد لغة</span>
+              </span>
+              <span class="text-[11px] font-bold text-slate-500">📅 2026/9/25</span>
+            </div>
+            <div class="flex items-center gap-1">
+              <button onclick="shareSingleLesson(1)" class="bg-sky-50 hover:bg-sky-100 text-sky-700 text-xs px-2.5 py-1 rounded-lg border border-sky-200 flex items-center gap-1 font-bold cursor-pointer" title="مشاركة رابط الدرس الفوري">
+                <span>🔗</span>
+                <span class="text-[10px]">مُشَارَكَة</span>
+              </button>
+            </div>
+          </div>
           <div>
-            <h4 class="text-sm font-black text-slate-900">إِضَافَةُ دَرْسٍ جَدِيدٍ بِالصُّورَةِ 📝</h4>
-            <p class="text-[11px] text-rose-800 font-semibold">الْتَقِطْ صُورَةَ كُرَّاسِكَ أَوْ اخْتَرْ رَسْمًا تَعْلِيمِيًّا جَاهِزًا</p>
+            <h4 class="text-sm font-black text-slate-900 leading-tight">أَقْسَامُ الكَلَامِ (الجُمْلَةُ الفِعْلِيَّةُ)</h4>
+            <p class="text-xs text-slate-700 font-semibold mt-1 bg-amber-50/60 p-2 rounded-xl border border-amber-100">
+              💬 كَتَبْتُ الجُمْلَةَ الفِعْلِيَّةَ فِي كُرَّاسِي: «يَرْكُضُ الأَطْفَالُ فِي مَلْعَبِ المَدْرَسَةِ»، وَحَصَلْتُ عَلَى مُلَاحَظَةِ: مُمْتَازٌ جِدًّا 🌟
+            </p>
+          </div>
+          <div class="rounded-xl overflow-hidden border-2 border-amber-200 h-44 bg-slate-900">
+            <img src="https://images.unsplash.com/photo-1517842645767-c639042777db?auto=format&amp;fit=crop&amp;w=600&amp;q=80" alt="أَقْسَامُ الكَلَامِ (الجُمْلَةُ الفِعْلِيَّةُ)" class="w-full h-full object-cover">
+          </div>
+          <div class="flex items-center justify-between pt-1">
+            <button onclick="speakVoice('كَتَبْتُ الجُمْلَةَ الفِعْلِيَّةَ فِي كُرَّاسِي: «يَرْكُضُ الأَطْفَالُ فِي مَلْعَبِ المَدْرَسَةِ»، وَحَصَلْتُ عَلَى مُلَاحَظَةِ: مُمْتَازٌ جِدًّا 🌟')" class="text-xs text-amber-900 bg-amber-100 hover:bg-amber-200 font-bold px-3 py-1.5 rounded-xl cursor-pointer">
+              🔊 اسْتَمِعْ لِلتَّلْخِيصِ
+            </button>
+            <button onclick="shareSingleLesson(1)" class="text-xs bg-emerald-600 hover:bg-emerald-700 text-white font-black px-3 py-1.5 rounded-xl shadow-xs cursor-pointer">
+              💬 إِرْسَالٌ عبر واتساب
+            </button>
           </div>
         </div>
-        <button type="button" class="text-xs bg-rose-100 hover:bg-rose-200 text-rose-800 font-black px-3 py-1.5 rounded-xl border border-rose-300" id="toggle-form-btn">
-          <span>افْتَحِ النَّمُوذَجَ 🔽</span>
-        </button>
-      </div>
-
-      <!-- محتويات نموذج الإضافة -->
-      <form id="daily-lesson-form" class="space-y-3 pt-2 border-t border-rose-200 hidden" onsubmit="handleNewLessonSubmit(event)">
-        <div class="grid grid-cols-2 gap-2">
+      
+        <div class="lesson-card-hover bg-white border-2 border-amber-200 rounded-2xl p-3.5 shadow-sm space-y-2.5 ">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <span class="px-2 py-0.5 rounded-lg border text-xs font-black bg-teal-100 text-teal-800 border-teal-300">
+                <span>🔬</span>
+                <span>إيقاظ علمي</span>
+              </span>
+              <span class="text-[11px] font-bold text-slate-500">📅 2026/9/24</span>
+            </div>
+            <div class="flex items-center gap-1">
+              <button onclick="shareSingleLesson(2)" class="bg-sky-50 hover:bg-sky-100 text-sky-700 text-xs px-2.5 py-1 rounded-lg border border-sky-200 flex items-center gap-1 font-bold cursor-pointer" title="مشاركة رابط الدرس الفوري">
+                <span>🔗</span>
+                <span class="text-[10px]">مُشَارَكَة</span>
+              </button>
+            </div>
+          </div>
           <div>
-            <label class="block text-[11px] font-black text-slate-700 mb-1">اليَوْمُ / التَّارِيخُ:</label>
-            <select id="lesson-day" class="w-full bg-white border border-rose-300 rounded-xl p-2 text-xs font-bold text-slate-800 focus:ring-2 focus:ring-rose-400 outline-none">
-              <option value="اليَوْمَ (الإِثْنَيْنِ)">اليَوْمَ (الإِثْنَيْنِ) ☀️</option>
-              <option value="الأَمْسَ (الأَحَدِ)">الأَمْسَ (الأَحَدِ)</option>
-              <option value="الثُّلَاثَاءَ">الثُّلَاثَاءَ</option>
-              <option value="الأَرْبِعَاءَ">الأَرْبِعَاءَ</option>
-              <option value="الخَمِيسَ">الخَمِيسَ</option>
-              <option value="الجُمُعَةَ">الجُمُعَةَ</option>
-            </select>
+            <h4 class="text-sm font-black text-slate-900 leading-tight">حَرَكَتَا الشَّهِيقِ وَالزَّفِيرِ عِنْدَ الإِنْسَانِ</h4>
+            <p class="text-xs text-slate-700 font-semibold mt-1 bg-amber-50/60 p-2 rounded-xl border border-amber-100">
+              💬 رَسَمْتُ الرِّئَتَيْنِ فِي كُرَّاسِ الإِيقَاظِ، الشَّهِيقُ يَعْلُو فِيهِ القَفَصُ الصَّدْرِيُّ، وَالزَّفِيرُ يَنْخَفِضُ فِيهِ الصَّدْرُ.
+            </p>
+          </div>
+          <div class="rounded-xl overflow-hidden border-2 border-amber-200 h-44 bg-slate-900">
+            <img src="https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&amp;fit=crop&amp;w=600&amp;q=80" alt="حَرَكَتَا الشَّهِيقِ وَالزَّفِيرِ عِنْدَ الإِنْسَانِ" class="w-full h-full object-cover">
+          </div>
+          <div class="flex items-center justify-between pt-1">
+            <button onclick="speakVoice('رَسَمْتُ الرِّئَتَيْنِ فِي كُرَّاسِ الإِيقَاظِ، الشَّهِيقُ يَعْلُو فِيهِ القَفَصُ الصَّدْرِيُّ، وَالزَّفِيرُ يَنْخَفِضُ فِيهِ الصَّدْرُ.')" class="text-xs text-amber-900 bg-amber-100 hover:bg-amber-200 font-bold px-3 py-1.5 rounded-xl cursor-pointer">
+              🔊 اسْتَمِعْ لِلتَّلْخِيصِ
+            </button>
+            <button onclick="shareSingleLesson(2)" class="text-xs bg-emerald-600 hover:bg-emerald-700 text-white font-black px-3 py-1.5 rounded-xl shadow-xs cursor-pointer">
+              💬 إِرْسَالٌ عبر واتساب
+            </button>
+          </div>
+        </div>
+      
+        <div class="lesson-card-hover bg-white border-2 border-amber-200 rounded-2xl p-3.5 shadow-sm space-y-2.5 ">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <span class="px-2 py-0.5 rounded-lg border text-xs font-black bg-blue-100 text-blue-800 border-blue-300">
+                <span>📐</span>
+                <span>رياضيات</span>
+              </span>
+              <span class="text-[11px] font-bold text-slate-500">📅 2026/9/23</span>
+            </div>
+            <div class="flex items-center gap-1">
+              <button onclick="shareSingleLesson(3)" class="bg-sky-50 hover:bg-sky-100 text-sky-700 text-xs px-2.5 py-1 rounded-lg border border-sky-200 flex items-center gap-1 font-bold cursor-pointer" title="مشاركة رابط الدرس الفوري">
+                <span>🔗</span>
+                <span class="text-[10px]">مُشَارَكَة</span>
+              </button>
+            </div>
           </div>
           <div>
-            <label class="block text-[11px] font-black text-slate-700 mb-1">المَادَّةُ الدِّرَاسِيَّةُ:</label>
-            <select id="lesson-subject" class="w-full bg-white border border-rose-300 rounded-xl p-2 text-xs font-bold text-slate-800 focus:ring-2 focus:ring-rose-400 outline-none">
-              <option value="reading">📖 القِرَاءَة</option>
-              <option value="grammar">✍️ قَوَاعِدُ اللُّغَة</option>
-              <option value="science">🔬 الإِيقَاظُ العِلْمِي</option>
-              <option value="math">📐 الرِّيَاضِيَّات</option>
-              <option value="poetry">📜 المَحْفُوظَات</option>
-            </select>
+            <h4 class="text-sm font-black text-slate-900 leading-tight">جَدْوَلُ الضَّرْبِ فِي 4 وَ 5 كَجَمْعٍ تِكْرَارِيٍّ</h4>
+            <p class="text-xs text-slate-700 font-semibold mt-1 bg-amber-50/60 p-2 rounded-xl border border-amber-100">
+              💬 أَنْجَزْتُ عَمَلِيَّاتِ الضَّرْبِ بِسُرْعَةٍ: 5 × 4 = 20، وَرَسَمْتُ 5 مَجْمُوعَاتٍ فِي كُلِّ وَاحِدَةٍ 4 نُجُومٍ.
+            </p>
           </div>
-        </div>
-
-        <div>
-          <label class="block text-[11px] font-black text-slate-700 mb-1">عُنْوَانُ دَرْسِ اليَوْمِ:</label>
-          <input type="text" id="lesson-title-input" required placeholder="مِثَال: قِيَاسُ الأَطْوَالِ بِالمِلِّيمِتْر، أَوْ سُورَةُ الضُّحَى" class="w-full bg-white border border-rose-300 rounded-xl p-2 text-xs font-bold text-slate-800 focus:ring-2 focus:ring-rose-400 outline-none"/>
-        </div>
-
-        <div>
-          <label class="block text-[11px] font-black text-slate-700 mb-1">مُلَخَّصُ الدَّرْسِ أَوْ مَا تَعَلَّمْتُهُ (مَشْكُول):</label>
-          <textarea id="lesson-notes-input" rows="2" required placeholder="اكْتُبْ هُنَا أَهَمَّ قَاعِدَةٍ أَوْ مُلَاحَظَةٍ فِي هَذَا الدَّرْسِ..." class="w-full bg-white border border-rose-300 rounded-xl p-2 text-xs font-bold text-slate-800 focus:ring-2 focus:ring-rose-400 outline-none"></textarea>
-        </div>
-
-        <!-- اختيار الصورة: رفع صورة أو اختيار رسومات ونماذج جاهزة -->
-        <div class="space-y-2 bg-white/70 p-2.5 rounded-xl border border-rose-200">
-          <label class="block text-[11px] font-black text-slate-800">📸 صُورَةُ الدَّرْسِ أَوْ كُرَّاسِ التَّمَارِينِ:</label>
-          
-          <!-- أزرار سريعة لصور ونماذج جاهزة ملونة -->
-          <div class="text-[10px] text-slate-600 font-bold mb-1">اخْتَرْ نَمُوذَجًا جَاهِزًا سَرِيعًا:</div>
-          <div class="grid grid-cols-4 gap-1.5" id="preset-images-picker">
-            <button type="button" class="preset-choice-btn p-1.5 bg-amber-50 hover:bg-amber-100 border-2 border-amber-400 rounded-lg text-center transition flex flex-col items-center" onclick="selectPresetImage(0, this)">
-              <span class="text-2xl">📝</span>
-              <span class="text-[9px] font-black text-amber-950">كُرَّاسُ الخَطّ</span>
+          <div class="rounded-xl overflow-hidden border-2 border-amber-200 h-44 bg-slate-900">
+            <img src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&amp;fit=crop&amp;w=600&amp;q=80" alt="جَدْوَلُ الضَّرْبِ فِي 4 وَ 5 كَجَمْعٍ تِكْرَارِيٍّ" class="w-full h-full object-cover">
+          </div>
+          <div class="flex items-center justify-between pt-1">
+            <button onclick="speakVoice('أَنْجَزْتُ عَمَلِيَّاتِ الضَّرْبِ بِسُرْعَةٍ: 5 × 4 = 20، وَرَسَمْتُ 5 مَجْمُوعَاتٍ فِي كُلِّ وَاحِدَةٍ 4 نُجُومٍ.')" class="text-xs text-amber-900 bg-amber-100 hover:bg-amber-200 font-bold px-3 py-1.5 rounded-xl cursor-pointer">
+              🔊 اسْتَمِعْ لِلتَّلْخِيصِ
             </button>
-            <button type="button" class="preset-choice-btn p-1.5 bg-teal-50 hover:bg-teal-100 border border-teal-300 rounded-lg text-center transition flex flex-col items-center" onclick="selectPresetImage(1, this)">
-              <span class="text-2xl">🫁</span>
-              <span class="text-[9px] font-black text-teal-950">تَجْرِبَةُ الإِيقَاظ</span>
-            </button>
-            <button type="button" class="preset-choice-btn p-1.5 bg-blue-50 hover:bg-blue-100 border border-blue-300 rounded-lg text-center transition flex flex-col items-center" onclick="selectPresetImage(2, this)">
-              <span class="text-2xl">📊</span>
-              <span class="text-[9px] font-black text-blue-950">جَدْوَلُ الحِسَاب</span>
-            </button>
-            <button type="button" class="preset-choice-btn p-1.5 bg-purple-50 hover:bg-purple-100 border border-purple-300 rounded-lg text-center transition flex flex-col items-center" onclick="selectPresetImage(3, this)">
-              <span class="text-2xl">🎨</span>
-              <span class="text-[9px] font-black text-purple-950">رَسْمٌ تَعْلِيمِيّ</span>
+            <button onclick="shareSingleLesson(3)" class="text-xs bg-emerald-600 hover:bg-emerald-700 text-white font-black px-3 py-1.5 rounded-xl shadow-xs cursor-pointer">
+              💬 إِرْسَالٌ عبر واتساب
             </button>
           </div>
-
-          <!-- رفع صورة من الكاميرا أو الهاتف -->
-          <div class="pt-2 flex items-center gap-2">
-            <label class="flex-1 bg-white hover:bg-rose-50 border-2 border-dashed border-rose-300 rounded-xl p-2 text-center cursor-pointer transition flex items-center justify-center gap-1.5">
-              <span class="text-lg">📷</span>
-              <span class="text-[11px] font-extrabold text-rose-700" id="file-label-text">الْتَقِطْ صُورَةً مِنْ هَاتِفِكَ (اخْتِيَارِيّ)</span>
-              <input type="file" accept="image/*" id="lesson-file-input" class="hidden" onchange="handleImageFileUpload(event)"/>
-            </label>
-          </div>
-
-          <!-- معاينة مصغرة للصورة المختارة -->
-          <div class="hidden flex items-center gap-2 bg-emerald-50 p-2 rounded-xl border border-emerald-300" id="selected-image-preview-box">
-            <span class="text-xs font-black text-emerald-800">الصُّورَةُ المَضْبُوطَةُ:</span>
-            <div id="preview-thumbnail-container" class="w-12 h-12 rounded-lg overflow-hidden border border-emerald-400 bg-white flex items-center justify-center text-xl"></div>
-            <span class="text-[10px] text-emerald-700 font-bold" id="preview-caption">صُورَةٌ جَاهِزَةٌ لِلْحِفْظِ</span>
-          </div>
         </div>
-
-        <button type="submit" class="w-full bg-gradient-to-r from-rose-600 via-pink-600 to-orange-500 hover:from-rose-700 hover:to-orange-600 text-white font-black text-sm py-2.5 rounded-xl shadow-md transition active:scale-95 flex items-center justify-center gap-1.5 cursor-pointer">
-          <span>🌟 احْفَظِ الدَّرْسَ فِي دَفْتَرِي اليَوْمِي (+20 نَجْمَة)</span>
-        </button>
-      </form>
-    </div>
-
-    <!-- شريط تصفية بطاقات الدروس اليومية المصورة -->
-    <div class="flex items-center justify-between bg-amber-50 p-2 rounded-2xl border border-amber-200 gap-1 text-[10px] sm:text-xs font-black overflow-x-auto">
-      <button class="daily-filter-btn px-2.5 py-1.5 rounded-xl bg-rose-600 text-white shadow-xs shrink-0 cursor-pointer" onclick="filterDailyLessons('all', this)">
-        الْكُلّ
-      </button>
-      <button class="daily-filter-btn px-2.5 py-1.5 rounded-xl bg-white text-slate-700 border border-amber-200 shrink-0 cursor-pointer" onclick="filterDailyLessons('today', this)">
-        ☀️ دُرُوسُ اليَوْم
-      </button>
-      <button class="daily-filter-btn px-2.5 py-1.5 rounded-xl bg-white text-slate-700 border border-amber-200 shrink-0 cursor-pointer" onclick="filterDailyLessons('reading', this)">
-        📖 قِرَاءَة
-      </button>
-      <button class="daily-filter-btn px-2.5 py-1.5 rounded-xl bg-white text-slate-700 border border-amber-200 shrink-0 cursor-pointer" onclick="filterDailyLessons('science', this)">
-        🔬 إِيقَاظ
-      </button>
-      <button class="daily-filter-btn px-2.5 py-1.5 rounded-xl bg-white text-slate-700 border border-amber-200 shrink-0 cursor-pointer" onclick="filterDailyLessons('math', this)">
-        📐 حِسَاب
-      </button>
-    </div>
-
-    <!-- معرض بطاقات الدروس اليومية المصورة -->
-    <div class="space-y-3.5" id="daily-lessons-list">
-      <!-- ستملأ برمجياً عبر دالة renderDailyLessonsCards() -->
-    </div>
-  </div>
-
-  <!-- نافذة تكبير الصورة المنبثقة (Lightbox / Fullscreen Modal) -->
-  <div class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex flex-col items-center justify-center p-3" id="photo-lightbox-modal" onclick="closePhotoLightbox(event)">
-    <div class="bg-white rounded-3xl max-w-lg w-full p-4 shadow-2xl space-y-3 border-4 border-amber-300 relative" onclick="event.stopPropagation()">
-      <div class="flex items-center justify-between border-b pb-2">
-        <div class="flex items-center gap-1.5">
-          <span class="text-xl">🔍</span>
-          <h4 class="text-sm font-black text-slate-900" id="lightbox-title">مُعَايَنَةُ صُورَةِ الدَّرْسِ الكَامِلَةِ</h4>
-        </div>
-        <button class="w-8 h-8 rounded-full bg-slate-100 hover:bg-rose-100 text-slate-700 hover:text-rose-600 font-black text-sm flex items-center justify-center cursor-pointer" onclick="closePhotoLightbox()">✕</button>
       </div>
-      <div class="w-full max-h-[60vh] overflow-hidden rounded-2xl border-2 border-slate-200 flex items-center justify-center bg-slate-50" id="lightbox-image-box">
-        <!-- الصورة المكبرة أو محتوى الكراس -->
-      </div>
-      <p class="text-xs text-slate-700 font-bold bg-amber-50 p-2.5 rounded-xl border border-amber-200 text-center" id="lightbox-caption">
-        انْقُرْ فِي أَيِّ مَكَانٍ لِلْإِغْلَاقِ
+<!-- نصيحة ذكية للتلميذ -->
+<div class="bg-sky-50 border-2 border-sky-200 rounded-2xl p-3 flex items-center gap-3">
+<span class="text-3xl">💡</span>
+<p class="text-xs text-sky-950 font-bold leading-relaxed">
+<strong>كَيْفَ تَسْتَفِيدُ مِنَ الطَّرِيقَتَيْنِ؟</strong>
+        الدُّرُوسُ تَتَزَامَنُ تِلْقَائِيًّا عَبْرَ السَّحَابَةِ، وَيُمْكِنُكَ أَيْضًا نَقْرُ زِرِّ «🔗 مُشَارَكَةٌ» عَلَى أَيِّ دَرْسٍ لِإِرْسَالِهِ مُبَاشَرَةً بِالوَاتْسَابِ لِيَفْتَحَ فَوْرًا عِنْدَ زُمَلَائِكَ!
       </p>
-      <div class="flex justify-end gap-2">
-        <button class="text-xs bg-rose-600 text-white font-black px-4 py-2 rounded-xl shadow cursor-pointer" onclick="closePhotoLightbox()">
-          إِغْلَاق ✕
+</div>
+</div>
+<!-- ============================================== -->
+<!-- 2. قسم القراءة التونسي -->
+<!-- ============================================== -->
+<div class="p-4 space-y-4 hidden" id="section-reading">
+<div class="flex items-center justify-between bg-amber-50 p-2.5 rounded-2xl border border-amber-200">
+<span class="text-xs font-black text-amber-900">اخْتَرْ نَصَّ القِرَاءَةِ:</span>
+<div class="flex gap-1.5">
+<button class="story-choice-btn text-xs font-bold px-2.5 py-1 rounded-xl bg-amber-500 text-white shadow cursor-pointer" id="story-btn-0" onclick="loadTunisianStory(0)">🌳 البَلْفِيدِير</button>
+<button class="story-choice-btn text-xs font-bold px-2.5 py-1 rounded-xl bg-white border border-amber-300 text-amber-900 cursor-pointer" id="story-btn-1" onclick="loadTunisianStory(1)">🏡 ضَيْعَةُ الجَدّ</button>
+<button class="story-choice-btn text-xs font-bold px-2.5 py-1 rounded-xl bg-white border border-amber-300 text-amber-900 cursor-pointer" id="story-btn-2" onclick="loadTunisianStory(2)">🌊 سِيدِي بُوسَعِيد</button>
+</div>
+</div>
+<div class="bg-gradient-to-b from-sky-50 to-blue-100 rounded-2xl p-4 border-2 border-sky-200 text-center relative shadow-sm">
+<h3 class="text-xl font-black text-sky-950" id="story-title">فِي حَدِيقَةِ البَلْفِيدِير بِتُونِسَ 🇹🇳</h3>
+<p class="text-xs text-sky-800 font-bold mt-1">اِضْغَطْ عَلَى أَيِّ كَلِمَةٍ مَشْكُولَةٍ لِسَمَاعِ نُطْقِهَا التَّعْلِيمِي الصَّحِيحِ</p>
+</div>
+<div class="bg-white p-5 rounded-2xl border-2 border-amber-200 text-center text-xl sm:text-2xl font-black leading-loose text-slate-800 shadow-inner min-h-[110px]" id="story-container"><span class="clickable-word p-1 rounded-lg inline-block cursor-pointer" onclick="speakVoice('ذَهَبَ')">ذَهَبَ</span> <span class="clickable-word p-1 rounded-lg inline-block cursor-pointer" onclick="speakVoice('سَلِيمٌ')">سَلِيمٌ</span> <span class="clickable-word p-1 rounded-lg inline-block cursor-pointer" onclick="speakVoice('مَعَ')">مَعَ</span> <span class="clickable-word p-1 rounded-lg inline-block cursor-pointer" onclick="speakVoice('عَائِلَتِهِ')">عَائِلَتِهِ</span> <span class="clickable-word p-1 rounded-lg inline-block cursor-pointer" onclick="speakVoice('إِلَى')">إِلَى</span> <span class="clickable-word p-1 rounded-lg inline-block cursor-pointer" onclick="speakVoice('مُنْتَزَهِ')">مُنْتَزَهِ</span> <span class="clickable-word p-1 rounded-lg inline-block cursor-pointer" onclick="speakVoice('البَلْفِيدِير')">البَلْفِيدِير</span> <span class="clickable-word p-1 rounded-lg inline-block cursor-pointer" onclick="speakVoice('بِتُونِسَ')">بِتُونِسَ</span> <span class="clickable-word p-1 rounded-lg inline-block cursor-pointer" onclick="speakVoice('العَاصِمَةِ.')">العَاصِمَةِ.</span> <span class="clickable-word p-1 rounded-lg inline-block cursor-pointer" onclick="speakVoice('شَاهَدَ')">شَاهَدَ</span> <span class="clickable-word p-1 rounded-lg inline-block cursor-pointer" onclick="speakVoice('الأَسَدَ')">الأَسَدَ</span> <span class="clickable-word p-1 rounded-lg inline-block cursor-pointer" onclick="speakVoice('الشُّجَاعَ،')">الشُّجَاعَ،</span> <span class="clickable-word p-1 rounded-lg inline-block cursor-pointer" onclick="speakVoice('وَالغَزَالَ')">وَالغَزَالَ</span> <span class="clickable-word p-1 rounded-lg inline-block cursor-pointer" onclick="speakVoice('اللَّطِيفَ،')">اللَّطِيفَ،</span> <span class="clickable-word p-1 rounded-lg inline-block cursor-pointer" onclick="speakVoice('وَقَضَى')">وَقَضَى</span> <span class="clickable-word p-1 rounded-lg inline-block cursor-pointer" onclick="speakVoice('يَوْمًا')">يَوْمًا</span> <span class="clickable-word p-1 rounded-lg inline-block cursor-pointer" onclick="speakVoice('بَهِيجًا')">بَهِيجًا</span> <span class="clickable-word p-1 rounded-lg inline-block cursor-pointer" onclick="speakVoice('تَحْتَ')">تَحْتَ</span> <span class="clickable-word p-1 rounded-lg inline-block cursor-pointer" onclick="speakVoice('الأَشْجَارِ')">الأَشْجَارِ</span> <span class="clickable-word p-1 rounded-lg inline-block cursor-pointer" onclick="speakVoice('العَالِيَةِ.')">العَالِيَةِ.</span></div>
+<div class="flex items-center justify-between">
+<button class="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 text-white font-black text-xs px-4 py-2 rounded-xl shadow cursor-pointer flex items-center gap-1.5" id="play-story-btn" onclick="playFullStory()">
+<span id="play-story-icon">▶️</span>
+<span id="play-story-text">تَشْغِيلُ النَّصِّ كَامِلًا</span>
+</button>
+<div class="flex items-center gap-2 text-xs font-bold">
+<span>السُّرْعَةُ:</span>
+<button class="px-2 py-1 bg-amber-100 rounded-lg text-amber-900" onclick="setSpeed(0.75)">🐢 بَطِيءٌ</button>
+<button class="px-2 py-1 bg-amber-500 text-white rounded-lg" onclick="setSpeed(1.0)">⭐ طَبِيعِيٌّ</button>
+</div>
+</div>
+</div>
+<!-- ============================================== -->
+<!-- 3. قسم قواعد اللغة -->
+<!-- ============================================== -->
+<div class="p-4 space-y-4 hidden" id="section-grammar">
+<div class="bg-gradient-to-r from-emerald-500 to-teal-600 text-white p-4 rounded-2xl shadow flex items-center justify-between">
+<div>
+<span class="text-[11px] bg-emerald-800/60 px-2 py-0.5 rounded-full font-bold">المِنْهَاجُ التُّونِسِيُّ 🇹🇳</span>
+<h3 class="text-lg font-black mt-1">أَنْشِطَةُ النَّحْوِ وَالصَّرْفِ ✍️</h3>
+<p class="text-xs text-emerald-100">أَقْسَامُ الكَلَامِ (اسْمٌ، فِعْلٌ، حَرْفٌ) وَالتَّصْرِيفُ</p>
+</div>
+<span class="text-4xl">📚</span>
+</div>
+<div class="bg-white border-2 border-emerald-200 rounded-2xl p-4 shadow-sm space-y-3">
+<div class="flex items-center justify-between">
+<span class="bg-emerald-100 text-emerald-800 text-xs font-black px-2 py-1 rounded-lg">نَشَاطُ تَصْنِيفِ الكَلِمَاتِ</span>
+<button class="text-xs bg-emerald-50 text-emerald-700 font-bold px-2 py-1 rounded-lg border border-emerald-200 cursor-pointer" onclick="speakVoice(grammarWords[currentGrammarIdx].word)">
+          🔊 اسْتَمِعْ
         </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ============================================== -->
-  <!-- 2. قسم القراءة التونسي مع المشاهد المصورة التعليمية -->
-  <!-- ============================================== -->
-  <div class="p-3 sm:p-4 space-y-4 hidden" id="section-reading">
-    <!-- اختيار النص التونسي -->
-    <div class="flex items-center justify-between bg-amber-50 p-2.5 rounded-2xl border border-amber-200">
-      <span class="text-xs font-black text-amber-900">اخْتَرْ نَصَّ القِرَاءَةِ:</span>
-      <div class="flex gap-1.5">
-        <button class="text-xs font-bold px-2.5 py-1 rounded-xl bg-amber-500 text-white shadow cursor-pointer" id="story-btn-0" onclick="loadStory(0)">🌳 البَلْفِيدِير</button>
-        <button class="text-xs font-bold px-2.5 py-1 rounded-xl bg-white border border-amber-300 text-amber-900 cursor-pointer" id="story-btn-1" onclick="loadStory(1)">🏡 ضَيْعَةُ الجَدّ</button>
-        <button class="text-xs font-bold px-2.5 py-1 rounded-xl bg-white border border-amber-300 text-amber-900 cursor-pointer" id="story-btn-2" onclick="loadStory(2)">🌊 سِيدِي بُوسَعِيد</button>
-      </div>
-    </div>
-
-    <!-- لوحة المشهد المصور التعليمي للنص -->
-    <div class="bg-gradient-to-b from-sky-50 to-blue-100/70 rounded-2xl p-4 border-2 border-sky-200 text-center relative shadow-sm">
-      <div class="text-5xl py-2 flex justify-center gap-4" id="story-emoji-icon">
-        <span class="animate-bounce">🌳</span>
-        <span>🦁</span>
-        <span>🌸</span>
-        <span>🎈</span>
-      </div>
-      <h3 class="text-xl font-black text-sky-950 mt-1" id="story-title">فِي حَدِيقَةِ البَلْفِيدِير بِتُونِسَ</h3>
-      <p class="text-xs text-sky-800 font-bold mt-1">اِضْغَطْ عَلَى أَيِّ كَلِمَةٍ مَشْكُولَةٍ لِسَمَاعِ نُطْقِهَا التَّعْلِيمِي الصَّحِيحِ</p>
-    </div>
-
-    <!-- صندوق النص المشكول المتفاعل مع الصوت -->
-    <div class="bg-amber-50/80 border-2 border-amber-200 rounded-2xl p-4 shadow space-y-3">
-      <div class="flex items-center justify-between flex-wrap gap-2">
-        <span class="text-xs font-black text-amber-900 flex items-center gap-1.5">
-          🎧 انْقُرْ عَلَى الكَلِمَاتِ أَوْ شَغِّلْ النَّصَّ:
-        </span>
-        <button class="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 text-white font-extrabold text-xs px-4 py-2 rounded-xl shadow-md flex items-center gap-1.5 cursor-pointer" onclick="playFullText()">
-          <span>▶️ تَشْغِيلُ النَّصِّ كَامِلًا</span>
-        </button>
-      </div>
-      <div class="bg-white p-4 rounded-2xl border border-amber-200 text-center text-xl sm:text-2xl font-black leading-loose text-slate-800 shadow-inner" id="story-container">
-        <!-- تملأ برمجياً -->
-      </div>
-      <div class="flex items-center justify-center gap-3 pt-2 text-xs font-extrabold text-slate-700">
-        <span>سُرْعَةُ النُّطْقِ:</span>
-        <button class="px-3 py-1 bg-amber-100 hover:bg-amber-200 text-amber-900 rounded-xl cursor-pointer" onclick="setSpeed(0.7)">🐢 بَطِيءٌ</button>
-        <button class="px-3 py-1 bg-amber-500 text-white rounded-xl shadow cursor-pointer" onclick="setSpeed(1.0)">⭐ طَبِيعِيٌّ</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ============================================== -->
-  <!-- 3. قسم قواعد اللغة المصورة وتصريف الأفعال -->
-  <!-- ============================================== -->
-  <div class="p-3 sm:p-4 space-y-4 hidden" id="section-grammar">
-    <div class="bg-gradient-to-r from-emerald-500 to-teal-600 text-white p-3.5 rounded-2xl shadow flex items-center justify-between">
-      <div>
-        <span class="text-[11px] bg-emerald-800/60 px-2 py-0.5 rounded-full font-bold">بَرْنَامَجُ قَوَاعِدِ اللُّغَةِ (تُونِس)</span>
-        <h3 class="text-base sm:text-lg font-black mt-1">أَنْشِطَةُ النَّحْوِ وَالصَّرْفِ المُصَوَّرَةُ ✍️</h3>
-        <p class="text-xs text-emerald-100">أَقْسَامُ الكَلَامِ بِالصُّوَرِ، وَالتَّصْرِيفُ مَعَ الضَّمَائِرِ</p>
-      </div>
-      <span class="text-3xl">📚</span>
-    </div>
-
-    <!-- بطاقات أقسام الكلمة المصورة -->
-    <div class="grid grid-cols-3 gap-2">
-      <div class="bg-sky-50 border-2 border-sky-300 rounded-xl p-2 text-center cursor-pointer card-hover" onclick="speakVoice('الاسْمُ: مِثْلُ: أَسَدٌ، شَجَرَةٌ، سَلِيمٌ')">
-        <div class="text-2xl mb-1">🦁🏷️</div>
-        <span class="text-xs font-black text-sky-950 block">1. الاسْمُ</span>
-        <span class="text-[9px] text-sky-800 font-bold">حَيَوَان / إِنْسَان</span>
-      </div>
-      <div class="bg-amber-50 border-2 border-amber-300 rounded-xl p-2 text-center cursor-pointer card-hover" onclick="speakVoice('الفِعْلُ: مِثْلُ: يَرْكُضُ، سَقَى، يَقْرَأُ')">
-        <div class="text-2xl mb-1">🏃⚡</div>
-        <span class="text-xs font-black text-amber-950 block">2. الفِعْلُ</span>
-        <span class="text-[9px] text-amber-800 font-bold">حَرَكَةٌ وَعَمَلٌ</span>
-      </div>
-      <div class="bg-purple-50 border-2 border-purple-300 rounded-xl p-2 text-center cursor-pointer card-hover" onclick="speakVoice('الحَرْفُ: مِثْلُ: فِي، عَلَى، إِلَى')">
-        <div class="text-2xl mb-1">🔗🌉</div>
-        <span class="text-xs font-black text-purple-950 block">3. الحَرْفُ</span>
-        <span class="text-[9px] text-purple-800 font-bold">رَابِطٌ بَيْنَ الكَلِمَاتِ</span>
-      </div>
-    </div>
-
-    <!-- نشاط تصنيف الكلمة التفاعلي -->
-    <div class="bg-white border-2 border-emerald-200 rounded-2xl p-3.5 shadow-sm space-y-2">
-      <div class="flex items-center justify-between">
-        <span class="bg-emerald-100 text-emerald-800 text-xs font-black px-2 py-0.5 rounded-lg">نَشَاط 1</span>
-        <span class="text-xs font-bold text-slate-500" id="classify-progress-text">الْكَلِمَةُ 1 مِنْ 5</span>
-      </div>
-      <div class="bg-emerald-50/70 border border-emerald-200 rounded-xl p-3 text-center">
-        <span class="text-xs text-emerald-800 font-bold block mb-1">الْكَلِمَةُ المَطْلُوبَةُ:</span>
-        <div class="text-2xl font-black text-emerald-950" id="classify-target-word">البَلْفِيدِيرُ</div>
-      </div>
-      <div class="grid grid-cols-3 gap-2 pt-1">
-        <button class="py-2 bg-sky-100 hover:bg-sky-200 text-sky-950 font-black text-xs sm:text-sm rounded-xl border border-sky-300 cursor-pointer" onclick="handleClassifyChoice('اسم', this)">🏷️ اسْمٌ</button>
-        <button class="py-2 bg-amber-100 hover:bg-amber-200 text-amber-950 font-black text-xs sm:text-sm rounded-xl border border-amber-300 cursor-pointer" onclick="handleClassifyChoice('فعل', this)">🏃 فِعْلٌ</button>
-        <button class="py-2 bg-purple-100 hover:bg-purple-200 text-purple-950 font-black text-xs sm:text-sm rounded-xl border border-purple-300 cursor-pointer" onclick="handleClassifyChoice('حرف', this)">🔗 حَرْفٌ</button>
-      </div>
-      <div class="text-xs font-black p-2 rounded-xl hidden text-center" id="classify-feedback"></div>
-      <div class="text-left pt-1">
-        <button class="text-xs text-emerald-700 underline font-black cursor-pointer" onclick="nextClassifyWord()">الْكَلِمَةُ التَّالِيَةُ ⬅️</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ============================================== -->
-  <!-- 4. قسم الإيقاظ العلمي (التنفس والحيوانات) -->
-  <!-- ============================================== -->
-  <div class="p-3 sm:p-4 space-y-4 hidden" id="section-science">
-    <div class="bg-gradient-to-r from-teal-500 to-cyan-600 text-white p-3.5 rounded-2xl shadow flex items-center justify-between">
-      <div>
-        <span class="text-[10px] bg-white/20 px-2 py-0.5 rounded-full font-bold">المِنْهَاجُ التُّونِسِيُّ 🇹🇳</span>
-        <h3 class="text-base sm:text-lg font-black mt-1">الإِيقَاظُ العِلْمِيُّ المُصَوَّرُ 🔬</h3>
-        <p class="text-xs text-teal-100">رُسُومٌ تَشْرِيحِيَّةٌ لِلتَّنَفُّسِ وَأَنْسَاقِ التَّنَقُّلِ عِنْدَ الحَيَوَانِ</p>
-      </div>
-      <span class="text-3xl animate-pulse">🫁</span>
-    </div>
-
-    <!-- رسم تشريحي لحركتي التنفس -->
-    <div class="bg-white border-2 border-teal-200 rounded-2xl p-3.5 space-y-3">
-      <div class="flex items-center justify-between">
-        <h4 class="text-xs sm:text-sm font-black text-teal-950">حَرَكَاتُ التَّنَفُّسِ: الشَّهِيقُ وَالزَّفِيرُ</h4>
-        <button class="bg-teal-50 text-teal-700 text-xs font-bold px-2 py-1 rounded-lg border border-teal-300 cursor-pointer" onclick="speakVoice('فِي الشَّهِيقِ يَدْخُلُ الأُكْسِيجِين فَيَعْلُو القَفَصُ الصَّدْرِيُّ، وَفِي الزَّفِيرِ يَخْرُجُ الهَوَاءُ فَيَنْخَفِضُ القَفَصُ الصَّدْرِيُّ')">
-          <span>🔊 اسْتَمِعْ</span>
-        </button>
-      </div>
-      <div class="grid grid-cols-2 gap-2 text-center">
-        <div class="border-2 border-teal-300 bg-teal-50/60 rounded-xl p-2.5">
-          <span class="text-xs font-black text-teal-900 block mb-1">1. الشَّهِيقُ</span>
-          <span class="text-3xl animate-pulse inline-block">🫁</span>
-          <p class="text-[10px] font-bold text-teal-800 mt-1">دُخُول الأُكْسِيجِين ⬆️ يَعْلُو الصَّدْرُ</p>
-        </div>
-        <div class="border-2 border-cyan-300 bg-cyan-50/60 rounded-xl p-2.5">
-          <span class="text-xs font-black text-cyan-900 block mb-1">2. الزَّفِيرُ</span>
-          <span class="text-3xl inline-block">💨</span>
-          <p class="text-[10px] font-bold text-cyan-800 mt-1">خُرُوج الهَوَاءِ ⬇️ يَنْخَفِضُ الصَّدْرُ</p>
-        </div>
-      </div>
-      <div class="grid grid-cols-4 gap-1.5 pt-1 text-center">
-        <button class="p-1.5 rounded-lg border border-amber-300 bg-amber-50 text-[10px] font-black card-hover cursor-pointer" onclick="speakVoice('الأَرْنَبُ يَتَنَقَّلُ بِالقَفْزِ')">
-          <span>🐇 الأَرْنَب</span><br/><span class="text-amber-700">قَفْزٌ</span>
-        </button>
-        <button class="p-1.5 rounded-lg border border-sky-300 bg-sky-50 text-[10px] font-black card-hover cursor-pointer" onclick="speakVoice('السَّمَكَةُ تَتَنَقَّلُ بِالسِّبَاحَةِ')">
-          <span>🐟 السَّمَكَة</span><br/><span class="text-sky-700">سِبَاحَةٌ</span>
-        </button>
-        <button class="p-1.5 rounded-lg border border-blue-300 bg-blue-50 text-[10px] font-black card-hover cursor-pointer" onclick="speakVoice('الحَمَامَةُ تَتَنَقَّلُ بِالطَّيَرَانِ')">
-          <span>🕊️ الحَمَامَة</span><br/><span class="text-blue-700">طَيَرَانٌ</span>
-        </button>
-        <button class="p-1.5 rounded-lg border border-orange-300 bg-orange-50 text-[10px] font-black card-hover cursor-pointer" onclick="speakVoice('الحِصَانُ يَتَنَقَّلُ بِالعَدْوِ')">
-          <span>🐎 الحِصَان</span><br/><span class="text-orange-700">عَدْوٌ</span>
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ============================================== -->
-  <!-- 5. قسم الرياضيات (الضرب والهندسة) -->
-  <!-- ============================================== -->
-  <div class="p-3 sm:p-4 space-y-4 hidden" id="section-math">
-    <div class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white p-3.5 rounded-2xl shadow flex items-center justify-between">
-      <div>
-        <span class="text-[10px] bg-white/20 px-2 py-0.5 rounded-full font-bold">السَّنَةُ 3 أَسَاسِي</span>
-        <h3 class="text-base sm:text-lg font-black mt-1">الرِّيَاضِيَّاتُ وَالحِسَابُ المُصَوَّرُ 📐</h3>
-        <p class="text-xs text-blue-100">رُسُومٌ بَيَانِيَّةٌ لِلضَّرْبِ وَأَشْكَالٌ هَنْدَسِيَّةٌ</p>
-      </div>
-      <span class="text-3xl">🔢</span>
-    </div>
-
-    <!-- جدول الضرب السريع -->
-    <div class="bg-white border-2 border-blue-200 rounded-2xl p-4 text-center space-y-3">
-      <span class="text-xs font-black text-blue-900 block">احْسِبْ بِسُرْعَةٍ يَا عَبْقَرِي:</span>
-      <div class="bg-blue-50 border border-blue-200 rounded-2xl p-3 text-3xl font-black text-blue-950 flex items-center justify-center gap-3">
-        <span id="math-num1">5</span>
-        <span class="text-orange-500">×</span>
-        <span id="math-num2">4</span>
-        <span>=</span>
-        <span class="text-orange-600 font-extrabold">؟</span>
-      </div>
-      <div class="grid grid-cols-3 gap-2" id="math-options"></div>
-      <div class="text-xs font-black p-2 rounded-xl hidden text-center" id="math-feedback"></div>
-      <button class="text-xs font-bold text-blue-700 hover:text-blue-900 underline cursor-pointer" onclick="newMathProblem()">
-        عَمَلِيَّةٌ حِسَابِيَّةٌ جَدِيدَةٌ 🔄
+</div>
+<div class="bg-emerald-50/70 border border-emerald-200 rounded-2xl p-3 text-center">
+<span class="text-xs text-emerald-800 font-bold block mb-1">الْكَلِمَةُ المَطْلُوبَةُ:</span>
+<div class="text-2xl font-black text-emerald-950 py-1" id="grammar-target-word">البَلْفِيدِيرُ</div>
+</div>
+<div class="grid grid-cols-3 gap-2">
+<button class="py-3 bg-sky-100 border-2 border-sky-300 font-black text-sky-950 text-sm rounded-xl cursor-pointer" onclick="checkGrammar('اسم', this)">🏷️ اسْمٌ</button>
+<button class="py-3 bg-amber-100 border-2 border-amber-300 font-black text-amber-950 text-sm rounded-xl cursor-pointer" onclick="checkGrammar('فعل', this)">🏃 فِعْلٌ</button>
+<button class="py-3 bg-purple-100 border-2 border-purple-300 font-black text-purple-950 text-sm rounded-xl cursor-pointer" onclick="checkGrammar('حرف', this)">🔗 حَرْفٌ</button>
+</div>
+<div class="text-xs font-black p-2.5 rounded-xl hidden text-center" id="grammar-feedback"></div>
+<div class="flex items-center justify-between text-[11px] font-bold text-slate-500 pt-1">
+<span id="grammar-progress">الْكَلِمَةُ 1 مِنْ 5</span>
+<button class="text-emerald-700 underline font-black cursor-pointer" onclick="nextGrammarWord()">الْكَلِمَةُ التَّالِيَةُ ⬅️</button>
+</div>
+</div>
+</div>
+<!-- ============================================== -->
+<!-- 4. قسم الإيقاظ العلمي -->
+<!-- ============================================== -->
+<div class="p-4 space-y-4 hidden" id="section-science">
+<div class="bg-gradient-to-r from-teal-500 to-cyan-600 text-white p-4 rounded-2xl shadow flex items-center justify-between">
+<div>
+<span class="text-[10px] bg-teal-800/70 px-2 py-0.5 rounded-full font-bold">الإِيقَاظُ العِلْمِيُّ 🇹🇳</span>
+<h3 class="text-lg font-black mt-1">حَرَكَاتُ التَّنَفُّسِ: الشَّهِيقُ وَالزَّفِيرُ 🔬</h3>
+<p class="text-xs text-teal-100">رُسُومٌ تَشْرِيحِيَّةٌ وَتَجَارِبُ تَوْضِيحِيَّةٌ</p>
+</div>
+<span class="text-4xl">🫁</span>
+</div>
+<div class="bg-white border-2 border-teal-200 rounded-2xl p-4 shadow-sm space-y-3">
+<div class="grid grid-cols-2 gap-2 text-center">
+<div class="border-2 border-teal-300 bg-teal-50/60 rounded-xl p-3 flex flex-col items-center">
+<span class="text-xs font-black text-teal-900 mb-1">1. الشَّهِيقُ</span>
+<span class="text-4xl my-2">🫁</span>
+<p class="text-xs font-bold text-teal-800">⬇️ دُخُولُ الهَوَاءِ (O₂)</p>
+<p class="text-xs font-black text-emerald-700">⬆️ يَعْلُو الصَّدْرُ</p>
+</div>
+<div class="border-2 border-cyan-300 bg-cyan-50/60 rounded-xl p-3 flex flex-col items-center">
+<span class="text-xs font-black text-cyan-900 mb-1">2. الزَّفِيرُ</span>
+<span class="text-4xl my-2">💨</span>
+<p class="text-xs font-bold text-cyan-800">⬆️ خُرُوجُ الهَوَاءِ (CO₂)</p>
+<p class="text-xs font-black text-cyan-700">⬇️ يَنْخَفِضُ الصَّدْرُ</p>
+</div>
+</div>
+<button class="w-full bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs py-2 rounded-xl shadow cursor-pointer" onclick="speakVoice('فِي الشَّهِيقِ يَدْخُلُ الهَوَاءُ الغَنِيُّ بِالأُكْسِيجِين فَيَعْلُو القَفَصُ الصَّدْرِيُّ، وَفِي الزَّفِيرِ يَخْرُجُ الهَوَاءُ فَيَنْخَفِضُ الصَّدْرُ.')">
+        🔊 اسْتَمِعْ لِلشَّرْحِ العِلْمِيِّ
       </button>
-    </div>
-  </div>
-
-  <!-- ============================================== -->
-  <!-- 6. قسم حقيبة الدرس ومواد التعلم -->
-  <!-- ============================================== -->
-  <div class="p-3 sm:p-4 space-y-4 hidden" id="section-materials">
-    <div class="bg-gradient-to-r from-amber-600 to-orange-600 text-white p-3.5 rounded-2xl shadow flex items-center justify-between">
-      <div>
-        <span class="text-[10px] bg-white/20 px-2 py-0.5 rounded-full font-bold">تُونِس 🇹🇳</span>
-        <h3 class="text-base sm:text-lg font-black mt-1">حَقِيبَةُ الدَّرْسِ وَالمَوَادِّ 🎒</h3>
-        <p class="text-xs text-amber-100">مُسْتَلْزَمَاتُ وَبِطَاقَاتُ كُلِّ مَادَّةٍ دِرَاسِيَّةٍ</p>
-      </div>
-      <span class="text-3xl">📑</span>
-    </div>
-
-    <div class="space-y-2.5">
-      <div class="bg-white border-2 border-amber-200 rounded-2xl p-3 shadow-xs flex items-center justify-between">
-        <div class="flex items-center gap-2.5">
-          <span class="text-2xl">📖</span>
-          <div>
-            <h4 class="text-xs sm:text-sm font-black text-amber-950">بِطَاقَاتُ مَادَّةِ القِرَاءَةِ</h4>
-            <p class="text-[10px] text-slate-600">كُرَّاسُ الأَنْشِطَةِ، كِتَابُ القِرَاءَةِ، وَالمُفْرَدَاتُ المَفَاتِيحُ</p>
-          </div>
-        </div>
-        <button class="bg-amber-500 text-white text-xs font-bold px-2.5 py-1 rounded-xl cursor-pointer" onclick="speakVoice('مُسْتَلْزَمَاتُ القِرَاءَةِ: كُرَّاسُ الأَنْشِطَةِ وَكِتَابُ القِرَاءَةِ لِلسَّنَةِ الثَّالِثَةِ')">
-          🔊 اسْتَمِعْ
-        </button>
-      </div>
-
-      <div class="bg-white border-2 border-emerald-200 rounded-2xl p-3 shadow-xs flex items-center justify-between">
-        <div class="flex items-center gap-2.5">
-          <span class="text-2xl">✍️</span>
-          <div>
-            <h4 class="text-xs sm:text-sm font-black text-emerald-950">مُخَطَّطُ قَوَاعِدِ اللُّغَةِ</h4>
-            <p class="text-[10px] text-slate-600">أَقْسَامُ الكَلَامِ (اسْم، فِعْل، حَرْف)، وَجَدْوَلُ التَّصْرِيفِ</p>
-          </div>
-        </div>
-        <button class="bg-emerald-600 text-white text-xs font-bold px-2.5 py-1 rounded-xl cursor-pointer" onclick="speakVoice('قَوَاعِدُ اللُّغَةِ: الاسْمُ، وَالفِعْلُ، وَالحَرْفُ')">
-          🔊 اسْتَمِعْ
-        </button>
-      </div>
-
-      <div class="bg-white border-2 border-teal-200 rounded-2xl p-3 shadow-xs flex items-center justify-between">
-        <div class="flex items-center gap-2.5">
-          <span class="text-2xl">🔬</span>
-          <div>
-            <h4 class="text-xs sm:text-sm font-black text-teal-950">دَلِيلُ الإِيقَاظِ العِلْمِيِّ</h4>
-            <p class="text-[10px] text-slate-600">تَجَارِبُ التَّنَفُّسِ، وَبِطَاقَاتُ أَنْمَاطِ التَّنَقُّلِ عِنْدَ الحَيَوَانِ</p>
-          </div>
-        </div>
-        <button class="bg-teal-600 text-white text-xs font-bold px-2.5 py-1 rounded-xl cursor-pointer" onclick="speakVoice('الإِيقَاظُ العِلْمِيُّ: حَرَكَتَا التَّنَفُّسِ هُمَا الشَّهِيقُ وَالزَّفِيرُ')">
-          🔊 اسْتَمِعْ
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- شريط التنقل السفلي الثابت -->
-  <nav class="bg-amber-100/90 border-t-2 border-amber-200 px-1 py-2 flex items-center justify-around text-xs font-black text-amber-900">
-    <button class="flex flex-col items-center gap-0.5 text-rose-600 hover:scale-105 transition cursor-pointer" id="bnav-dailylessons" onclick="switchTab('dailylessons')">
-      <span class="text-xl">📸</span>
-      <span class="text-[10px]">دُرُوسِي</span>
-    </button>
-    <button class="flex flex-col items-center gap-0.5 text-slate-700 hover:text-orange-600 hover:scale-105 transition cursor-pointer" id="bnav-reading" onclick="switchTab('reading')">
-      <span class="text-xl">📖</span>
-      <span class="text-[10px]">القِرَاءَة</span>
-    </button>
-    <button class="flex flex-col items-center gap-0.5 text-slate-700 hover:text-orange-600 hover:scale-105 transition cursor-pointer" id="bnav-grammar" onclick="switchTab('grammar')">
-      <span class="text-xl">✍️</span>
-      <span class="text-[10px]">القَوَاعِد</span>
-    </button>
-    <button class="flex flex-col items-center gap-0.5 text-slate-700 hover:text-orange-600 hover:scale-105 transition cursor-pointer" id="bnav-science" onclick="switchTab('science')">
-      <span class="text-xl">🔬</span>
-      <span class="text-[10px]">الإِيقَاظ</span>
-    </button>
-    <button class="flex flex-col items-center gap-0.5 text-slate-700 hover:text-orange-600 hover:scale-105 transition cursor-pointer" id="bnav-math" onclick="switchTab('math')">
-      <span class="text-xl">📐</span>
-      <span class="text-[10px]">الحِسَاب</span>
-    </button>
-    <button class="flex flex-col items-center gap-0.5 text-slate-700 hover:text-orange-600 hover:scale-105 transition cursor-pointer" id="bnav-materials" onclick="switchTab('materials')">
-      <span class="text-xl">🎒</span>
-      <span class="text-[10px]">الحَقِيبَة</span>
-    </button>
-  </nav>
+</div>
+</div>
+<!-- ============================================== -->
+<!-- 5. قسم الرياضيات -->
+<!-- ============================================== -->
+<div class="p-4 space-y-4 hidden" id="section-math">
+<div class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white p-4 rounded-2xl shadow flex items-center justify-between">
+<div>
+<span class="text-[11px] bg-blue-800/60 px-2 py-0.5 rounded-full font-bold">الحِسَابُ وَالهَنْدَسَةُ 📐</span>
+<h3 class="text-lg font-black mt-1">جَدْوَلُ الضَّرْبِ السَّرِيعُ</h3>
+<p class="text-xs text-blue-100">احْسِبْ بِذَكَاءٍ وَاكْتَسِبِ النُّجُومَ</p>
+</div>
+<span class="text-4xl">🔢</span>
+</div>
+<div class="bg-white border-2 border-blue-200 rounded-2xl p-4 shadow-sm space-y-3 text-center">
+<span class="text-xs font-black text-blue-900 block">احْسِبْ عَمَلِيَّةَ الضَّرْبِ:</span>
+<div class="bg-blue-50 border border-blue-200 rounded-2xl p-4 text-3xl font-black text-blue-950 flex items-center justify-center gap-3">
+<span>5</span>
+<span class="text-orange-500">×</span>
+<span>4</span>
+<span>=</span>
+<span class="text-orange-600 font-extrabold">؟</span>
+</div>
+<div class="grid grid-cols-3 gap-2 pt-2">
+<button class="py-2.5 bg-blue-100 font-black rounded-xl text-blue-950 text-base cursor-pointer" onclick="checkMath(18, this)">18</button>
+<button class="py-2.5 bg-blue-100 font-black rounded-xl text-blue-950 text-base cursor-pointer" onclick="checkMath(20, this)">20</button>
+<button class="py-2.5 bg-blue-100 font-black rounded-xl text-blue-950 text-base cursor-pointer" onclick="checkMath(24, this)">24</button>
+</div>
+<div class="text-xs font-black p-2.5 rounded-xl hidden text-center" id="math-feedback"></div>
+</div>
+</div>
+<!-- ============================================== -->
+<!-- 6. قسم الحقيبة المدرسية -->
+<!-- ============================================== -->
+<div class="p-4 space-y-4 hidden" id="section-materials">
+<div class="bg-gradient-to-r from-amber-600 to-red-600 text-white p-4 rounded-2xl shadow flex items-center justify-between">
+<div>
+<h3 class="text-lg font-black">حَقِيبَةُ المُسْتَلْزَمَاتِ 🎒</h3>
+<p class="text-xs text-amber-100">كُرَّاسَاتٌ وَبِطَاقَاتُ المَوَادِّ التَّعْلِيمِيَّةِ</p>
+</div>
+<span class="text-4xl">📑</span>
+</div>
+<div class="bg-white border-2 border-amber-200 rounded-2xl p-3.5 shadow-sm space-y-2">
+<div class="flex items-center gap-3">
+<span class="text-3xl">📖</span>
+<div>
+<h4 class="text-sm font-black text-amber-950">كِتَابُ القِرَاءَةِ وَكُرَّاسُ الأَنْشِطَةِ</h4>
+<span class="text-xs text-slate-600">المِنْهَاجُ التُّونِسِيُّ المُعْتَمَدُ لِلسَّنَةِ 3 أَسَاسِي</span>
+</div>
+</div>
+<button class="text-xs bg-amber-600 hover:bg-amber-700 text-white font-bold px-3 py-1.5 rounded-xl cursor-pointer" onclick="speakVoice('كِتَابُ القِرَاءَةِ وَكُرَّاسُ الأَنْشِطَةِ لِلسَّنَةِ الثَّالِثَةِ مِنْ التَّعْلِيمِ الأَسَاسِيِّ بِتُونِسَ')">
+        🔊 اسْتَمِعْ لِلْمُحْتَوَى
+      </button>
+</div>
+</div>
+<!-- شريط التنقل السفلي -->
+<nav class="bg-amber-100/95 border-t-2 border-amber-200 px-2 py-2.5 flex items-center justify-around text-xs font-black text-amber-900">
+<button class="flex flex-col items-center gap-0.5 text-orange-600 cursor-pointer" id="bnav-notebook" onclick="switchTab('notebook')">
+<span class="text-lg">📝</span>
+<span class="text-[10px]">دُرُوسِي</span>
+</button>
+<button class="flex flex-col items-center gap-0.5 text-slate-700 cursor-pointer" id="bnav-reading" onclick="switchTab('reading')">
+<span class="text-lg">📖</span>
+<span class="text-[10px]">القِرَاءَة</span>
+</button>
+<button class="flex flex-col items-center gap-0.5 text-slate-700 cursor-pointer" id="bnav-grammar" onclick="switchTab('grammar')">
+<span class="text-lg">✍️</span>
+<span class="text-[10px]">القَوَاعِد</span>
+</button>
+<button class="flex flex-col items-center gap-0.5 text-slate-700 cursor-pointer" id="bnav-science" onclick="switchTab('science')">
+<span class="text-lg">🔬</span>
+<span class="text-[10px]">الإِيقَاظ</span>
+</button>
+<button class="flex flex-col items-center gap-0.5 text-slate-700 cursor-pointer" id="bnav-math" onclick="switchTab('math')">
+<span class="text-lg">📐</span>
+<span class="text-[10px]">الحِسَاب</span>
+</button>
+<button class="flex flex-col items-center gap-0.5 text-slate-700 cursor-pointer" id="bnav-materials" onclick="switchTab('materials')">
+<span class="text-lg">🎒</span>
+<span class="text-[10px]">الحَقِيبَة</span>
+</button>
+</nav>
 </main>
-
+<!-- ============================================================== -->
+<!-- نافذة استقبال درس مشترك برابط فوري (Received Shared Lesson Modal) -->
+<!-- ============================================================== -->
+<div class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-3 hidden" id="incoming-lesson-modal">
+<div class="bg-white rounded-3xl max-w-lg w-full overflow-hidden border-4 border-amber-400 shadow-2xl p-4 sm:p-5 space-y-3.5 relative">
+<div class="text-center space-y-1">
+<div class="w-16 h-16 bg-gradient-to-tr from-amber-400 to-orange-500 rounded-3xl mx-auto flex items-center justify-center text-3xl shadow-lg border-2 border-white">
+        🎁
+      </div>
+<span class="text-xs bg-red-600 text-white font-black px-2.5 py-0.5 rounded-full inline-block">دَرْسٌ مُشْتَرَكٌ جَدِيدٌ 🌟</span>
+<h3 class="text-base sm:text-lg font-black text-amber-950" id="incoming-modal-title">وَصَلَكَ دَرْسٌ جَدِيدٌ مِنْ بَطَلِ الثَّالِثَةِ!</h3>
+<p class="text-xs text-slate-600 font-bold">أَرْسَلَ لَكَ أَحَدُ التَّلَامِيذِ صُورَةَ كُرَّاسِهِ لِلْمُرَاجَعَةِ وَالحِفْظِ</p>
+</div>
+<div class="bg-amber-50 rounded-2xl p-3 border-2 border-amber-200 space-y-2">
+<div class="flex items-center justify-between">
+<span class="px-2 py-0.5 rounded-lg border text-xs font-black bg-white text-amber-900 border-amber-300" id="incoming-subject-tag">📖 مَادَّةُ القِرَاءَةِ</span>
+<span class="text-[11px] font-bold text-slate-500" id="incoming-date-tag">📅 2026/09</span>
+</div>
+<h4 class="text-sm font-black text-slate-900" id="incoming-lesson-title">عُنْوَانُ الدَّرْسِ</h4>
+<p class="text-xs text-slate-700 bg-white/80 p-2 rounded-xl border border-amber-100" id="incoming-lesson-notes"></p>
+<div class="relative rounded-xl overflow-hidden border-2 border-amber-300 h-44 bg-slate-900">
+<img alt="صورة الكراس المشترك" class="w-full h-full object-cover" id="incoming-lesson-img" src="">
+</div>
+</div>
+<div class="flex items-center gap-2 pt-1">
+<button class="flex-1 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 text-white font-black text-xs sm:text-sm py-3 px-3 rounded-2xl shadow-lg flex items-center justify-center gap-1.5 transition active:scale-95 cursor-pointer" onclick="acceptIncomingLesson()">
+<span>📥</span>
+<span>حِفْظُ الدَّرْسِ فِي دَفْتَرِي فَوْرًا (+20 ⭐)</span>
+</button>
+<button class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs py-3 px-3 rounded-2xl transition cursor-pointer" onclick="closeIncomingModal()">
+        إِغْلَاق
+      </button>
+</div>
+</div>
+</div>
+<!-- ============================================================== -->
+<!-- نافذة منبثقة لإضافة درس جديد وتصوير الكراس (Modal) -->
+<!-- ============================================================== -->
+<div class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-2 sm:p-4 hidden" id="new-lesson-modal">
+<div class="bg-white rounded-3xl max-w-xl w-full max-h-[94vh] overflow-y-auto border-4 border-amber-400 shadow-2xl p-4 sm:p-5 space-y-4 relative">
+<div class="flex items-center justify-between border-b pb-3 border-amber-200">
+<div class="flex items-center gap-2.5">
+<div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-400 to-orange-500 flex items-center justify-center text-3xl shadow-md border-2 border-white">
+          📸
+        </div>
+<div>
+<h3 class="text-base sm:text-lg font-black text-amber-950">تَوْثِيقُ دَرْسٍ أَوْ كُرَّاسٍ جَدِيدٍ</h3>
+<p class="text-[11px] text-amber-800 font-bold">صَوِّرْ أَوْ ارْفَعْ؛ يُحْفَظُ فِي جِهَازِكَ وَيُرْفَعُ لِلسَّحَابَةِ فَوْرًا</p>
+</div>
+</div>
+<button class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 font-black cursor-pointer" onclick="closeNewLessonModal()">✕</button>
+</div>
+<form class="space-y-3.5 text-right" id="new-lesson-form" onsubmit="saveNewLesson(event)">
+<div>
+<label class="block text-xs font-black text-slate-800 mb-1">1. صُورَةُ الكُرَّاسِ:</label>
+<div class="grid grid-cols-2 gap-2 mb-2">
+<button class="p-2.5 rounded-xl border-2 border-blue-400 bg-sky-50 text-blue-900 font-black text-xs flex items-center justify-center gap-1.5 cursor-pointer" onclick="document.getElementById('lesson-image-file').click()" type="button">
+<span>📁</span>
+<span>ارْفَعْ صُورَةً مِنْ الجِهَازِ</span>
+</button>
+<button class="p-2.5 rounded-xl border-2 border-emerald-400 bg-emerald-50 text-emerald-900 font-black text-xs flex items-center justify-center gap-1.5 cursor-pointer" onclick="selectPresetPrompt()" type="button">
+<span>✨</span>
+<span>نَمُوذَجُ كُرَّاسٍ جَاهِزٍ</span>
+</button>
+</div>
+<input accept="image/*" class="hidden" id="lesson-image-file" onchange="handleImageFile(event)" type="file">
+<div class="h-40 rounded-xl overflow-hidden border-2 border-amber-300 bg-slate-900 relative">
+<img alt="معاينة" class="w-full h-full object-cover" id="modal-preview-img" src="https://www.gstatic.com/labs-code/stitch/stitch-placeholder-300x300.svg">
+<span class="absolute top-2 right-2 bg-yellow-400 text-amber-950 text-[10px] font-black px-2 py-0.5 rounded-lg">صُورَةٌ جَاهِزَةٌ لِلْحِفْظِ</span>
+</div>
+</div>
+<div>
+<label class="block text-xs font-black text-slate-800 mb-1">2. المَادَّةُ:</label>
+<select class="w-full p-2.5 rounded-xl border-2 border-slate-300 text-xs font-bold bg-slate-50" id="modal-lesson-subject">
+<option value="قراءة">📖 قراءة</option>
+<option value="قواعد لغة">✍️ قواعد لغة</option>
+<option value="إيقاظ علمي">🔬 إيقاظ علمي</option>
+<option value="رياضيات">📐 رياضيات</option>
+</select>
+</div>
+<div>
+<label class="block text-xs font-black text-slate-800 mb-1">3. عُنْوَانُ الدَّرْسِ:</label>
+<input class="w-full p-2.5 rounded-xl border-2 border-slate-300 text-xs font-bold bg-slate-50" id="modal-lesson-title" placeholder="مِثَال: عَمَلِيَّةُ الضَّرْبِ / حَرْفُ التَّاءِ" required="" type="text">
+</div>
+<div>
+<label class="block text-xs font-black text-slate-800 mb-1">4. تَلْخِيصُ مَا تَعَلَّمْتَهُ:</label>
+<textarea class="w-full p-2.5 rounded-xl border-2 border-slate-300 text-xs font-bold bg-slate-50" id="modal-lesson-notes" placeholder="مِثَال: أَنْجَزْتُ التَّمَارِينَ فِي كُرَّاسِي وَحَصَلْتُ عَلَى عَلَامَةِ مُمْتَازٌ!" rows="2"></textarea>
+</div>
+<div class="pt-2 flex items-center gap-2">
+<button class="flex-1 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 text-white font-black text-sm py-3 px-4 rounded-2xl shadow-lg flex items-center justify-center gap-2 cursor-pointer" type="submit">
+<span>⭐</span>
+<span>حِفْظٌ فِي الجِهَازِ وَالسَّحَابَةِ (+25 نَجْمَة)</span>
+</button>
+<button class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs py-3 px-4 rounded-2xl cursor-pointer" onclick="closeNewLessonModal()" type="button">
+          إِلْغَاء
+        </button>
+</div>
+</form>
+</div>
+</div>
+<!-- ============================================================== -->
+<!-- نافذة مشاركة رابط الدرس الفوري (Share Modal) -->
+<!-- ============================================================== -->
+<div class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-3 hidden" id="share-link-modal">
+<div class="bg-white rounded-3xl max-w-md w-full border-4 border-amber-400 shadow-2xl p-4 sm:p-5 space-y-3.5 text-right">
+<div class="flex items-center justify-between border-b pb-2 border-amber-200">
+<div class="flex items-center gap-2">
+<span class="text-2xl">🔗</span>
+<h4 class="text-sm sm:text-base font-black text-amber-950">مُشَارَكَةُ الدَّرْسِ بَرَابِطٍ مُبَاشِرٍ</h4>
+</div>
+<button class="w-7 h-7 rounded-full bg-slate-100 text-slate-700 font-black cursor-pointer" onclick="closeShareModal()">✕</button>
+</div>
+<p class="text-xs text-slate-700 font-bold leading-relaxed">
+      عِنْدَ إِرْسَالِ هَذَا الرَّابِطِ لِأَيِّ صَدِيقٍ أَوْ وَلِيٍّ عَبْرَ الوَاتْسَابِ، سَيُفْتَحُ لَدَيْهِ هَذَا الدَّرْسُ مُبَاشَرَةً مَعَ صُورَةِ الكُرَّاسِ وَيُمْكِنُهُ حِفْظُهُ فِي دَفْتَرِهِ فَوْرًا!
+    </p>
+<div class="relative">
+<input class="w-full bg-slate-50 border-2 border-slate-300 rounded-xl p-2.5 text-xs text-slate-800 font-mono font-bold select-all focus:outline-none" id="direct-share-url-input" readonly="" type="text">
+</div>
+<div class="grid grid-cols-2 gap-2 pt-1">
+<button class="bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs py-2.5 px-3 rounded-xl shadow flex items-center justify-center gap-1.5 cursor-pointer" onclick="shareToWhatsApp()">
+<span>💬</span>
+<span>إِرْسَالٌ عبر واتساب</span>
+</button>
+<button class="bg-blue-600 hover:bg-blue-700 text-white font-black text-xs py-2.5 px-3 rounded-xl shadow flex items-center justify-center gap-1.5 cursor-pointer" onclick="copyShareLessonUrl()">
+<span>📋</span>
+<span>نَسْخُ الرَّابِطِ</span>
+</button>
+</div>
+</div>
+</div>
+<!-- إشعار Toast للحفظ والتحديث -->
+<div class="fixed bottom-6 inset-x-4 sm:inset-x-auto sm:right-6 sm:max-w-md bg-emerald-800 text-white p-4 rounded-3xl border-3 border-emerald-300 shadow-2xl z-50 transition transform duration-300 ease-out translate-y-32 opacity-0 pointer-events-none" id="save-toast">
+<div class="flex items-start gap-3">
+<div class="w-10 h-10 rounded-2xl bg-emerald-500/80 flex items-center justify-center text-2xl shrink-0 border border-white">
+      🎉
+    </div>
+<div class="flex-1 text-right">
+<h5 class="text-xs sm:text-sm font-black text-yellow-200" id="toast-title">📋 تَمَّ نَسْخُ الكُودِ!</h5>
+<p class="text-[11px] font-bold text-emerald-100 mt-0.5 leading-snug" id="toast-body">يُمْكِنُكَ الآنَ لَصْقُهُ فِي مُحَرِّرِ GitHub وحِفْظِهِ!</p>
+</div>
+<button class="text-white/80 hover:text-white text-xs font-black p-1 cursor-pointer" onclick="hideToast()">✕</button>
+</div>
+</div>
 <footer class="text-center text-xs text-amber-900 font-black space-y-1 pb-4">
-  <p>💡 تطبيق أبطال الثالثة أساسي - المنهاج التونسي الرسمي (دفتر الدروس اليومية بالصور، قراءة، قواعد، وإيقاظ علمي)</p>
-  <p class="text-[11px] text-amber-800/80 font-bold">يعمل دون اتصال إنترنت عند تحميله على الهاتف أو الحاسوب 🇹🇳</p>
+<p>💡 تطبيق أبطال الثالثة أساسي - المنهاج التونسي الرسمي (مزامنة سحابية حية + روابط مشاركة مباشرة للدروس والصور)</p>
+<p class="text-[11px] text-amber-800/80 font-bold">يعمل متصلاً وبالكامل دون اتصال إنترنت عند تحميله على الهاتف أو الحاسوب 🇹🇳</p>
 </footer>
-
 <script>
   let speechRate = 1.0;
   let stars = 310;
+  let currentShareLessonUrl = '';
+  let incomingSharedLessonData = null;
 
-  function addStars(num) {
-    stars += num;
-    document.getElementById('star-count').innerText = stars;
+  // قناة المزامنة السحابية المفتوحة التلقائية بدون إعدادات (Zero-Config Cloud Endpoint)
+  const CLOUD_SYNC_TOPIC = 'tunisia_3rd_grade_classroom_sync';
+  const CLOUD_ENDPOINT = 'https://ntfy.sh/' + CLOUD_SYNC_TOPIC;
+
+  // نماذج كراسات افتراضية
+  const presetPhotos = {
+    grammar: "https://images.unsplash.com/photo-1517842645767-c639042777db?auto=format&fit=crop&w=600&q=80",
+    science: "https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&w=600&q=80",
+    math: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=600&q=80",
+    reading: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?auto=format&fit=crop&w=600&q=80"
+  };
+
+  let currentModalPhoto = presetPhotos.grammar;
+
+  let notebookLessons = [
+    {
+      id: 1,
+      subject: "قواعد لغة",
+      subjectColor: "bg-emerald-100 text-emerald-800 border-emerald-300",
+      subjectIcon: "✍️",
+      title: "أَقْسَامُ الكَلَامِ (الجُمْلَةُ الفِعْلِيَّةُ)",
+      date: "2026/9/25",
+      image: presetPhotos.grammar,
+      notes: "كَتَبْتُ الجُمْلَةَ الفِعْلِيَّةَ فِي كُرَّاسِي: «يَرْكُضُ الأَطْفَالُ فِي مَلْعَبِ المَدْرَسَةِ»، وَحَصَلْتُ عَلَى مُلَاحَظَةِ: مُمْتَازٌ جِدًّا 🌟",
+      isCustom: false
+    },
+    {
+      id: 2,
+      subject: "إيقاظ علمي",
+      subjectColor: "bg-teal-100 text-teal-800 border-teal-300",
+      subjectIcon: "🔬",
+      title: "حَرَكَتَا الشَّهِيقِ وَالزَّفِيرِ عِنْدَ الإِنْسَانِ",
+      date: "2026/9/24",
+      image: presetPhotos.science,
+      notes: "رَسَمْتُ الرِّئَتَيْنِ فِي كُرَّاسِ الإِيقَاظِ، الشَّهِيقُ يَعْلُو فِيهِ القَفَصُ الصَّدْرِيُّ، وَالزَّفِيرُ يَنْخَفِضُ فِيهِ الصَّدْرُ.",
+      isCustom: false
+    },
+    {
+      id: 3,
+      subject: "رياضيات",
+      subjectColor: "bg-blue-100 text-blue-800 border-blue-300",
+      subjectIcon: "📐",
+      title: "جَدْوَلُ الضَّرْبِ فِي 4 وَ 5 كَجَمْعٍ تِكْرَارِيٍّ",
+      date: "2026/9/23",
+      image: presetPhotos.math,
+      notes: "أَنْجَزْتُ عَمَلِيَّاتِ الضَّرْبِ بِسُرْعَةٍ: 5 × 4 = 20، وَرَسَمْتُ 5 مَجْمُوعَاتٍ فِي كُلِّ وَاحِدَةٍ 4 نُجُومٍ.",
+      isCustom: false
+    }
+  ];
+
+  let currentFilter = 'all';
+
+  // نصوص القراءة التونسية
+  const tunisianStories = [
+    {
+      title: "فِي حَدِيقَةِ البَلْفِيدِير بِتُونِسَ 🇹🇳",
+      text: "ذَهَبَ سَلِيمٌ مَعَ عَائِلَتِهِ إِلَى مُنْتَزَهِ البَلْفِيدِير بِتُونِسَ العَاصِمَةِ. شَاهَدَ الأَسَدَ الشُّجَاعَ، وَالغَزَالَ اللَّطِيفَ، وَقَضَى يَوْمًا بَهِيجًا تَحْتَ الأَشْجَارِ العَالِيَةِ."
+    },
+    {
+      title: "فِي ضَيْعَةِ الجَدِّ كَامِل 🏡",
+      text: "سَافَرَ سَلِيمٌ إِلَى قَرْيَةِ جَدِّهِ، فَشَاهَدَ الحُقُولَ الخَضْرَاءَ وَالأَشْجَارَ المُثْمِرَةَ، وَسَاعَدَ جَدَّهُ فِي سِقَايَةِ النَّبَاتَاتِ."
+    },
+    {
+      title: "عُطْلَةٌ فِي سِيدِي بُوسَعِيد 🌊",
+      text: "زَارَ سَلِيمٌ قَرْيَةَ سِيدِي بُوسَعِيد الجَمِيلَةَ ذَاتَ البُيُوتِ البَيْضَاءِ وَالأَبْوَابِ الزَّرْقَاءِ المُنَقَّشَةِ، وَتَمَتَّعَ بِمَنْظَرِ البَحْرِ الهَادِئِ."
+    }
+  ];
+
+  // كلمات القواعد
+  const grammarWords = [
+    { word: "البَلْفِيدِيرُ", type: "اسم" },
+    { word: "يَرْكُضُ", type: "فعل" },
+    { word: "فِي", type: "حرف" },
+    { word: "تُونِسُ", type: "اسم" },
+    { word: "كَتَبَ", type: "فعل" }
+  ];
+  let currentGrammarIdx = 0;
+
+  // تهيئة التطبيق
+  window.addEventListener('DOMContentLoaded', () => {
+    loadLocalLessons();
+    renderNotebook();
+    loadTunisianStory(0);
+    initLiveCloudEvents();
+    checkIncomingLink();
+  });
+
+  function loadLocalLessons() {
+    try {
+      const saved = localStorage.getItem('tunisia_lessons_v2');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          notebookLessons = parsed;
+        }
+      }
+    } catch (e) {}
   }
 
-  function confettiEffect() {
-    if (typeof confetti === 'function') {
-      confetti({ particleCount: 70, spread: 60, origin: { y: 0.6 } });
+  function saveLocalLessons() {
+    try {
+      localStorage.setItem('tunisia_lessons_v2', JSON.stringify(notebookLessons));
+    } catch (e) {}
+  }
+
+  // ==========================================
+  // 1. نظام السحابة الحية التلقائية (Live Cloud Sync)
+  // ==========================================
+  function initLiveCloudEvents() {
+    if (!window.EventSource) return;
+    try {
+      const sse = new EventSource(`${CLOUD_ENDPOINT}/sse`);
+      sse.onopen = () => {
+        document.getElementById('cloud-status-title').innerText = '📡 السَّحَابَةُ الحَيَّةُ: مُتَّصِلَةٌ تِلْقَائِيًّا (مُزَامَنَةٌ فَوْرِيَّةٌ)';
+      };
+      sse.onmessage = (e) => {
+        try {
+          const raw = JSON.parse(e.data);
+          if (raw && raw.message) {
+            const data = JSON.parse(raw.message);
+            if (data && data.action === 'NEW_LESSON' && data.lesson) {
+              receiveCloudLesson(data.lesson);
+            }
+          }
+        } catch (err) {}
+      };
+    } catch (e) {}
+  }
+
+  async function broadcastToCloud(lesson) {
+    try {
+      await fetch(CLOUD_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Title': encodeURIComponent('درس جديد في الثالثة أساسي') },
+        body: JSON.stringify({ action: 'NEW_LESSON', lesson: lesson })
+      });
+    } catch (e) {}
+  }
+
+  function receiveCloudLesson(incoming) {
+    if (!incoming || !incoming.id) return;
+    const exists = notebookLessons.some(l => l.id === incoming.id || (l.title === incoming.title && l.date === incoming.date));
+    if (!exists) {
+      notebookLessons.unshift(incoming);
+      saveLocalLessons();
+      renderNotebook(incoming.id);
+      showToast('🌟 دَرْسٌ سَحَابِيٌّ جَدِيدٌ!', `وَصَلَ دَرْسُ «${incoming.title}» مِنْ جِهَازٍ آخَرَ وَأُضِيفَ لِدَفْتَرِكَ!`);
+      if (typeof confetti === 'function') confetti({ particleCount: 70, spread: 60 });
     }
+  }
+
+  async function manualSyncCloud(showAlert = true) {
+    const icon = document.getElementById('sync-icon');
+    if (icon) icon.classList.add('animate-spin');
+    try {
+      const res = await fetch(`${CLOUD_ENDPOINT}/json?poll=1`, { cache: 'no-store' });
+      if (res.ok) {
+        const text = await res.text();
+        const lines = text.trim().split('\n');
+        let added = 0;
+        lines.forEach(line => {
+          try {
+            const row = JSON.parse(line);
+            if (row && row.message) {
+              const parsed = JSON.parse(row.message);
+              if (parsed && parsed.action === 'NEW_LESSON' && parsed.lesson) {
+                const incoming = parsed.lesson;
+                const exists = notebookLessons.some(l => l.id === incoming.id || (l.title === incoming.title && l.date === incoming.date));
+                if (!exists) {
+                  notebookLessons.unshift(incoming);
+                  added++;
+                }
+              }
+            }
+          } catch(e){}
+        });
+        if (added > 0) {
+          saveLocalLessons();
+          renderNotebook();
+          showToast('🔄 تَمَّتِ المَزَامَنَةُ!', `تَمَّ جَلْبُ ${added} دَرْسٍ جَدِيدٍ مِنَ السَّحَابَةِ!`);
+        } else if (showAlert) {
+          showToast('✅ كُلُّ الدُّرُوسِ مُحَدَّثَةٌ!', 'دَفْتَرُكَ مُتَزَامِنٌ تَمَامًا مَعَ السَّحَابَةِ وَجَمِيعِ الأَجْهِزَةِ.');
+        }
+      }
+    } catch(e) {
+      if (showAlert) showToast('🔒 مَحْفُوظٌ مَحَلِّيًّا', 'دُرُوسُكَ مَحْفُوظَةٌ بِأَمَانٍ فِي جِهَازِكَ!');
+    } finally {
+      setTimeout(() => { if (icon) icon.classList.remove('animate-spin'); }, 600);
+    }
+  }
+
+  // ==========================================
+  // 2. نظام مشاركة الدرس الفوري برابط مباشر (Instant Link)
+  // ==========================================
+  function generateLessonShareLink(lesson) {
+    const minObj = {
+      i: lesson.id,
+      s: lesson.subject,
+      t: lesson.title,
+      d: lesson.date,
+      n: lesson.notes,
+      img: (lesson.image && lesson.image.startsWith('http')) ? lesson.image : 'preset'
+    };
+    const jsonStr = JSON.stringify(minObj);
+    const encoded = encodeURIComponent(jsonStr);
+    const base = window.location.origin + window.location.pathname;
+    return `${base}#lesson=${encoded}`;
+  }
+
+  function shareSingleLesson(id) {
+    const lesson = notebookLessons.find(l => l.id === id);
+    if (!lesson) return;
+    const url = generateLessonShareLink(lesson);
+    currentShareLessonUrl = url;
+    document.getElementById('direct-share-url-input').value = url;
+    document.getElementById('share-link-modal').classList.remove('hidden');
+    speakVoice(`تَمَّ إِنْشَاءُ رَابِطِ دَرْسِ ${lesson.title}؛ يُمْكِنُكَ إِرْسَالُهُ فَوْرًا عَبْرَ الوَاتْسَابِ!`);
+  }
+
+  function closeShareModal() {
+    document.getElementById('share-link-modal').classList.add('hidden');
+  }
+
+  function copyShareLessonUrl() {
+    const input = document.getElementById('direct-share-url-input');
+    if (input) {
+      input.select();
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(input.value);
+      } else {
+        document.execCommand('copy');
+      }
+      showToast('📋 تَمَّ نَسْخُ الرَّابِطِ!', 'أَرْسِلِ الرَّابِطَ لِأَصْدِقَائِكَ لِيَفْتَحُوا الدَّرْسَ عِنْدَهُمْ.');
+    }
+  }
+
+  function shareToWhatsApp() {
+    if (!currentShareLessonUrl) return;
+    const text = encodeURIComponent(`شَاهِدْ مَعِي دَرْسَ اليَوْمِ فِي دَفْتَرِ أَبْطَالِ الثَّالِثَةِ أَسَاسِي بِتُونِسَ 🇹🇳:\n${currentShareLessonUrl}`);
+    window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
+  }
+
+  function checkIncomingLink() {
+    const hash = window.location.hash;
+    if (hash && hash.includes('#lesson=')) {
+      try {
+        const raw = hash.replace('#lesson=', '');
+        const obj = JSON.parse(decodeURIComponent(raw));
+        if (obj && obj.t) {
+          let chosenImg = presetPhotos.grammar;
+          if (obj.img && obj.img.startsWith('http')) chosenImg = obj.img;
+          else if (obj.s && obj.s.includes('إيقاظ')) chosenImg = presetPhotos.science;
+          else if (obj.s && obj.s.includes('حساب')) chosenImg = presetPhotos.math;
+
+          incomingSharedLessonData = {
+            id: obj.i || Date.now(),
+            subject: obj.s || 'قراءة',
+            subjectColor: 'bg-amber-100 text-amber-800 border-amber-300',
+            subjectIcon: '📖',
+            title: obj.t,
+            date: obj.d || new Date().toISOString().split('T')[0],
+            image: chosenImg,
+            notes: obj.n || 'دَرْسٌ مُشْتَرَكٌ',
+            isCustom: true
+          };
+
+          document.getElementById('incoming-modal-title').innerText = `وَصَلَكَ دَرْسُ «${obj.t}»!`;
+          document.getElementById('incoming-lesson-title').innerText = obj.t;
+          document.getElementById('incoming-lesson-notes').innerText = '💬 ' + (obj.n || '');
+          document.getElementById('incoming-subject-tag').innerText = `📖 ${obj.s || 'قراءة'}`;
+          document.getElementById('incoming-date-tag').innerText = `📅 ${obj.d || ''}`;
+          document.getElementById('incoming-lesson-img').src = chosenImg;
+          document.getElementById('incoming-lesson-modal').classList.remove('hidden');
+
+          speakVoice(`مَرْحَبًا يَا بَطَل! وَصَلَكَ دَرْسٌ مُشْتَرَكٌ جَدِيدٌ: ${obj.t}`);
+        }
+      } catch (e) {}
+    }
+  }
+
+  function closeIncomingModal() {
+    document.getElementById('incoming-lesson-modal').classList.add('hidden');
+    history.replaceState(null, null, ' ');
+  }
+
+  function acceptIncomingLesson() {
+    if (!incomingSharedLessonData) return;
+    const exists = notebookLessons.some(l => l.id === incomingSharedLessonData.id);
+    if (!exists) {
+      notebookLessons.unshift(incomingSharedLessonData);
+      saveLocalLessons();
+      renderNotebook(incomingSharedLessonData.id);
+      addStars(20);
+      showToast('🎉 دَرْسٌ جَدِيدٌ فِي دَفْتَرِكَ!', `تَمَّ حِفْظُ «${incomingSharedLessonData.title}» بِنَجَاحٍ!`);
+      speakVoice(`أَحْسَنْتَ! تَمَّ حِفْظُ دَرْسِ ${incomingSharedLessonData.title} فِي دَفْتَرِكَ.`);
+    }
+    closeIncomingModal();
+  }
+
+  // ==========================================
+  // 3. أدوات تحميل index.html لنشره على GitHub
+  // ==========================================
+  function downloadSelfIndexHtml() {
+    const fullHtml = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+    const blob = new Blob([fullHtml], { type: 'text/html;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'index.html';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showToast('📥 تَمَّ تَحْمِيلُ index.html!', 'ارْفَعْ هَذَا المَلَفَّ إِلَى GitHub لِيَتَحَدَّثَ مَوْقِعُكَ فَوْرًا!');
+    speakVoice('تَمَّ تَحْمِيلُ مَلَفِّ إندكس دوت إتش تي إم إل لِرَفْعِهِ عَلَى جِيتْ هَاب!');
+  }
+
+  function copySourceCode() {
+    const fullHtml = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(fullHtml);
+      showToast('📋 تَمَّ نَسْخُ الكُودِ!', 'يُمْكِنُكَ الآنَ لَصْقُهُ فِي مُحَرِّرِ GitHub وحِفْظِهِ!');
+    }
+  }
+
+  // ==========================================
+  // إدارة دفتر الدروس وعرض البطاقات
+  // ==========================================
+  function renderNotebook(highlightId = null) {
+    const container = document.getElementById('notebook-lessons-container');
+    const countAll = document.getElementById('notebook-count-all');
+    if (countAll) countAll.innerText = notebookLessons.length;
+
+    const filtered = (currentFilter === 'all')
+      ? notebookLessons
+      : notebookLessons.filter(l => l.subject === currentFilter);
+
+    if (filtered.length === 0) {
+      container.innerHTML = `
+        <div class="bg-amber-50 border-2 border-dashed border-amber-300 rounded-2xl p-6 text-center space-y-2">
+          <span class="text-3xl">📝</span>
+          <p class="text-xs font-black text-amber-900">لَا تُوجَدُ دُرُوسٌ مُسَجَّلَةٌ فِي هَذِهِ المَادَّةِ بَعْدُ!</p>
+        </div>
+      `;
+      return;
+    }
+
+    container.innerHTML = filtered.map(l => {
+      const isNew = (l.id === highlightId) ? 'ring-2 ring-emerald-500' : '';
+      return `
+        <div class="lesson-card-hover bg-white border-2 border-amber-200 rounded-2xl p-3.5 shadow-sm space-y-2.5 ${isNew}">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <span class="px-2 py-0.5 rounded-lg border text-xs font-black ${l.subjectColor || 'bg-amber-100 text-amber-800'}">
+                <span>${l.subjectIcon || '📖'}</span>
+                <span>${l.subject}</span>
+              </span>
+              <span class="text-[11px] font-bold text-slate-500">📅 ${l.date}</span>
+            </div>
+            <div class="flex items-center gap-1">
+              <button onclick="shareSingleLesson(${l.id})" class="bg-sky-50 hover:bg-sky-100 text-sky-700 text-xs px-2.5 py-1 rounded-lg border border-sky-200 flex items-center gap-1 font-bold cursor-pointer" title="مشاركة رابط الدرس الفوري">
+                <span>🔗</span>
+                <span class="text-[10px]">مُشَارَكَة</span>
+              </button>
+            </div>
+          </div>
+          <div>
+            <h4 class="text-sm font-black text-slate-900 leading-tight">${l.title}</h4>
+            <p class="text-xs text-slate-700 font-semibold mt-1 bg-amber-50/60 p-2 rounded-xl border border-amber-100">
+              💬 ${l.notes}
+            </p>
+          </div>
+          <div class="rounded-xl overflow-hidden border-2 border-amber-200 h-44 bg-slate-900">
+            <img src="${l.image}" alt="${l.title}" class="w-full h-full object-cover"/>
+          </div>
+          <div class="flex items-center justify-between pt-1">
+            <button onclick="speakVoice('${l.notes.replace(/'/g, "\\'")}')" class="text-xs text-amber-900 bg-amber-100 hover:bg-amber-200 font-bold px-3 py-1.5 rounded-xl cursor-pointer">
+              🔊 اسْتَمِعْ لِلتَّلْخِيصِ
+            </button>
+            <button onclick="shareSingleLesson(${l.id})" class="text-xs bg-emerald-600 hover:bg-emerald-700 text-white font-black px-3 py-1.5 rounded-xl shadow-xs cursor-pointer">
+              💬 إِرْسَالٌ عبر واتساب
+            </button>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function filterNotebook(sub, btn) {
+    currentFilter = sub;
+    document.querySelectorAll('.filter-btn').forEach(b => {
+      b.className = 'filter-btn flex-1 py-1.5 px-2 rounded-xl bg-white text-slate-700 border border-amber-200 text-center whitespace-nowrap cursor-pointer';
+    });
+    btn.className = 'filter-btn flex-1 py-1.5 px-2 rounded-xl bg-amber-600 text-white shadow-xs text-center whitespace-nowrap cursor-pointer';
+    renderNotebook();
+  }
+
+  function openNewLessonModal() {
+    document.getElementById('new-lesson-modal').classList.remove('hidden');
+    currentModalPhoto = presetPhotos.grammar;
+    document.getElementById('modal-preview-img').src = currentModalPhoto;
+    speakVoice('مَرْحَبًا يَا بَطَل! صَوِّرْ أَوْ ارْفَعْ كُرَّاسَكَ لِيُحْفَظَ فِي جِهَازِكَ وَالسَّحَابَةِ');
+  }
+
+  function closeNewLessonModal() {
+    document.getElementById('new-lesson-modal').classList.add('hidden');
+  }
+
+  function selectPresetPrompt() {
+    const list = [presetPhotos.grammar, presetPhotos.science, presetPhotos.math, presetPhotos.reading];
+    currentModalPhoto = list[Math.floor(Math.random() * list.length)];
+    document.getElementById('modal-preview-img').src = currentModalPhoto;
+  }
+
+  function handleImageFile(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      currentModalPhoto = event.target.result;
+      document.getElementById('modal-preview-img').src = currentModalPhoto;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function saveNewLesson(e) {
+    e.preventDefault();
+    const title = document.getElementById('modal-lesson-title').value.trim() || 'دَرْسٌ مَدْرَسِيٌّ';
+    const sub = document.getElementById('modal-lesson-subject').value;
+    const notes = document.getElementById('modal-lesson-notes').value.trim() || 'تَمَّ تَوْثِيقُ كُرَّاسِ الدَّرْسِ بِنَجَاحٍ!';
+    const today = new Date().toISOString().split('T')[0];
+
+    let color = 'bg-amber-100 text-amber-800 border-amber-300';
+    let icon = '📖';
+    if (sub === 'قواعد لغة') { color = 'bg-emerald-100 text-emerald-800 border-emerald-300'; icon = '✍️'; }
+    else if (sub === 'إيقاظ علمي') { color = 'bg-teal-100 text-teal-800 border-teal-300'; icon = '🔬'; }
+    else if (sub === 'رياضيات') { color = 'bg-blue-100 text-blue-800 border-blue-300'; icon = '📐'; }
+
+    const newLesson = {
+      id: Date.now(),
+      subject: sub,
+      subjectColor: color,
+      subjectIcon: icon,
+      title: title,
+      date: today,
+      image: currentModalPhoto,
+      notes: notes,
+      isCustom: true
+    };
+
+    notebookLessons.unshift(newLesson);
+    saveLocalLessons();
+    broadcastToCloud(newLesson);
+    closeNewLessonModal();
+    renderNotebook(newLesson.id);
+    addStars(25);
+
+    showToast('🎉 تَمَّ الحِفْظُ وَالمُزَامَنَةُ!', `تَمَّ حِفْظُ دَرْسِ «${title}» مَحَلِّيًّا وَسَحَابِيًّا!`);
+    speakVoice(`أَحْسَنْتَ يَا بَطَلُنَا! تَمَّ حِفْظُ دَرْسِ ${title} بِنَجَاحٍ.`);
+    document.getElementById('new-lesson-form').reset();
+  }
+
+  // ==========================================
+  // أدوات التبويبات والمواد التعليمية
+  // ==========================================
+  function switchTab(tab) {
+    const tabs = ['notebook', 'reading', 'grammar', 'science', 'math', 'materials'];
+    tabs.forEach(t => {
+      const sec = document.getElementById('section-' + t);
+      const btn = document.getElementById('tab-' + t);
+      const bnav = document.getElementById('bnav-' + t);
+      if (sec) sec.classList.add('hidden');
+      if (btn) btn.className = 'py-2 px-1 bg-amber-800/40 hover:bg-white/20 text-white rounded-xl flex items-center justify-center gap-0.5 transition cursor-pointer';
+      if (bnav) bnav.className = 'flex flex-col items-center gap-0.5 text-slate-700 cursor-pointer';
+    });
+
+    const activeSec = document.getElementById('section-' + tab);
+    const activeBtn = document.getElementById('tab-' + tab);
+    const activeBnav = document.getElementById('bnav-' + tab);
+    if (activeSec) activeSec.classList.remove('hidden');
+    if (activeBtn) activeBtn.className = 'py-2 px-1 bg-yellow-300 text-amber-950 font-black rounded-xl ring-2 ring-white/80 shadow flex items-center justify-center gap-0.5 transition cursor-pointer';
+    if (activeBnav) activeBnav.className = 'flex flex-col items-center gap-0.5 text-orange-600 cursor-pointer';
+
+    if (tab === 'notebook') renderNotebook();
+  }
+
+  function loadTunisianStory(idx) {
+    const s = tunisianStories[idx];
+    document.getElementById('story-title').innerText = s.title;
+    const words = s.text.split(' ');
+    document.getElementById('story-container').innerHTML = words.map(w => `<span class="clickable-word p-1 rounded-lg inline-block cursor-pointer" onclick="speakVoice('${w}')">${w}</span>`).join(' ');
+    document.querySelectorAll('.story-choice-btn').forEach((b, i) => {
+      b.className = (i === idx) ? 'story-choice-btn text-xs font-bold px-2.5 py-1 rounded-xl bg-amber-500 text-white shadow cursor-pointer' : 'story-choice-btn text-xs font-bold px-2.5 py-1 rounded-xl bg-white border border-amber-300 text-amber-900 cursor-pointer';
+    });
+  }
+
+  function playFullStory() {
+    const title = document.getElementById('story-title').innerText;
+    const text = document.getElementById('story-container').innerText;
+    speakVoice(title + '. ' + text);
+  }
+
+  function checkGrammar(choice, btn) {
+    const cur = grammarWords[currentGrammarIdx];
+    const fb = document.getElementById('grammar-feedback');
+    fb.classList.remove('hidden');
+    if (choice === cur.type) {
+      fb.className = 'text-xs font-black p-2.5 rounded-xl text-center bg-emerald-100 text-emerald-900 border border-emerald-300';
+      fb.innerText = `أَحْسَنْتَ يَا بَطَل! كَلِمَةُ «${cur.word}» هِيَ ${cur.type} صَحِيحٌ (+5 ⭐)`;
+      addStars(5);
+      speakVoice('إِجَابَةٌ صَحِيحَةٌ، مُمْتَازٌ!');
+    } else {
+      fb.className = 'text-xs font-black p-2.5 rounded-xl text-center bg-rose-100 text-rose-900 border border-rose-300';
+      fb.innerText = `حَاوِلْ مَرَّةً أُخْرَى، كَلِمَةُ «${cur.word}» هِيَ ${cur.type}.`;
+    }
+  }
+
+  function nextGrammarWord() {
+    currentGrammarIdx = (currentGrammarIdx + 1) % grammarWords.length;
+    document.getElementById('grammar-target-word').innerText = grammarWords[currentGrammarIdx].word;
+    document.getElementById('grammar-progress').innerText = `الْكَلِمَةُ ${currentGrammarIdx + 1} مِنْ ${grammarWords.length}`;
+    document.getElementById('grammar-feedback').classList.add('hidden');
+  }
+
+  function checkMath(val, btn) {
+    const fb = document.getElementById('math-feedback');
+    fb.classList.remove('hidden');
+    if (val === 20) {
+      fb.className = 'text-xs font-black p-2.5 rounded-xl text-center bg-emerald-100 text-emerald-900 border border-emerald-300';
+      fb.innerText = 'أَحْسَنْتَ يَا عَبْقَرِي! 5 × 4 = 20 (+10 ⭐)';
+      addStars(10);
+      speakVoice('أَحْسَنْتَ، خَمْسَةٌ ضَرْبُ أَرْبَعَةٍ يُسَاوِي عِشْرِينَ!');
+    } else {
+      fb.className = 'text-xs font-black p-2.5 rounded-xl text-center bg-rose-100 text-rose-900 border border-rose-300';
+      fb.innerText = 'حَاوِلْ مَرَّةً أُخْرَى، 5 مَجْمُوعَاتٍ فِي كُلٍّ مِنْهَا 4!';
+    }
+  }
+
+  function setSpeed(rate) {
+    speechRate = rate;
   }
 
   function speakVoice(text) {
@@ -582,553 +1185,25 @@
     window.speechSynthesis.speak(utt);
   }
 
-  function setSpeed(rate) {
-    speechRate = rate;
+  function addStars(num) {
+    stars += num;
+    document.getElementById('star-count').innerText = stars;
   }
 
-  function switchTab(tab) {
-    const tabs = ['dailylessons', 'reading', 'grammar', 'science', 'math', 'materials'];
-    tabs.forEach(t => {
-      const sec = document.getElementById('section-' + t);
-      const btn = document.getElementById('tab-' + t);
-      const bnav = document.getElementById('bnav-' + t);
-      if (sec) sec.classList.add('hidden');
-      if (btn) btn.className = 'py-2 px-1 bg-amber-800/40 hover:bg-white/20 text-white rounded-xl flex items-center justify-center gap-0.5 transition cursor-pointer';
-      if (bnav) bnav.className = 'flex flex-col items-center gap-0.5 text-slate-700 hover:text-orange-600 hover:scale-105 transition cursor-pointer';
-    });
-
-    const activeSec = document.getElementById('section-' + tab);
-    const activeBtn = document.getElementById('tab-' + tab);
-    const activeBnav = document.getElementById('bnav-' + tab);
-    if (activeSec) activeSec.classList.remove('hidden');
-    if (activeBtn) activeBtn.className = 'py-2 px-1 bg-white text-rose-600 rounded-xl shadow flex items-center justify-center gap-0.5 transition cursor-pointer';
-    if (activeBnav) activeBnav.className = 'flex flex-col items-center gap-0.5 text-rose-600 hover:scale-105 transition cursor-pointer';
+  function showToast(title, body) {
+    const t = document.getElementById('save-toast');
+    document.getElementById('toast-title').innerText = title;
+    document.getElementById('toast-body').innerText = body;
+    t.classList.remove('translate-y-32', 'opacity-0', 'pointer-events-none');
+    t.classList.add('translate-y-0', 'opacity-100');
+    setTimeout(hideToast, 5000);
   }
 
-  // ==========================================
-  // بيانات ونظام قسم الدروس اليومية المصورة
-  // ==========================================
-  const presetTemplates = [
-    {
-      id: "preset_copybook",
-      name: "كُرَّاسُ الخَطّ وَالإِمْلَاء",
-      icon: "✍️",
-      svgGraphic: `
-        <div class="w-full h-full bg-amber-50/95 border-2 border-amber-300 rounded-xl p-3 flex flex-col justify-between shadow-inner">
-          <div class="border-b border-amber-300 pb-1 flex justify-between text-[11px] font-black text-amber-900">
-            <span>كُرَّاسُ النَّشَاطِ التُّونِسِي</span>
-            <span>السَّنَةُ 3 أَسَاسِي</span>
-          </div>
-          <div class="py-2 text-center font-black text-amber-950">
-            <p class="text-sm bg-white/80 py-1.5 rounded-lg border border-amber-200">« تُونِسُ بَلَدِي الحَبِيبُ خَضْرَاءُ جَمِيلَةٌ »</p>
-            <p class="text-xs text-slate-600 mt-1">خَطٌّ جَمِيلٌ وَمُرَتَّبٌ مَعَ الضَّبْطِ بِالشَّكْلِ التَّامِّ ✨</p>
-          </div>
-          <div class="flex justify-between items-center text-[10px] text-amber-800 font-bold border-t border-amber-200 pt-1">
-            <span>مُلَاحَظَةُ المُعَلِّمِ: عَمَلٌ مُمْتَازٌ 🌟</span>
-            <span>العَلَامَة: 10/10 🎖️</span>
-          </div>
-        </div>
-      `
-    },
-    {
-      id: "preset_science",
-      name: "رَسْمُ تَجْرِبَةِ التَّنَفُّس",
-      icon: "🫁",
-      svgGraphic: `
-        <div class="w-full h-full bg-teal-50/95 border-2 border-teal-300 rounded-xl p-3 flex items-center justify-around shadow-inner">
-          <div class="text-center">
-            <div class="text-3xl animate-pulse">🫁</div>
-            <span class="text-[10px] font-black text-teal-900 block mt-1">شَهِيقٌ (يَعْلُو الصَّدْرُ)</span>
-            <span class="text-[9px] bg-teal-200 text-teal-950 px-1 py-0.5 rounded font-bold">دُخُول الأُكْسِيجِين O₂</span>
-          </div>
-          <div class="text-2xl text-teal-600 font-black">↔️</div>
-          <div class="text-center">
-            <div class="text-3xl">💨</div>
-            <span class="text-[10px] font-black text-cyan-900 block mt-1">زَفِيرٌ (يَنْخَفِضُ الصَّدْرُ)</span>
-            <span class="text-[9px] bg-cyan-200 text-cyan-950 px-1 py-0.5 rounded font-bold">خُرُوج CO₂</span>
-          </div>
-        </div>
-      `
-    },
-    {
-      id: "preset_math",
-      name: "جَدْوَلُ قِيَاسِ السَّعَاتِ",
-      icon: "📊",
-      svgGraphic: `
-        <div class="w-full h-full bg-blue-50/95 border-2 border-blue-300 rounded-xl p-2.5 flex flex-col justify-between shadow-inner text-center">
-          <div class="text-xs font-black text-blue-950">جَدْوَلُ قِيَاسِ السَّعَاتِ (اللِّتْر وَالمِلِّيلِتْر)</div>
-          <div class="grid grid-cols-3 gap-1 bg-white p-1 rounded-lg border border-blue-200 text-[10px] font-black text-slate-800">
-            <div class="bg-blue-100 p-1 rounded">1 لِتْر (L) 🥛</div>
-            <div class="bg-indigo-100 p-1 rounded">=</div>
-            <div class="bg-amber-100 p-1 rounded">1000 مل (mL) 💧</div>
-          </div>
-          <div class="text-[10px] font-bold text-blue-900">مِثَال: قَارُورَةُ المَاءِ = 1 لِتْر وَنِصْف (1500 مل)</div>
-        </div>
-      `
-    },
-    {
-      id: "preset_art",
-      name: "رَسْمُ الطَّبِيعَةِ التُّونِسِيَّة",
-      icon: "🎨",
-      svgGraphic: `
-        <div class="w-full h-full bg-white/95 border-2 border-purple-300 rounded-xl p-2 flex items-center justify-center gap-3 shadow-inner">
-          <span class="text-4xl">🌳</span>
-          <div class="text-center">
-            <div class="text-2xl">🏡 ☀️ 🌾</div>
-            <span class="text-[11px] font-black text-purple-950 mt-1 block">مَشْهَدُ الضَّيْعَةِ فِي الرِّيفِ التُّونِسِي</span>
-          </div>
-          <span class="text-4xl">🫒</span>
-        </div>
-      `
-    }
-  ];
-
-  let selectedPresetIdx = 0;
-  let customUploadedImage = null;
-
-  let dailyLessons = [
-    {
-      id: 1,
-      day: "اليَوْمَ (الإِثْنَيْنِ)",
-      isToday: true,
-      subjectKey: "science",
-      subjectLabel: "الإِيقَاظُ العِلْمِي",
-      subjectIcon: "🔬",
-      title: "دَرْسُ اليَوْمِ: مَسْلَكُ الهَوَاءِ وَحَرَكَتَا التَّنَفُّسِ",
-      summary: "تَعَلَّمْنَا اليَوْمَ أَنَّ عَمَلِيَّةَ التَّنَفُّسِ تَتَكَوَّنُ مِنْ شَهِيقٍ يَدْخُلُ فِيهِ الأُكْسِيجِين فَيَعْلُو القَفَصُ الصَّدْرِيُّ، وَزَفِيرٍ يَخْرُجُ فِيهِ ثَانِي أُكْسِيدِ الكَرْبُون فَيَنْخَفِضُ الصَّدْرُ.",
-      voiceText: "دَرْسُ اليَوْمِ فِي الإِيقَاظِ العِلْمِي: حَرَكَتَا التَّنَفُّسِ هُمَا الشَّهِيقُ وَالزَّفِيرُ، فِي الشَّهِيقِ يَعْلُو الصَّدْرُ وَفِي الزَّفِيرِ يَنْخَفِضُ الصَّدْرُ.",
-      imageType: "preset",
-      presetIdx: 1,
-      tag: "تَجْرِبَةٌ صَفِّيَّةٌ 🫁"
-    },
-    {
-      id: 2,
-      day: "اليَوْمَ (الإِثْنَيْنِ)",
-      isToday: true,
-      subjectKey: "reading",
-      subjectLabel: "القِرَاءَةُ التَّعْلِيمِيَّة",
-      subjectIcon: "📖",
-      title: "دَرْسُ اليَوْمِ: نَصُّ «مُنْتَزَهُ البَلْفِيدِير» بِتُونِسَ",
-      summary: "قَرَأْنَا اليَوْمَ نَصَّ البَلْفِيدِير بِتُونِسَ، وَتَدَرَّبْنَا عَلَى النُّطْقِ السَّلِيمِ لِلْكَلِمَاتِ المَشْكُولَةِ وَمَعْرِفَةِ أَقْسَامِ الكَلِمَةِ (اسْمٌ، فِعْلٌ، حَرْفٌ).",
-      voiceText: "دَرْسُ اليَوْمِ فِي القِرَاءَةِ: زَارَ سَلِيمٌ حَدِيقَةَ البَلْفِيدِير مَعَ عَائِلَتِهِ، وَشَاهَدَ الأَسَدَ الشُّجَاعَ وَالأَشْجَارَ البَاسِقَةَ.",
-      imageType: "preset",
-      presetIdx: 0,
-      tag: "كُرَّاسُ القِرَاءَة 📝"
-    },
-    {
-      id: 3,
-      day: "الأَمْسَ (الأَحَدِ)",
-      isToday: false,
-      subjectKey: "math",
-      subjectLabel: "الرِّيَاضِيَّاتُ وَالحِسَاب",
-      subjectIcon: "📐",
-      title: "دَرْسُ الأَمْسِ: قِيَاسُ السَّعَاتِ بِاللِّتْرِ (L) وَالمِلِّيلِتْرِ (mL)",
-      summary: "تَعَرَّفْنَا عَلَى وَحْدَةِ قِيَاسِ السَّوَائِلِ: اللِّتْرُ الوَاحِدُ يُسَاوِي 1000 مِلِّيلِتْر، وَاسْتَعْمَلْنَا قَارُورَاتٍ مُدَرَّجَةً لِتَجْرِبَةِ مَلْءِ الأَوْعِيَةِ فِي القِسْمِ.",
-      voiceText: "دَرْسُ الرِّيَاضِيَّاتِ: اللِّتْرُ هُوَ وَحْدَةُ قِيَاسِ السَّعَةِ، 1 لِتْر يُسَاوِي أَلْفَ مِلِّيلِتْر.",
-      imageType: "preset",
-      presetIdx: 2,
-      tag: "جَدْوَلُ القِيَاس 📊"
-    }
-  ];
-
-  function toggleAddLessonForm() {
-    const form = document.getElementById('daily-lesson-form');
-    const btn = document.getElementById('toggle-form-btn');
-    if (form.classList.contains('hidden')) {
-      form.classList.remove('hidden');
-      btn.innerHTML = '<span>أَغْلِقِ النَّمُوذَجَ 🔼</span>';
-    } else {
-      form.classList.add('hidden');
-      btn.innerHTML = '<span>افْتَحِ النَّمُوذَجَ 🔽</span>';
-    }
+  function hideToast() {
+    const t = document.getElementById('save-toast');
+    t.classList.remove('translate-y-0', 'opacity-100');
+    t.classList.add('translate-y-32', 'opacity-0', 'pointer-events-none');
   }
-
-  function selectPresetImage(idx, btnEl) {
-    selectedPresetIdx = idx;
-    customUploadedImage = null;
-    document.querySelectorAll('.preset-choice-btn').forEach(b => {
-      b.className = 'preset-choice-btn p-1.5 bg-slate-50 hover:bg-slate-100 border border-slate-300 rounded-lg text-center transition flex flex-col items-center';
-    });
-    if (btnEl) {
-      btnEl.className = 'preset-choice-btn p-1.5 bg-amber-50 hover:bg-amber-100 border-2 border-amber-500 rounded-lg text-center transition flex flex-col items-center ring-2 ring-amber-300';
-    }
-    const previewBox = document.getElementById('selected-image-preview-box');
-    const thumb = document.getElementById('preview-thumbnail-container');
-    const caption = document.getElementById('preview-caption');
-    previewBox.classList.remove('hidden');
-    thumb.innerHTML = `<span class="text-2xl">${presetTemplates[idx].icon}</span>`;
-    caption.innerText = presetTemplates[idx].name;
-    document.getElementById('file-label-text').innerText = 'الْتَقِطْ صُورَةً مِنْ هَاتِفِكَ (اخْتِيَارِيّ)';
-  }
-
-  function handleImageFileUpload(e) {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = function(event) {
-        customUploadedImage = event.target.result;
-        const previewBox = document.getElementById('selected-image-preview-box');
-        const thumb = document.getElementById('preview-thumbnail-container');
-        const caption = document.getElementById('preview-caption');
-        previewBox.classList.remove('hidden');
-        thumb.innerHTML = `<img src="${customUploadedImage}" class="w-full h-full object-cover rounded-lg" alt="معاينة كراس التلميذ"/>`;
-        caption.innerText = `صُورَةٌ مَرْفُوعَةٌ: ${file.name.substring(0, 15)}...`;
-        document.getElementById('file-label-text').innerText = '✅ تَمَّ اخْتِيَارُ صُورَةِ الكُرَّاسِ';
-        document.querySelectorAll('.preset-choice-btn').forEach(b => {
-          b.className = 'preset-choice-btn p-1.5 bg-slate-50 hover:bg-slate-100 border border-slate-300 rounded-lg text-center transition flex flex-col items-center';
-        });
-      };
-      reader.readAsDataURL(file);
-    }
-  }
-
-  function handleNewLessonSubmit(e) {
-    e.preventDefault();
-    const day = document.getElementById('lesson-day').value;
-    const subKey = document.getElementById('lesson-subject').value;
-    const title = document.getElementById('lesson-title-input').value.trim();
-    const notes = document.getElementById('lesson-notes-input').value.trim();
-
-    const subjectMap = {
-      reading: { label: "القِرَاءَةُ التَّعْلِيمِيَّة", icon: "📖" },
-      grammar: { label: "قَوَاعِدُ اللُّغَة", icon: "✍️" },
-      science: { label: "الإِيقَاظُ العِلْمِي", icon: "🔬" },
-      math: { label: "الرِّيَاضِيَّاتُ وَالحِسَاب", icon: "📐" },
-      poetry: { label: "المَحْفُوظَاتُ وَالأَنَاشِيد", icon: "📜" }
-    };
-
-    const newLesson = {
-      id: Date.now(),
-      day: day,
-      isToday: day.includes("اليَوْمَ"),
-      subjectKey: subKey,
-      subjectLabel: subjectMap[subKey].label,
-      subjectIcon: subjectMap[subKey].icon,
-      title: title,
-      summary: notes,
-      voiceText: `${title}. ${notes}`,
-      imageType: customUploadedImage ? "uploaded" : "preset",
-      presetIdx: selectedPresetIdx,
-      customImage: customUploadedImage,
-      tag: "دَرْسٌ مُضَافٌ حَدِيثًا 🌟"
-    };
-
-    dailyLessons.unshift(newLesson);
-    renderDailyLessonsCards('all');
-
-    addStars(20);
-    confettiEffect();
-    speakVoice(`رَائِعٌ جِدًّا! تَمَّتْ إِضَافَةُ دَرْسِ ${title} إِلَى دَفْتَرِكَ اليَوْمِيِّ بِنَجَاح!`);
-
-    document.getElementById('daily-lesson-form').reset();
-    customUploadedImage = null;
-    document.getElementById('selected-image-preview-box').classList.add('hidden');
-    document.getElementById('file-label-text').innerText = 'الْتَقِطْ صُورَةً مِنْ هَاتِفِكَ (اخْتِيَارِيّ)';
-    toggleAddLessonForm();
-  }
-
-  function renderDailyLessonsCards(filterCategory = 'all') {
-    const list = document.getElementById('daily-lessons-list');
-    let filtered = dailyLessons;
-
-    if (filterCategory === 'today') {
-      filtered = dailyLessons.filter(l => l.isToday);
-    } else if (filterCategory !== 'all') {
-      filtered = dailyLessons.filter(l => l.subjectKey === filterCategory);
-    }
-
-    if (filtered.length === 0) {
-      list.innerHTML = `
-        <div class="bg-white border-2 border-dashed border-amber-300 rounded-2xl p-6 text-center text-slate-600 space-y-2">
-          <span class="text-4xl">📂</span>
-          <p class="text-xs font-black text-slate-800">لَا تُوجَدُ دُرُوسٌ حَالِيًّا فِي هَذَا التَّصْنِيفِ.</p>
-          <p class="text-[11px]">اضْغَطْ عَلَى «إِضَافَةُ دَرْسٍ جَدِيدٍ بِالصُّورَةِ» لِتَوْثِيقِ دَرْسِ كُرَّاسِكَ الفَوْرِي!</p>
-        </div>
-      `;
-      return;
-    }
-
-    list.innerHTML = filtered.map(lesson => {
-      let imageHtml = '';
-      if (lesson.imageType === 'uploaded' && lesson.customImage) {
-        imageHtml = `
-          <div class="relative w-full h-44 rounded-xl overflow-hidden border-2 border-slate-200 cursor-pointer group bg-slate-100 flex items-center justify-center" onclick="openPhotoLightbox(${lesson.id})">
-            <img src="${lesson.customImage}" alt="${lesson.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300"/>
-            <div class="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition flex items-center justify-center">
-              <span class="bg-white/90 text-slate-900 text-xs font-black px-3 py-1.5 rounded-full shadow flex items-center gap-1">
-                🔍 انْقُرْ لِتَكْبِيرِ الصُّورَةِ
-              </span>
-            </div>
-          </div>
-        `;
-      } else {
-        const p = presetTemplates[lesson.presetIdx || 0];
-        imageHtml = `
-          <div class="relative w-full h-36 rounded-xl overflow-hidden border-2 border-amber-200 cursor-pointer group shadow-sm" onclick="openPhotoLightbox(${lesson.id})">
-            ${p.svgGraphic}
-            <div class="absolute bottom-2 left-2 bg-black/60 hover:bg-black/80 text-white text-[10px] font-black px-2 py-0.5 rounded-md flex items-center gap-1">
-              🔍 تَكْبِيرُ المَشْهَدِ
-            </div>
-          </div>
-        `;
-      }
-
-      return `
-        <article class="bg-white border-2 border-rose-200 hover:border-rose-400 rounded-2xl p-3.5 shadow-sm space-y-3 card-hover">
-          <div class="flex items-center justify-between">
-            <div class="flex items-center gap-2">
-              <span class="w-10 h-10 rounded-2xl bg-gradient-to-br from-rose-100 to-amber-100 border border-rose-300 flex items-center justify-center text-xl shadow-xs">
-                ${lesson.subjectIcon}
-              </span>
-              <div>
-                <div class="flex items-center gap-1.5">
-                  <span class="text-[10px] bg-rose-100 text-rose-900 font-extrabold px-2 py-0.5 rounded-full">${lesson.subjectLabel}</span>
-                  <span class="text-[10px] bg-amber-100 text-amber-900 font-black px-2 py-0.5 rounded-full">${lesson.day}</span>
-                </div>
-                <h4 class="text-sm font-black text-slate-900 mt-1">${lesson.title}</h4>
-              </div>
-            </div>
-            <span class="text-[10px] font-bold bg-slate-100 text-slate-700 px-2 py-0.5 rounded-md">${lesson.tag}</span>
-          </div>
-
-          ${imageHtml}
-
-          <div class="bg-gradient-to-br from-rose-50/70 to-amber-50/60 p-2.5 rounded-xl border border-rose-100 text-xs text-slate-800 font-bold leading-relaxed">
-            <p>💡 <strong>خُلَاصَةُ الدَّرْسِ:</strong> ${lesson.summary}</p>
-          </div>
-
-          <div class="flex items-center justify-between pt-1 text-xs font-black">
-            <button class="bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-700 text-white px-3.5 py-1.5 rounded-xl shadow-xs flex items-center gap-1.5 active:scale-95 transition cursor-pointer" onclick="speakVoice('${lesson.voiceText.replace(/'/g, "\\'")}')">
-              <span>🔊 اسْتَمِعْ لِلشَّرْحِ</span>
-            </button>
-            <div class="flex items-center gap-1.5">
-              <button class="bg-amber-100 hover:bg-amber-200 text-amber-900 px-2.5 py-1.5 rounded-xl border border-amber-300 flex items-center gap-1 cursor-pointer" onclick="openPhotoLightbox(${lesson.id})">
-                <span>🔍 تَكْبِير</span>
-              </button>
-              <button class="bg-slate-100 hover:bg-slate-200 text-slate-800 px-2.5 py-1.5 rounded-xl border border-slate-300 flex items-center gap-1 cursor-pointer" onclick="alert('تم تجهيز صورة وملخص الدرس للطباعة والمراجعة!')">
-                <span>🖨️ حِفْظ</span>
-              </button>
-            </div>
-          </div>
-        </article>
-      `;
-    }).join('');
-  }
-
-  function filterDailyLessons(category, btn) {
-    document.querySelectorAll('.daily-filter-btn').forEach(b => {
-      b.className = 'daily-filter-btn px-2.5 py-1.5 rounded-xl bg-white text-slate-700 border border-amber-200 shrink-0 cursor-pointer';
-    });
-    if (btn) {
-      btn.className = 'daily-filter-btn px-2.5 py-1.5 rounded-xl bg-rose-600 text-white shadow-xs shrink-0 cursor-pointer';
-    }
-    renderDailyLessonsCards(category);
-  }
-
-  function openPhotoLightbox(lessonId) {
-    const lesson = dailyLessons.find(l => l.id === lessonId);
-    if (!lesson) return;
-
-    const modal = document.getElementById('photo-lightbox-modal');
-    const titleEl = document.getElementById('lightbox-title');
-    const box = document.getElementById('lightbox-image-box');
-    const cap = document.getElementById('lightbox-caption');
-
-    titleEl.innerText = `${lesson.subjectIcon} ${lesson.title}`;
-    cap.innerText = lesson.summary;
-
-    if (lesson.imageType === 'uploaded' && lesson.customImage) {
-      box.innerHTML = `<img src="${lesson.customImage}" class="w-full max-h-[55vh] object-contain rounded-xl" alt="صورة الدرس المكبرة"/>`;
-    } else {
-      const p = presetTemplates[lesson.presetIdx || 0];
-      box.innerHTML = `<div class="w-full h-64 p-2">${p.svgGraphic}</div>`;
-    }
-
-    modal.classList.remove('hidden');
-    modal.classList.add('flex');
-    speakVoice(lesson.title);
-  }
-
-  function closePhotoLightbox() {
-    const modal = document.getElementById('photo-lightbox-modal');
-    modal.classList.add('hidden');
-    modal.classList.remove('flex');
-  }
-
-  // ==========================================
-  // نصوص القراءة التونسية
-  // ==========================================
-  const tunisianStories = [
-    {
-      title: "فِي حَدِيقَةِ البَلْفِيدِير بِتُونِسَ",
-      emojis: ["🌳", "🦁", "🌸", "🎈"],
-      text: "زَارَ سَلِيمٌ حَدِيقَةَ البَلْفِيدِير مَعَ عَائِلَتِهِ، فَشَاهَدَ الأَسَدَ الشُّجَاعَ وَالأَشْجَارَ البَاسِقَةَ، ثُمَّ تَنَاوَلَ لَمْجَةً شَهِيَّةً وَهُوَ فَرِحٌ مَسْرُورٌ."
-    },
-    {
-      title: "ضَيْعَةُ الجَدِّ كَامِلٍ فِي الرِّيفِ",
-      emojis: ["🏡", "🐑", "🌿", "🚜"],
-      text: "اسْتَيْقَظَ الجَدُّ كَامِلٌ بَاكِرًا، وَسَقَى شُجَيْرَاتِ الزَّيْتُونِ المُبَارَكَةِ، ثُمَّ رَعَى الخِرَافَ فِي المَرْعَى الخَصِيبِ بِهِمَّةٍ وَنَشَاطٍ."
-    },
-    {
-      title: "جَوْلَةٌ سَاحِرَةٌ فِي سِيدِي بُوسَعِيد",
-      emojis: ["🌊", "⛵", "🏛️", "🌸"],
-      text: "صَعِدَتِ العَائِلَةُ هَضْبَةَ سِيدِي بُوسَعِيد الجَمِيلَةَ، فَرَأَوْا البُيُوتَ البَيْضَاءَ وَالأَبْوَابَ الزَّرْقَاءَ العَتِيقَةَ تُطِلُّ عَلَى البَحْرِ الهَادِئِ."
-    }
-  ];
-
-  let currentStoryIdx = 0;
-
-  function loadStory(idx) {
-    currentStoryIdx = idx;
-    const story = tunisianStories[idx];
-    document.getElementById('story-title').innerText = story.title;
-    document.getElementById('story-emoji-icon').innerHTML = story.emojis.map(e => `<span class="animate-bounce">${e}</span>`).join('');
-    
-    for (let i = 0; i < 3; i++) {
-      const btn = document.getElementById('story-btn-' + i);
-      if (btn) {
-        if (i === idx) {
-          btn.className = 'text-xs font-bold px-2.5 py-1 rounded-xl bg-amber-500 text-white shadow cursor-pointer';
-        } else {
-          btn.className = 'text-xs font-bold px-2.5 py-1 rounded-xl bg-white border border-amber-300 text-amber-900 cursor-pointer';
-        }
-      }
-    }
-
-    renderStoryWords(story.text);
-    speakVoice(story.title);
-  }
-
-  function renderStoryWords(text) {
-    const container = document.getElementById('story-container');
-    const words = text.split(' ');
-    container.innerHTML = words.map((w, i) => `<span class="clickable-word" id="word-${i}" onclick="clickWord('${w}', ${i})">${w}</span>`).join(' ');
-  }
-
-  function clickWord(w, i) {
-    document.querySelectorAll('.clickable-word').forEach(el => el.classList.remove('word-highlight'));
-    const target = document.getElementById('word-' + i);
-    if (target) target.classList.add('word-highlight');
-    speakVoice(w);
-  }
-
-  function playFullText() {
-    const story = tunisianStories[currentStoryIdx];
-    speakVoice(story.text);
-  }
-
-  // ==========================================
-  // قواعد اللغة: تصنيف الكلمات
-  // ==========================================
-  const wordsToClassify = [
-    { word: "البَلْفِيدِيرُ", type: "اسم" },
-    { word: "يَرْكُضُ", type: "فعل" },
-    { word: "فِي", type: "حرف" },
-    { word: "شَجَرَةٌ", type: "اسم" },
-    { word: "عَلَى", type: "حرف" }
-  ];
-  let classifyIdx = 0;
-
-  function handleClassifyChoice(chosen, btn) {
-    const current = wordsToClassify[classifyIdx];
-    const fb = document.getElementById('classify-feedback');
-    fb.classList.remove('hidden');
-
-    if (chosen === current.type) {
-      fb.className = 'text-xs font-black p-2 rounded-xl text-center bg-emerald-100 text-emerald-900 border border-emerald-300';
-      fb.innerText = `أَحْسَنْتَ يَا بَطَل! كَلِمَةُ «${current.word}» هِيَ ${chosen} صَحِيحٌ! ⭐ (+10 نُجُوم)`;
-      addStars(10);
-      confettiEffect();
-      speakVoice(`أَحْسَنْتَ! ${current.word} هِيَ ${chosen}`);
-      setTimeout(() => nextClassifyWord(), 1400);
-    } else {
-      fb.className = 'text-xs font-black p-2 rounded-xl text-center bg-rose-100 text-rose-900 border border-rose-300';
-      fb.innerText = `حَاوِلْ مَرَّةً أُخْرَى! كَلِمَةُ «${current.word}» لَيْسَتْ ${chosen}.`;
-      speakVoice(`حَاوِلْ مَرَّةً أُخْرَى!`);
-    }
-  }
-
-  function nextClassifyWord() {
-    classifyIdx = (classifyIdx + 1) % wordsToClassify.length;
-    const current = wordsToClassify[classifyIdx];
-    document.getElementById('classify-target-word').innerText = current.word;
-    document.getElementById('classify-progress-text').innerText = `الْكَلِمَةُ ${classifyIdx + 1} مِنْ ${wordsToClassify.length}`;
-    document.getElementById('classify-feedback').classList.add('hidden');
-    speakVoice(current.word);
-  }
-
-  // ==========================================
-  // الرياضيات: جدول الضرب
-  // ==========================================
-  let mathAns = 20;
-
-  function newMathProblem() {
-    const n1 = Math.floor(Math.random() * 5) + 2;
-    const n2 = Math.floor(Math.random() * 5) + 2;
-    mathAns = n1 * n2;
-    document.getElementById('math-num1').innerText = n1;
-    document.getElementById('math-num2').innerText = n2;
-    document.getElementById('math-feedback').classList.add('hidden');
-
-    let opts = [mathAns, mathAns + 2, Math.max(2, mathAns - 3)];
-    opts = opts.sort(() => Math.random() - 0.5);
-
-    const cont = document.getElementById('math-options');
-    cont.innerHTML = opts.map(val => `
-      <button class="py-2.5 bg-blue-100 hover:bg-blue-200 text-blue-950 font-black text-base rounded-xl border border-blue-300 cursor-pointer shadow-xs" onclick="checkMathAns(${val})">
-        ${val}
-      </button>
-    `).join('');
-  }
-
-  function checkMathAns(val) {
-    const fb = document.getElementById('math-feedback');
-    fb.classList.remove('hidden');
-    if (val === mathAns) {
-      fb.className = 'text-xs font-black p-2 rounded-xl text-center bg-emerald-100 text-emerald-900 border border-emerald-300';
-      fb.innerText = `عَبْقَرِيٌّ! الإِجَابَةُ الصَّحِيحَةُ هِيَ ${mathAns}! ⭐ (+10 نُجُوم)`;
-      addStars(10);
-      confettiEffect();
-      speakVoice(`عَبْقَرِيٌّ! الإِجَابَةُ هِيَ ${mathAns}`);
-      setTimeout(() => newMathProblem(), 1300);
-    } else {
-      fb.className = 'text-xs font-black p-2 rounded-xl text-center bg-rose-100 text-rose-900 border border-rose-300';
-      fb.innerText = `حَاوِلْ مَرَّةً أُخْرَى!`;
-      speakVoice(`حَاوِلْ مَرَّةً أُخْرَى!`);
-    }
-  }
-
-  function shareApp() {
-    if (navigator.share) {
-      navigator.share({
-        title: 'تطبيق أبطال الثالثة أساسي - تونس',
-        text: 'دفتر الدروس اليومية المصورة وتطبيق المنهاج التونسي للسنة الثالثة بالصوت والصورة!',
-        url: window.location.href
-      }).catch(() => {});
-    } else {
-      navigator.clipboard.writeText(window.location.href);
-      alert('تم نسخ رابط التطبيق بنجاح لمشاركته مع زملائك ومعلميك!');
-    }
-  }
-
-  function downloadSelf() {
-    const html = document.documentElement.outerHTML;
-    const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = 'abtal_thaltha_asasi_tunisie.html';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    alert('جارٍ تحميل التطبيق كاملاً للعمل دون اتصال إنترنت على هاتفك أو حاسوبك! 🇹🇳');
-  }
-
-  // التهيئة الأولية
-  window.addEventListener('DOMContentLoaded', () => {
-    loadStory(0);
-    renderDailyLessonsCards('all');
-    newMathProblem();
-  });
 </script>
-</body>
-</html>
+
+</body></html>
