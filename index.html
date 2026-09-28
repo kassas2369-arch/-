@@ -3,25 +3,139 @@
 <html dir="rtl" lang="ar"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>تطبيق أبطال الثالثة أساسي - ملف التلميذة ميرا الأموري</title>
+<title>تطبيق أبطال الثالثة أساسي - ملف التلميذة ميرا الامورا</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&amp;display=swap" rel="stylesheet"/>
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 <style>
+    :root {
+      --brand-rose: #e11d48;
+      --brand-amber: #d97706;
+      --brand-green: #059669;
+      --brand-blue: #2563eb;
+      --brand-sky: #0284c7;
+      --brand-whatsapp: #25d366;
+      --surface: #fffbeb;
+      --ink: #431407;
+      --radius-card: 1.25rem;
+      --shadow-card: 0 8px 24px rgba(67, 20, 7, 0.08);
+      --touch: 44px;
+    }
     * { box-sizing: border-box; }
+    html { -webkit-tap-highlight-color: transparent; }
     body {
       font-family: 'Cairo', sans-serif;
       user-select: none;
       -webkit-user-select: none;
-      background: linear-gradient(135deg, #fef3c7 0%, #fed7aa 50%, #fef08a 100%);
+      background: linear-gradient(165deg, #fef3c7 0%, #fed7aa 45%, #fde68a 100%);
+      background-attachment: fixed;
       min-height: 100vh;
+      min-height: 100dvh;
       margin: 0;
       padding: 0;
+      color: var(--ink);
     }
+    /* بطاقات موحّدة */
+    .ui-card {
+      background: #fff;
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-card);
+    }
+    /* أزرار لمس مريحة */
+    .ui-btn {
+      min-height: var(--touch);
+      border-radius: 0.9rem;
+      font-weight: 900;
+      transition: transform 0.12s ease, box-shadow 0.12s ease, opacity 0.12s;
+    }
+    .ui-btn:active { transform: scale(0.97); }
+    .ui-btn-primary {
+      background: linear-gradient(135deg, #f43f5e, #e11d48);
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(225, 29, 72, 0.35);
+    }
+    .ui-btn-success {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(5, 150, 105, 0.3);
+    }
+    .ui-btn-whatsapp {
+      background: linear-gradient(135deg, #34d399, #25d366);
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(37, 211, 102, 0.35);
+    }
+    .ui-btn-amber {
+      background: linear-gradient(135deg, #fbbf24, #d97706);
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(217, 119, 6, 0.3);
+    }
+    .ui-btn-blue {
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+    }
+    /* شريط السحابة */
+    .cloud-bar {
+      background: linear-gradient(135deg, #064e3b 0%, #0f172a 50%, #115e59 100%);
+      border: 2px solid rgba(52, 211, 153, 0.45);
+      border-radius: 1rem;
+      box-shadow: 0 6px 20px rgba(6, 78, 59, 0.25);
+    }
+    .cloud-bar button {
+      min-height: 36px;
+      border-radius: 0.75rem;
+      font-weight: 900;
+    }
+    /* التبويبات */
+    .tab-btn {
+      min-height: 40px;
+      border-radius: 0.85rem;
+      font-weight: 900;
+      transition: all 0.15s ease;
+    }
+    .tab-btn-active {
+      background: #fde047 !important;
+      color: #431407 !important;
+      box-shadow: 0 0 0 2px rgba(255,255,255,0.85), 0 4px 12px rgba(0,0,0,0.12);
+    }
+    /* حقول الإدخال */
+    input, textarea, select {
+      font-family: 'Cairo', sans-serif !important;
+      border-radius: 0.75rem !important;
+    }
+    input:focus, textarea:focus, select:focus {
+      outline: none;
+      border-color: #f43f5e !important;
+      box-shadow: 0 0 0 3px rgba(244, 63, 94, 0.15);
+    }
+    /* سؤال الحساب كبير */
+    #math-question {
+      font-size: 1.5rem !important;
+      line-height: 1.4;
+      letter-spacing: 0.02em;
+    }
+    /* قائمة دروس — أزرار الصف */
+    #notebook-lessons-container button,
+    #students-list-container button {
+      min-height: 36px;
+    }
+    /* شريط سفلي */
+    nav.bottom-nav, #bottom-nav, .bottom-nav {
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    /* أنيميشن خفيف */
     .pulsing-dot { animation: pulse-ring 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
     @keyframes pulse-ring {
       0%, 100% { opacity: 1; transform: scale(1); }
       50% { opacity: 0.4; transform: scale(1.3); }
+    }
+    @keyframes fade-up {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    main > div[id^="section-"] {
+      animation: fade-up 0.25s ease;
     }
     .problem-pill-active {
       background: linear-gradient(to right, #ea580c, #c2410c) !important;
@@ -32,6 +146,20 @@
     .math-pill-active {
       background: linear-gradient(to right, #2563eb, #1d4ed8) !important;
       color: #ffffff !important;
+    }
+    /* قراءة — تمييز الفقرة النشطة */
+    .reading-para.ring-2 {
+      transition: background 0.2s, box-shadow 0.2s;
+    }
+    /* تحسين الطباعة */
+    @media print {
+      body { background: #fff; }
+      header, nav, .cloud-bar, #btn-sync-cloud { display: none !important; }
+    }
+    /* شاشات صغيرة جدًا */
+    @media (max-width: 380px) {
+      .tab-btn span { font-size: 0.65rem; }
+      #math-question { font-size: 1.25rem !important; }
     }
   </style>
 </head>
@@ -51,28 +179,28 @@
 </div>
 </div>
 <!-- شريط المزامنة السحابية الحية -->
-<div class="bg-gradient-to-r from-emerald-950 via-slate-900 to-teal-950 text-white p-2.5 rounded-2xl flex items-center justify-between gap-2 shadow-md border-2 border-emerald-500/40 text-xs">
+<div class="cloud-bar text-white p-2.5 flex items-center justify-between gap-2 text-xs">
 <div class="flex items-center gap-2 overflow-hidden">
 <span class="w-3 h-3 rounded-full bg-emerald-400 pulsing-dot shrink-0"></span>
 <div class="text-right">
-<div class="font-black text-[11px] text-emerald-200">📡 السَّحَابَةُ الحَيَّةُ: Live Cloud Hub</div>
-<div class="text-[10px] text-slate-300 font-bold">مُزَامَنَةٌ فَوْرِيَّةٌ + Instant Lesson Link (وَاتْسَاب)</div>
+<div class="font-black text-[11px] text-emerald-200">📡 السَّحَابَةُ الحَيَّةُ · Live Cloud Hub</div>
+<div class="text-[10px] text-emerald-100/80 font-bold">مُزَامَنَةٌ فَوْرِيَّةٌ + Instant Lesson Link</div>
 </div>
 </div>
-<div class="flex items-center gap-1 shrink-0">
-<button class="bg-emerald-500 hover:bg-emerald-600 active:scale-95 text-emerald-950 font-black px-2 py-1.5 rounded-xl shadow transition flex items-center gap-1 cursor-pointer text-[10px]" onclick="syncData()">
+<div class="flex items-center gap-1.5 shrink-0">
+<button id="btn-sync-cloud" type="button" class="ui-btn ui-btn-success px-2.5 py-1.5 flex items-center gap-1 cursor-pointer text-[10px]" onclick="window.syncData && window.syncData()">
 <span>🔄</span><span>مُزَامَنَةٌ</span>
 </button>
-<button class="bg-green-500 hover:bg-green-600 active:scale-95 text-white font-black px-2 py-1.5 rounded-xl shadow transition flex items-center gap-1 cursor-pointer text-[10px]" onclick="shareAppWhatsApp()">
+<button type="button" class="ui-btn ui-btn-whatsapp px-2.5 py-1.5 flex items-center gap-1 cursor-pointer text-[10px]" onclick="shareAppWhatsApp()">
 <span>💬</span><span>وَاتْسَاب</span>
 </button>
 </div>
 </div>
 </header>
 <!-- الإطار الرئيسي للتطبيق -->
-<main class="w-full max-w-xl bg-white/95 backdrop-blur rounded-3xl shadow-2xl border-4 border-amber-300 overflow-hidden flex flex-col relative mb-4">
+<main class="w-full max-w-xl bg-white/95 backdrop-blur rounded-[1.75rem] shadow-2xl border-[3px] border-amber-300/90 overflow-hidden flex flex-col relative mb-4 ui-card">
 <!-- بطاقة بطل اليوم ورصيد النجوم -->
-<section class="bg-gradient-to-r from-pink-500 via-rose-500 to-amber-500 p-4 text-white relative shadow">
+<section class="bg-gradient-to-br from-rose-500 via-pink-500 to-amber-500 p-4 text-white relative shadow-lg">
 <div class="flex items-center justify-between">
 <div class="flex items-center gap-3">
 <div class="w-13 h-13 bg-white/20 backdrop-blur-md rounded-2xl p-1 border-2 border-white/40 flex items-center justify-center text-3xl shadow-inner overflow-hidden" id="header-avatar-container">
@@ -83,7 +211,7 @@
 <span class="text-[10px] bg-black/25 px-2 py-0.5 rounded-full font-extrabold text-amber-100" id="header-grade-badge">السَّنَةُ الثَّالِثَةُ أَسَاسِي</span>
 <span class="text-[10px] bg-red-700/80 px-2 py-0.5 rounded-full font-extrabold text-white">أَرِيَانَة 🇹🇳</span>
 </div>
-<h2 class="text-lg font-black mt-1 text-white drop-shadow-sm" id="header-student-name">البَطَلَةُ مِيرَا الأَمُورِي 🌟</h2>
+<h2 class="text-lg font-black mt-1 text-white drop-shadow-sm" id="header-student-name">البَطَلَةُ مِيرَا الاَمُورَا 🌟</h2>
 <p class="text-[11px] text-pink-100 font-bold" id="header-school-name">المَدْرَسَةُ الابْتِدَائِيَّةُ مِلْيَار - أَرِيَانَة</p>
 </div>
 </div>
@@ -120,7 +248,7 @@
 <span class="text-[10px] bg-red-600 px-2 py-0.5 rounded-full font-bold">أَرِيَانَة - تُونِس 🇹🇳</span>
 </div>
 <h3 class="text-base sm:text-lg font-black mt-1">مِلَفُّ التِّلْمِيذَةِ المَدْرَسِيُّ وَالصِّحِّيُّ</h3>
-<p class="text-xs text-pink-100 font-bold">بِطَاقَةُ التِّلْمِيذَةِ مِيرَا الأَمُورِي • مَدْرَسَةُ مِلْيَار - أَرِيَانَة</p>
+<p class="text-xs text-pink-100 font-bold">بِطَاقَةُ التِّلْمِيذَةِ مِيرَا الاَمُورَا • مَدْرَسَةُ مِلْيَار - أَرِيَانَة</p>
 </div>
 <span class="text-4xl">🌸</span>
 </div>
@@ -166,7 +294,7 @@
 <div class="flex flex-col sm:flex-row items-center gap-4 bg-gradient-to-br from-pink-50/70 via-rose-50/50 to-amber-50/60 p-3 rounded-2xl border border-pink-200">
 <div class="relative flex flex-col items-center">
 <div class="w-24 h-24 rounded-2xl bg-white border-3 border-pink-400 overflow-hidden flex items-center justify-center shadow-md relative group" id="student-avatar-frame">
-<img alt="صورة التلميذة ميرا الأموري" class="w-full h-full object-cover" id="student-avatar-img" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCrm-u9f7V1NIlfZQUTXgbLdviaXst12XpXgEeS1_kdX-8HdMGNyizlYkTAA7OedpC4ftN0JTdAPR-q7cUlIgqsmTsNXP5l6t7gIOoR8hUX3_bC4tsv5EOdES2to5sl4I8WI6qk7ReETSijRZxOke3xGoWMZ0bWK0fHfRMEzbrdALv-2cK6ADv78Hz5jwwqNrchIBBsWYAJKieFYBDsY8GjEZ2DxupprvOXlfws8B3UavYXFoh9T79r6Q"/>
+<img alt="صورة التلميذة ميرا الامورا" class="w-full h-full object-cover" id="student-avatar-img" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCrm-u9f7V1NIlfZQUTXgbLdviaXst12XpXgEeS1_kdX-8HdMGNyizlYkTAA7OedpC4ftN0JTdAPR-q7cUlIgqsmTsNXP5l6t7gIOoR8hUX3_bC4tsv5EOdES2to5sl4I8WI6qk7ReETSijRZxOke3xGoWMZ0bWK0fHfRMEzbrdALv-2cK6ADv78Hz5jwwqNrchIBBsWYAJKieFYBDsY8GjEZ2DxupprvOXlfws8B3UavYXFoh9T79r6Q"/>
 <div class="text-5xl hidden" id="student-avatar-emoji">🌸</div>
 </div>
 <label class="mt-2 bg-pink-600 hover:bg-pink-700 text-white text-[11px] font-black px-2.5 py-1 rounded-xl shadow cursor-pointer transition flex items-center gap-1 active:scale-95" for="avatar-file-input">
@@ -178,7 +306,7 @@
 <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
 <div class="bg-white p-2.5 rounded-xl border border-pink-200 shadow-xs">
 <span class="block text-[10px] text-slate-500 font-bold mb-0.5">الاسْمُ وَاللَّقَبُ:</span>
-<span class="font-black text-sm text-pink-950 block" id="card-name-display">مِيرَا الأَمُورِي</span>
+<span class="font-black text-sm text-pink-950 block" id="card-name-display">مِيرَا الاَمُورَا</span>
 </div>
 <div class="bg-white p-2.5 rounded-xl border border-pink-200 shadow-xs">
 <span class="block text-[10px] text-slate-500 font-bold mb-0.5">المَدْرَسَةُ الابْتِدَائِيَّةُ:</span>
@@ -293,7 +421,7 @@
 <!-- قائمة الأعداد والتقييمات التونسية المسجلة -->
 <div class="space-y-2">
 <div class="flex items-center justify-between text-xs font-black text-amber-950">
-<span>📜 الأَعْدَادُ المُسَجَّلَةُ لِمِيرَا الأَمُورِي:</span>
+<span>📜 الأَعْدَادُ المُسَجَّلَةُ لِمِيرَا الاَمُورَا:</span>
 <span class="text-[10px] text-slate-500 font-bold">تُحْفَظُ فِي LocalStorage لَا تَضِيعُ أَبَدًا 💾</span>
 </div>
 <div class="space-y-2" id="grades-list-container">
@@ -370,7 +498,7 @@
 </span>
 <div class="space-y-1 text-[11px] font-bold text-sky-900">
 <div class="flex items-center justify-between">
-<span id="card-guardian-title">وَلِيُّ الأَمْرِ: السَّيِّد الأَمُورِي</span>
+<span id="card-guardian-title">وَلِيُّ الأَمْرِ: السَّيِّد الاَمُورَا</span>
 <a class="bg-sky-600 hover:bg-sky-700 text-white font-mono text-[10px] font-black px-2 py-0.5 rounded-lg flex items-center gap-1" href="tel:21698223344" id="card-phone-btn">
 <span>📞</span><span id="card-phone-display">98 223 344</span>
 </a>
@@ -585,21 +713,21 @@
 <span class="text-[10px] text-slate-500" id="lesson-photo-status">لَمْ تُخْتَرْ صُورَةٌ بَعْدُ</span>
 </div>
 <div class="flex flex-wrap gap-2">
-<label class="flex-1 min-w-[120px] bg-pink-600 hover:bg-pink-700 text-white font-black text-xs py-2.5 px-3 rounded-xl shadow cursor-pointer flex items-center justify-center gap-1.5 active:scale-95 transition">
+<label class="ui-btn ui-btn-primary flex-1 min-w-[120px] text-xs py-2.5 px-3 cursor-pointer flex items-center justify-center gap-1.5">
 <span>📸</span><span>الكَامِيرَا</span>
 <input accept="image/*" capture="environment" class="hidden" id="lesson-camera-input" onchange="handleLessonPhoto(event)" type="file"/>
 </label>
-<label class="flex-1 min-w-[120px] bg-indigo-600 hover:bg-indigo-700 text-white font-black text-xs py-2.5 px-3 rounded-xl shadow cursor-pointer flex items-center justify-center gap-1.5 active:scale-95 transition">
+<label class="ui-btn ui-btn-blue flex-1 min-w-[120px] text-xs py-2.5 px-3 cursor-pointer flex items-center justify-center gap-1.5">
 <span>🖼️</span><span>مِنَ المَعْرَضِ</span>
 <input accept="image/*" class="hidden" id="lesson-gallery-input" onchange="handleLessonPhoto(event)" type="file"/>
 </label>
-<button class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-black text-xs py-2.5 px-3 rounded-xl cursor-pointer" onclick="clearLessonPhoto()" type="button">مسح الصورة</button>
+<button class="ui-btn bg-slate-200 text-slate-700 text-xs py-2.5 px-3 cursor-pointer" onclick="clearLessonPhoto()" type="button">مسح</button>
 </div>
 <div class="hidden rounded-xl overflow-hidden border-2 border-amber-300 h-36 bg-slate-100" id="lesson-photo-preview-box">
 <img alt="معاينة" class="w-full h-full object-cover" id="lesson-photo-preview"/>
 </div>
 </div>
-<button class="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-black py-2.5 rounded-xl shadow text-xs flex items-center justify-center gap-1.5 cursor-pointer active:scale-95 transition" id="lesson-save-btn" onclick="saveLessonItem()">
+<button class="ui-btn ui-btn-amber w-full py-2.5 text-xs flex items-center justify-center gap-1.5 cursor-pointer" id="lesson-save-btn" onclick="saveLessonItem()">
 <span>💾</span><span id="lesson-save-btn-text">حِفْظُ الدَّرْسِ فِي الذَّاكِرَةِ</span>
 </button>
 </div>
@@ -620,13 +748,44 @@
 <div class="p-4 space-y-4 hidden" id="section-math">
 <div class="bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 text-white p-4 rounded-2xl shadow-md flex items-center justify-between">
 <div>
-<span class="text-[10px] bg-white/20 px-2 py-0.5 rounded-full font-black text-yellow-300">المِنْهَاجُ التُّونِسِيُّ الرَّسْمِيُّ 🇹🇳</span>
+<span class="text-[10px] bg-white/20 px-2 py-0.5 rounded-full font-black text-yellow-300">الثُّلَاثِيُّ الأَوَّلُ 2026 · المِنْهَاجُ التُّونِسِيُّ 🇹🇳</span>
 <h3 class="text-base sm:text-lg font-black mt-1">الرِّيَاضِيَّاتُ — السَّنَةُ الثَّالِثَةُ أَسَاسِي</h3>
-<p class="text-xs text-blue-100 font-bold">أَعْدَادٌ 0→9999 • جَمْعٌ وَطَرْحٌ • جَدَاوِلُ الضَّرْبِ • هَنْدَسَةٌ • نُقُودٌ</p>
+<p class="text-xs text-blue-100 font-bold">دُرُوسُ الثُّلَاثِيِّ الأَوَّلِ الجَارِيَةِ + تَمَارِينُ فَوْرِيَّةٌ</p>
 </div>
 <span class="text-4xl">📐</span>
 </div>
-<!-- محاور البرنامج -->
+<!-- درس اليوم -->
+<div id="lesson-of-day-card" class="bg-gradient-to-l from-amber-400 via-orange-400 to-rose-500 text-white p-3.5 rounded-2xl shadow-lg border-2 border-white/30 space-y-2">
+<div class="flex items-center justify-between gap-2">
+<div class="flex items-center gap-2 min-w-0">
+<span class="text-2xl shrink-0">⭐</span>
+<div class="min-w-0">
+<div class="text-[10px] font-black text-amber-100">دَرْسُ اليَوْمِ · الثُّلَاثِيُّ الأَوَّلُ</div>
+<div class="text-sm font-black leading-tight truncate" id="lod-title">—</div>
+</div>
+</div>
+<span class="text-[9px] font-black bg-white/25 px-2 py-1 rounded-full shrink-0" id="lod-week">—</span>
+</div>
+<p class="text-[11px] font-bold text-white/95 leading-snug" id="lod-goals">—</p>
+<div class="flex flex-wrap gap-2">
+<button type="button" id="lod-start-btn" onclick="startLessonOfDay()" class="ui-btn bg-white text-orange-700 text-[11px] px-3 py-2 flex items-center gap-1 cursor-pointer shadow">▶ اِبْدَإِ التَّمْرِينَ</button>
+<button type="button" onclick="document.getElementById('t1-math-lessons-list')&&document.getElementById('t1-math-lessons-list').scrollIntoView({behavior:'smooth'})" class="ui-btn bg-white/20 text-white text-[11px] px-3 py-2 cursor-pointer border border-white/40">كُلُّ الدُّرُوسِ</button>
+</div>
+</div>
+<!-- دروس الثلاثي الأول 2026 -->
+<div class="bg-white border-2 border-blue-200 rounded-2xl p-3 space-y-2 shadow-sm">
+<div class="flex items-center justify-between border-b border-blue-100 pb-2">
+<div class="flex items-center gap-1.5">
+<span class="text-lg">📅</span>
+<h4 class="text-xs sm:text-sm font-black text-blue-950">دُرُوسُ الحِسَابِ — الثُّلَاثِيُّ الأَوَّلُ 2026</h4>
+</div>
+<span class="text-[9px] font-black bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full">8 دُرُوس</span>
+</div>
+<div class="space-y-1.5 max-h-56 overflow-y-auto" id="t1-math-lessons-list">
+<!-- تُملأ من JS -->
+</div>
+</div>
+<!-- محاور التمارين السريعة -->
 <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-[10px] font-black">
 <button class="bg-sky-100 border-2 border-sky-300 rounded-xl p-2 text-sky-950 cursor-pointer hover:bg-sky-200" onclick="setMathMode('numbers')">🔢 الأَعْدَادُ</button>
 <button class="bg-amber-100 border-2 border-amber-300 rounded-xl p-2 text-amber-950 cursor-pointer hover:bg-amber-200" onclick="setMathMode('ops')">➕ جَمْعٌ وَطَرْحٌ</button>
@@ -645,7 +804,7 @@
 <div class="text-2xl font-black text-blue-700 bg-blue-50 py-3 rounded-xl font-mono" id="math-question">6 × 4 = ؟</div>
 <input class="w-32 mx-auto block p-2 text-center text-lg font-black border-2 border-blue-300 rounded-xl bg-blue-50/50" id="math-answer-input" placeholder="؟" type="number" onkeydown="if(event.key==='Enter')checkMathAnswer()"/>
 <div class="grid grid-cols-3 gap-2" id="math-choices"></div>
-<button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-black text-xs py-2.5 rounded-xl cursor-pointer" onclick="checkMathAnswer()">✅ تَحَقَّقْ مِنَ الإِجَابَةِ</button>
+<button class="ui-btn ui-btn-blue w-full py-2.5 text-xs cursor-pointer" onclick="checkMathAnswer()">✅ تَحَقَّقْ مِنَ الإِجَابَةِ</button>
 <div class="text-xs font-black hidden p-2 rounded-xl" id="math-feedback"></div>
 </div>
 <div class="flex items-center justify-between text-[10px] font-bold text-slate-600">
@@ -654,14 +813,14 @@
 <span id="math-hint-text" class="text-amber-700"></span>
 </div>
 </div>
-<!-- ملخص محاور المنهاج -->
+<!-- ملخص الثلاثي الأول -->
 <div class="bg-slate-50 border border-slate-200 rounded-xl p-3 text-[10px] font-bold text-slate-700 space-y-1">
-<div class="font-black text-slate-900 text-xs mb-1">📚 مِنَ البَرْنَامَجِ الرَّسْمِيِّ (س3 أَسَاسِي تُونِس):</div>
-<div>• الأَعْدَادُ مِنْ 0 إِلَى 9999: قِرَاءَةٌ، كِتَابَةٌ، مُقَارَنَةٌ، تَرْتِيبٌ، تَفْكِيكٌ</div>
-<div>• الجَمْعُ وَالطَّرْحُ بِالاِحْتِفَاظِ عَلَى أَعْدَادٍ ذَاتِ 4 أَرْقَامٍ</div>
-<div>• جَدَاوِلُ الضَّرْبِ 2←9 وَالضَّرْبُ فِي عَدَدٍ ذِي رَقْمٍ وَاحِدٍ</div>
-<div>• النُّقُودُ التُّونِسِيَّةُ (المِلِيم وَالدِّينَار)</div>
-<div>• المُرَبَّعُ وَالمُسْتَطِيلُ: تَعَرُّفٌ وَحِسَابُ المُحِيطِ</div>
+<div class="font-black text-slate-900 text-xs mb-1">📚 الثُّلَاثِيُّ الأَوَّلُ 2026 (س3 أَسَاسِي — حِسَاب):</div>
+<div>• مُرَاجَعَةُ الأَعْدَادِ إِلَى 999 ثُمَّ الاِنْتِقَالُ نَحْوَ 9999</div>
+<div>• الجَمْعُ وَالطَّرْحُ بِالاِحْتِفَاظِ / الاِسْتِعَارَةِ</div>
+<div>• بِدَايَةُ جَدَاوِلِ الضَّرْبِ (2 ← 5 ثُمَّ 6 ← 9)</div>
+<div>• النُّقُودُ التُّونِسِيَّةُ (المِلِيم) وَحَلُّ وَضْعِيَّاتٍ</div>
+<div>• تَعَرُّفُ المُرَبَّعِ وَالمُسْتَطِيلِ وَمُحِيطِهِمَا</div>
 </div>
 </div>
 <!-- ============================================== -->
@@ -796,7 +955,7 @@
 </nav>
 </main>
 <footer class="text-center text-xs text-amber-900 font-black space-y-1 pb-4">
-<p>💡 تطبيق أبطال الثالثة أساسي - ملف التلميذة ميرا الأموري (مدرسة مليار - أريانة، تونس)</p>
+<p>💡 تطبيق أبطال الثالثة أساسي - ملف التلميذة ميرا الامورا (مدرسة مليار - أريانة، تونس)</p>
 <p class="text-[11px] text-amber-800/80 font-bold">يعمل متصلاً وبالكامل دون اتصال إنترنت عند تحميله على الهاتف أو الحاسوب 🇹🇳</p>
 </footer>
 <!-- ============================================== -->
@@ -809,7 +968,7 @@
 <div class="flex items-center gap-2">
 <span class="text-2xl">✏️</span>
 <div>
-<h3 class="text-sm sm:text-base font-black">تَعْدِيلُ بَيَانَاتِ التِّلْمِيذَةِ (مِيرَا الأَمُورِي)</h3>
+<h3 class="text-sm sm:text-base font-black">تَعْدِيلُ بَيَانَاتِ التِّلْمِيذَةِ (مِيرَا الاَمُورَا)</h3>
 <p class="text-[10px] text-pink-100 font-bold">تحديث البيانات المدرسية والشخصية والصحية</p>
 </div>
 </div>
@@ -839,7 +998,7 @@
 <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
 <div>
 <label class="block text-[11px] font-black text-slate-700 mb-1">الاسْمُ وَاللَّقَبُ:</label>
-<input class="w-full font-black text-xs p-2 rounded-xl border-2 border-pink-200 focus:border-pink-500 focus:ring-0 text-right bg-slate-50 focus:bg-white" id="modal-input-name" placeholder="مِيرَا الأَمُورِي" type="text"/>
+<input class="w-full font-black text-xs p-2 rounded-xl border-2 border-pink-200 focus:border-pink-500 focus:ring-0 text-right bg-slate-50 focus:bg-white" id="modal-input-name" placeholder="مِيرَا الاَمُورَا" type="text"/>
 </div>
 <div>
 <label class="block text-[11px] font-black text-slate-700 mb-1">المَدْرَسَةُ الابْتِدَائِيَّةُ:</label>
@@ -884,7 +1043,7 @@
 </div>
 <div>
 <label class="block text-[11px] font-black text-slate-700 mb-1">صِفَةُ وَلِيِّ الأَمْرِ:</label>
-<input class="w-full font-black text-xs p-2 rounded-xl border-2 border-pink-200 focus:border-pink-500 focus:ring-0 text-right bg-slate-50 focus:bg-white" id="modal-input-guardian" placeholder="السَّيِّد الأَمُورِي (وَلِيُّ الأَمْرِ)" type="text"/>
+<input class="w-full font-black text-xs p-2 rounded-xl border-2 border-pink-200 focus:border-pink-500 focus:ring-0 text-right bg-slate-50 focus:bg-white" id="modal-input-guardian" placeholder="السَّيِّد الاَمُورَا (وَلِيُّ الأَمْرِ)" type="text"/>
 </div>
 </div>
 <!-- الحساسيات والملاحظات -->
@@ -915,7 +1074,7 @@
 <div class="space-y-1">
 <h3 class="text-base font-black text-rose-950">إِعَادَةُ تَعْيِينِ أَوْ حَذْفُ المِلَفِّ؟</h3>
 <p class="text-xs font-bold text-slate-600 leading-relaxed">
-      هَلْ أَنْتَ مُتَأَكِّدٌ مِنْ رَغْبَتِكَ فِي إِعَادَةِ ضَبْطِ بَيَانَاتِ البَطَلَةِ <b>مِيرَا الأَمُورِي</b> لِلْحَالَةِ الاِفْتِرَاضِيَّةِ أَوْ حَذْفِ التَّعْدِيلَاتِ المَحْفُوظَةِ؟
+      هَلْ أَنْتَ مُتَأَكِّدٌ مِنْ رَغْبَتِكَ فِي إِعَادَةِ ضَبْطِ بَيَانَاتِ البَطَلَةِ <b>مِيرَا الاَمُورَا</b> لِلْحَالَةِ الاِفْتِرَاضِيَّةِ أَوْ حَذْفِ التَّعْدِيلَاتِ المَحْفُوظَةِ؟
     </p>
 </div>
 <div class="bg-amber-50 p-2.5 rounded-xl border border-amber-200 text-[11px] font-bold text-amber-900 text-right">
@@ -953,16 +1112,16 @@
   let stars = 335;
   const STARS_STORAGE_KEY = 'mira_tunisia_stars';
 
-  // البيانات الافتراضية للتلميذة ميرا الأموري - مدرسة مليار أريانة
+  // البيانات الافتراضية للتلميذة ميرا الامورا - مدرسة مليار أريانة
   const DEFAULT_STUDENT_PROFILE = {
-    name: "مِيرَا الأَمُورِي",
+    name: "مِيرَا الاَمُورَا",
     school: "المَدْرَسَةُ الابْتِدَائِيَّةُ مِلْيَار - أَرِيَانَة",
     grade: "السَّنَةُ الثَّالِثَةُ أَسَاسِي - فَوْج (أ)",
     id: "TN-2026-AR-8012",
     birthdate: "2017-04-14",
     blood: "A+",
     phone: "98 223 344",
-    guardian: "السَّيِّد الأَمُورِي (وَلِيُّ الأَمْرِ)",
+    guardian: "السَّيِّد الاَمُورَا (وَلِيُّ الأَمْرِ)",
     height: "126 سم",
     weight: "25 كغ",
     allergy: "لَا تُوجَدُ حَسَاسِيَّةٌ دَوَائِيَّةٌ مَعْلُومَةٌ. تُفَضَّلُ اللَّمْجَةُ الصِّحِّيَّةُ الطَّازَجَةُ.",
@@ -1104,9 +1263,23 @@
 
   function loadProfileFromStorage() {
     try {
-      const saved = localStorage.getItem('tunisia_student_profile_mira');
+      let saved = null;
+      try { saved = localStorage.getItem('tunisia_student_profile_mira'); } catch (e) {}
+      if (!saved) { try { saved = sessionStorage.getItem('tunisia_student_profile_mira'); } catch (e) {} }
       if (saved) {
         studentProfile = JSON.parse(saved);
+        // استرجاع الصورة المنفصلة
+        if (studentProfile.avatar === '__LOCAL_AVATAR__' || !studentProfile.avatar) {
+          const sid = (typeof activeStudentId !== 'undefined' && activeStudentId) ? activeStudentId : 'mira-default';
+          const av = loadAvatarForStudent(sid) || loadAvatarForStudent('default') || loadAvatarForStudent('mira-default');
+          if (av) {
+            studentProfile.avatar = av;
+            studentProfile.isEmoji = false;
+          } else if (studentProfile.avatar === '__LOCAL_AVATAR__') {
+            studentProfile.avatar = '🌸';
+            studentProfile.isEmoji = true;
+          }
+        }
       } else {
         studentProfile = { ...DEFAULT_STUDENT_PROFILE };
       }
@@ -1123,12 +1296,74 @@
     }
   }
 
+  function avatarStorageKey(studentId) {
+    return 'mira_avatar_' + (studentId || 'default');
+  }
+
+  function saveAvatarForStudent(studentId, avatar, isEmoji) {
+    try {
+      const key = avatarStorageKey(studentId);
+      if (isEmoji || !avatar || avatar === '🌸' || !String(avatar).startsWith('data:')) {
+        // صورة رابط عادي أو إيموجي — تُحفظ مع الملف، نحذف المفتاح المنفصل
+        try { localStorage.removeItem(key); } catch (e) {}
+        try { sessionStorage.removeItem(key); } catch (e) {}
+        return true;
+      }
+      // حفظ الصورة في مفتاح مستقل
+      try {
+        localStorage.setItem(key, avatar);
+        try { sessionStorage.setItem(key, avatar); } catch (e) {}
+        return true;
+      } catch (e) {
+        // إعادة ضغط أقوى
+        console.warn('avatar save retry', e);
+        return false;
+      }
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function loadAvatarForStudent(studentId) {
+    try {
+      const key = avatarStorageKey(studentId);
+      let v = null;
+      try { v = localStorage.getItem(key); } catch (e) {}
+      if (!v) { try { v = sessionStorage.getItem(key); } catch (e) {} }
+      return v;
+    } catch (e) {
+      return null;
+    }
+  }
+
   function saveProfileToStorage() {
     try {
-      localStorage.setItem('tunisia_student_profile_mira', JSON.stringify(studentProfile));
-      localStorage.setItem(STARS_STORAGE_KEY, String(stars));
+      // احفظ الصورة منفصلة إن كانت data URL
+      const sid = (typeof activeStudentId !== 'undefined' && activeStudentId) ? activeStudentId : 'default';
+      if (studentProfile.avatar && String(studentProfile.avatar).startsWith('data:')) {
+        saveAvatarForStudent(sid, studentProfile.avatar, false);
+      }
+      // في JSON الملف: لا نضع data URL الطويل — نضع علامة فقط
+      const profToSave = { ...studentProfile };
+      if (profToSave.avatar && String(profToSave.avatar).startsWith('data:')) {
+        profToSave.avatar = '__LOCAL_AVATAR__';
+        profToSave.isEmoji = false;
+      }
+      const payload = JSON.stringify(profToSave);
+      try {
+        localStorage.setItem('tunisia_student_profile_mira', payload);
+        localStorage.setItem(STARS_STORAGE_KEY, String(stars));
+      } catch (e) {
+        try {
+          sessionStorage.setItem('tunisia_student_profile_mira', payload);
+          sessionStorage.setItem(STARS_STORAGE_KEY, String(stars));
+        } catch (e2) {}
+      }
+      if (typeof storageSet === 'function') {
+        storageSet(STARS_STORAGE_KEY, String(stars));
+      }
     } catch (e) {
-      console.warn("Storage quota or disabled");
+      console.warn("Storage quota or disabled", e);
     }
   }
 
@@ -1213,9 +1448,9 @@
       const bnav = document.getElementById(`bnav-${t}`);
       if (section) section.classList.add('hidden');
       if (btn) {
-        btn.className = 'py-2 px-0.5 bg-amber-800/40 hover:bg-white/20 text-white rounded-xl flex items-center justify-center gap-0.5 transition cursor-pointer';
+        btn.className = 'tab-btn py-2 px-0.5 bg-white/15 hover:bg-white/25 text-white flex items-center justify-center gap-0.5 cursor-pointer text-[9px] sm:text-xs';
       }
-      if (bnav) bnav.className = 'flex flex-col items-center gap-0.5 text-slate-700 cursor-pointer';
+      if (bnav) bnav.className = 'flex flex-col items-center gap-0.5 text-slate-500 cursor-pointer min-w-[3rem] min-h-[44px] justify-center';
     });
 
     const activeSec = document.getElementById(`section-${tabId}`);
@@ -1223,11 +1458,14 @@
     const activeBnav = document.getElementById(`bnav-${tabId}`);
     if (activeSec) activeSec.classList.remove('hidden');
     if (activeBtn) {
-      activeBtn.className = 'py-2 px-0.5 bg-yellow-300 text-amber-950 font-black rounded-xl ring-2 ring-white/80 shadow flex items-center justify-center gap-0.5 transition cursor-pointer';
+      activeBtn.className = 'tab-btn tab-btn-active py-2 px-0.5 flex items-center justify-center gap-0.5 cursor-pointer text-[9px] sm:text-xs font-black';
     }
-    if (activeBnav) activeBnav.className = 'flex flex-col items-center gap-0.5 text-pink-600 font-black cursor-pointer';
-    if (tabId === 'math' && typeof nextMathExercise === 'function') {
-      try { nextMathExercise(); } catch (e) {}
+    if (activeBnav) activeBnav.className = 'flex flex-col items-center gap-0.5 text-rose-600 font-black cursor-pointer min-w-[3rem] min-h-[44px] justify-center';
+    if (tabId === 'math') {
+      try {
+        if (typeof renderT1MathLessons === 'function') renderT1MathLessons();
+        if (typeof nextMathExercise === 'function') nextMathExercise();
+      } catch (e) {}
     }
   }
 
@@ -1297,7 +1535,8 @@
       alert('الرَّجَاءُ اخْتِيَارُ صُورَةٍ صَالِحَةٍ');
       return;
     }
-    compressImageToDataUrl(file, 400, 0.75, function(dataUrl) {
+    // ضغط قوي: 180px جودة 0.55 حتى تُحفظ بثبات
+    compressImageToDataUrl(file, 180, 0.55, function(dataUrl) {
       tempAvatarSrc = dataUrl;
       const preview = document.getElementById('modal-avatar-preview');
       if (preview) preview.src = dataUrl;
@@ -1318,14 +1557,20 @@
       alert('الرَّجَاءُ اخْتِيَارُ صُورَةٍ صَالِحَةٍ');
       return;
     }
-    compressImageToDataUrl(file, 400, 0.75, function(dataUrl) {
+    compressImageToDataUrl(file, 180, 0.55, function(dataUrl) {
       studentProfile.avatar = dataUrl;
       studentProfile.isEmoji = false;
+      const sid = (typeof activeStudentId !== 'undefined' && activeStudentId) ? activeStudentId : 'default';
+      const okAvatar = saveAvatarForStudent(sid, dataUrl, false);
       if (typeof syncActiveStudentFromProfile === 'function') syncActiveStudentFromProfile();
       if (typeof saveStudentsList === 'function') saveStudentsList();
       saveProfileToStorage();
       renderProfileUI();
+      if (typeof renderStudentsList === 'function') renderStudentsList();
       if (typeof confetti === 'function') confetti({ particleCount: 35, spread: 60 });
+      if (typeof showSyncToast === 'function') {
+        showSyncToast(okAvatar ? '✅ تَمَّ حِفْظُ الصُّورَةِ' : '⚠️ الصُّورَةُ قَدْ لَا تُحْفَظُ — حَاوِلِي صُورَةً أَصْغَرَ', okAvatar);
+      }
       speakVoice('تَمَّ تَحْدِيثُ الصُّورَةِ الشَّخْصِيَّةِ بِنَجَاحٍ!');
     });
   }
@@ -1351,7 +1596,7 @@
     renderProfileUI();
     if (typeof initGradesSystem === 'function') initGradesSystem();
     closeResetModal();
-    alert('تَمَّتْ إِعَادَةُ ضَبْطِ المِلَفِّ وَالنُّجُومِ وَالأَعْدَادِ إِلَى البَيَانَاتِ النَّمُوذَجِيَّةِ لِلتِّلْمِيذَةِ مِيرَا الأَمُورِي بِمَدْرَسَةِ مِلْيَار 🌸');
+    alert('تَمَّتْ إِعَادَةُ ضَبْطِ المِلَفِّ وَالنُّجُومِ وَالأَعْدَادِ إِلَى البَيَانَاتِ النَّمُوذَجِيَّةِ لِلتِّلْمِيذَةِ مِيرَا الاَمُورَا بِمَدْرَسَةِ مِلْيَار 🌸');
   }
 
   // وظائف المسائل والرياضيات
@@ -1467,6 +1712,152 @@
   let mathMode = 'mult';
   let mathCurrent = { q: '', answer: 0, hint: '' };
   let mathCorrect = 0, mathWrong = 0;
+
+  // دروس الحساب الجارية — الثلاثي الأول 2026 (س3 أساسي تونس)
+  const T1_MATH_LESSONS_2026 = [
+    {
+      id: 't1-1',
+      week: 'الأسبوع 1–2',
+      title: 'مُرَاجَعَةُ الأَعْدَادِ مِنْ 0 إِلَى 999',
+      goals: 'قِرَاءَةٌ، كِتَابَةٌ، مُقَارَنَةٌ، تَرْتِيبٌ',
+      mode: 'numbers',
+      status: 'جَارٍ'
+    },
+    {
+      id: 't1-2',
+      week: 'الأسبوع 2–3',
+      title: 'تَفْكِيكُ العَدَدِ (مِئَات — عَشَرَات — آحَاد)',
+      goals: 'تَرْكِيبٌ وَتَفْكِيكٌ بِطُرُقٍ مُخْتَلِفَةٍ',
+      mode: 'numbers',
+      status: 'جَارٍ'
+    },
+    {
+      id: 't1-3',
+      week: 'الأسبوع 3–4',
+      title: 'الجَمْعُ بِالاِحْتِفَاظِ (أَعْدَادٌ ذَاتُ 3 أَرْقَام)',
+      goals: 'آلِيَّةُ الجَمْعِ وَحَلُّ وَضْعِيَّاتٍ',
+      mode: 'ops',
+      status: 'جَارٍ'
+    },
+    {
+      id: 't1-4',
+      week: 'الأسبوع 4–5',
+      title: 'الطَّرْحُ بِالاِسْتِعَارَةِ',
+      goals: 'طَرْحٌ بِالاِحْتِفَاظِ وَالتَّحَقُّقُ بِالجَمْعِ',
+      mode: 'ops',
+      status: 'جَارٍ'
+    },
+    {
+      id: 't1-5',
+      week: 'الأسبوع 5–6',
+      title: 'جَدَاوِلُ الضَّرْبِ 2 وَ 3 وَ 4 وَ 5',
+      goals: 'الضَّرْبُ كَجَمْعٍ تِكْرَارِيٍّ + حِفْظُ الجَدَاوِلِ',
+      mode: 'mult',
+      status: 'جَارٍ'
+    },
+    {
+      id: 't1-6',
+      week: 'الأسبوع 6–7',
+      title: 'النُّقُودُ التُّونِسِيَّةُ (المِلِيم)',
+      goals: 'ثَمَنٌ، دَفْعٌ، بَاقِي — وَضْعِيَّاتٌ يَوْمِيَّةٌ',
+      mode: 'money',
+      status: 'قَادِمٌ'
+    },
+    {
+      id: 't1-7',
+      week: 'الأسبوع 7–8',
+      title: 'المُرَبَّعُ وَالمُسْتَطِيلُ',
+      goals: 'تَعَرُّفٌ وَحِسَابُ المُحِيطِ',
+      mode: 'geo',
+      status: 'قَادِمٌ'
+    },
+    {
+      id: 't1-8',
+      week: 'مُرَاجَعَةُ الثُّلَاثِيِّ',
+      title: 'حِسَابٌ ذِهْنِيٌّ وَوَضْعِيَّاتٌ مُدْمَجَةٌ',
+      goals: 'جَمْعٌ، طَرْحٌ، ضَرْبٌ، نُقُودٌ فِي مَسَائِلَ',
+      mode: 'mental',
+      status: 'مُرَاجَعَةٌ'
+    }
+  ];
+
+  function getLessonOfDay() {
+    // يوزّع الدروس على أيام الثلاثي (من منتصف سبتمبر تقريباً)
+    const start = new Date(2026, 8, 15); // 15 سبتمبر 2026
+    const now = new Date();
+    let dayIndex = Math.floor((now - start) / (24 * 60 * 60 * 1000));
+    if (dayIndex < 0) dayIndex = 0;
+    // كل درس يغطي حوالي 7 أيام
+    const lessonIndex = Math.min(
+      T1_MATH_LESSONS_2026.length - 1,
+      Math.floor(dayIndex / 7)
+    );
+    return T1_MATH_LESSONS_2026[lessonIndex] || T1_MATH_LESSONS_2026[0];
+  }
+
+  function renderLessonOfDay() {
+    const l = getLessonOfDay();
+    if (!l) return;
+    const t = document.getElementById('lod-title');
+    const w = document.getElementById('lod-week');
+    const g = document.getElementById('lod-goals');
+    if (t) t.innerText = l.title;
+    if (w) w.innerText = l.week;
+    if (g) g.innerText = '🎯 ' + l.goals;
+  }
+
+  function startLessonOfDay() {
+    const l = getLessonOfDay();
+    if (!l) return;
+    startT1Lesson(l.id);
+  }
+
+  function renderT1MathLessons() {
+    const box = document.getElementById('t1-math-lessons-list');
+    if (!box) return;
+    const todayId = (getLessonOfDay() || {}).id;
+    box.innerHTML = T1_MATH_LESSONS_2026.map((l, i) => {
+      const badge =
+        l.status === 'جَارٍ' ? 'bg-emerald-100 text-emerald-800 border-emerald-300' :
+        l.status === 'قَادِمٌ' ? 'bg-amber-100 text-amber-800 border-amber-300' :
+        'bg-sky-100 text-sky-800 border-sky-300';
+      const isToday = l.id === todayId;
+      const ring = isToday ? 'border-orange-400 bg-orange-50 ring-2 ring-orange-300' : 'border-slate-200 hover:border-blue-400 hover:bg-blue-50';
+      return `
+        <button type="button" onclick="startT1Lesson('${l.id}')"
+          class="w-full text-right p-2.5 rounded-xl border-2 ${ring} transition flex items-start gap-2 cursor-pointer">
+          <span class="w-7 h-7 rounded-lg ${isToday ? 'bg-orange-500' : 'bg-blue-600'} text-white text-xs font-black flex items-center justify-center shrink-0">${isToday ? '⭐' : (i + 1)}</span>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <span class="text-[9px] font-bold text-slate-500">${l.week}</span>
+              <span class="text-[9px] font-black px-1.5 py-0.5 rounded-md border ${badge}">${l.status}</span>
+              ${isToday ? '<span class="text-[9px] font-black text-orange-700">دَرْسُ اليَوْمِ</span>' : ''}
+            </div>
+            <div class="text-[11px] font-black text-slate-900 leading-snug">${l.title}</div>
+            <div class="text-[9px] text-slate-600 font-bold">${l.goals}</div>
+          </div>
+          <span class="text-blue-600 text-sm shrink-0">▶</span>
+        </button>`;
+    }).join('');
+    renderLessonOfDay();
+  }
+
+  function startT1Lesson(id) {
+    const l = T1_MATH_LESSONS_2026.find(x => x.id === id);
+    if (!l) return;
+    setMathMode(l.mode);
+    const label = document.getElementById('math-mode-label');
+    if (label) label.innerText = `📖 ${l.title}`;
+    const box = document.getElementById('math-exercise-box');
+    if (box) box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    // تمرينان متتاليان لنفس المحور عند بدء الدرس
+    setTimeout(() => { try { nextMathExercise(); } catch (e) {} }, 300);
+    speakVoice(`دَرْسُ اليَوْمِ: ${l.title}. هَيَّا نَتَدَرَّبُ`);
+  }
+
+  // إتاحة للاستخدام من الأزرار
+  window.startLessonOfDay = startLessonOfDay;
+  window.startT1Lesson = startT1Lesson;
 
   function randInt(a, b) { return Math.floor(Math.random() * (b - a + 1)) + a; }
 
@@ -1647,16 +2038,149 @@
     }
   }
 
-  function syncData() {
-    if (typeof saveProfileToStorage === 'function') saveProfileToStorage();
-    if (typeof saveStudentsList === 'function') saveStudentsList();
-    if (typeof saveLessonsForActive === 'function') saveLessonsForActive();
-    if (typeof saveGradesToStorage === 'function') saveGradesToStorage();
-    if (typeof saveStarsToStorage === 'function') saveStarsToStorage();
-    const name = (typeof studentProfile !== 'undefined' && studentProfile.name) ? studentProfile.name : 'البَطَلَة';
-    alert('✅ Live Cloud Hub\nتَمَّتِ المُزَامَنَةُ الفَوْرِيَّةُ!\n\n• مِلَفُّ ' + name + '\n• الدُّرُوسُ وَالأَعْدَادُ وَالنُّجُومُ\n• جَاهِزٌ لِلمُشَارَكَةِ بِـ Instant Lesson Link');
-    speakVoice('تَمَّتِ المُزَامَنَةُ السَّحَابِيَّةُ بِنَجَاحٍ');
+  function showSyncToast(msg, ok) {
+    let t = document.getElementById('sync-toast');
+    if (!t) {
+      t = document.createElement('div');
+      t.id = 'sync-toast';
+      t.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);z-index:9999;padding:12px 20px;border-radius:16px;font-family:Cairo,sans-serif;font-weight:900;font-size:13px;box-shadow:0 8px 24px rgba(0,0,0,.25);max-width:90%;text-align:center;transition:opacity .3s';
+      document.body.appendChild(t);
+    }
+    t.style.background = ok ? 'linear-gradient(135deg,#059669,#0d9488)' : 'linear-gradient(135deg,#dc2626,#e11d48)';
+    t.style.color = '#fff';
+    t.innerHTML = msg;
+    t.style.opacity = '1';
+    clearTimeout(t._hide);
+    t._hide = setTimeout(() => { t.style.opacity = '0'; }, 3500);
   }
+
+  function safeLocalSet(key, value) {
+    try {
+      localStorage.setItem(key, value);
+      try { sessionStorage.setItem(key, value); } catch (e) {}
+      return true;
+    } catch (e) {
+      // لا نحذف صور التلاميذ — الصور في مفاتيح منفصلة
+      try {
+        if (typeof studentLessons !== 'undefined' && Array.isArray(studentLessons)) {
+          studentLessons.forEach(l => {
+            if (l.photo && String(l.photo).startsWith('data:') && l.photo.length > 20000) l.photo = '';
+          });
+        }
+        // أعد بناء القيمة إن كانت قائمة تلاميذ
+        if (key && key.indexOf('students') !== -1 && typeof studentsList !== 'undefined') {
+          const slim = studentsList.map(s => {
+            const c = { ...s };
+            if (c.avatar && String(c.avatar).startsWith('data:')) {
+              if (typeof saveAvatarForStudent === 'function') saveAvatarForStudent(c.id, c.avatar, false);
+              c.avatar = '__LOCAL_AVATAR__';
+              c.isEmoji = false;
+            }
+            return c;
+          });
+          localStorage.setItem(key, JSON.stringify(slim));
+          return true;
+        }
+        localStorage.setItem(key, value);
+        return true;
+      } catch (e2) {
+        console.warn('storage fail', key, e2);
+        try { sessionStorage.setItem(key, value); return true; } catch (e3) { return false; }
+      }
+    }
+  }
+
+  function syncData() {
+    const btn = document.getElementById('btn-sync-cloud') || document.querySelector('[id="btn-sync-cloud"]');
+    if (btn) {
+      btn.disabled = true;
+      btn.innerHTML = '<span>⏳</span><span>جَارٍ...</span>';
+    }
+    let ok = true;
+    const results = [];
+    try {
+      // حفظ الصورة أولاً في مفتاح مستقل
+      try {
+        const sid = (typeof activeStudentId !== 'undefined' && activeStudentId) ? activeStudentId : 'default';
+        if (typeof studentProfile !== 'undefined' && studentProfile.avatar && String(studentProfile.avatar).startsWith('data:')) {
+          const okA = saveAvatarForStudent(sid, studentProfile.avatar, false);
+          results.push(okA ? 'الصورة ✓' : 'الصورة ✗');
+          if (!okA) ok = false;
+        } else {
+          results.push('الصورة —');
+        }
+      } catch (e) { results.push('الصورة ✗'); }
+
+      // مزامنة الملف
+      if (typeof syncActiveStudentFromProfile === 'function') {
+        try { syncActiveStudentFromProfile(); } catch (e) {}
+      }
+      try {
+        if (typeof studentProfile !== 'undefined') {
+          if (typeof saveProfileToStorage === 'function') saveProfileToStorage();
+          results.push('الملف ✓');
+        }
+      } catch (e) { ok = false; results.push('الملف ✗'); }
+
+      try {
+        const okS = safeLocalSet((typeof STARS_STORAGE_KEY !== 'undefined' ? STARS_STORAGE_KEY : 'mira_tunisia_stars'), String(typeof stars !== 'undefined' ? stars : 0));
+        results.push(okS ? 'النجوم ✓' : 'النجوم ✗');
+      } catch (e) { results.push('النجوم ✗'); }
+
+      try {
+        if (typeof studentsList !== 'undefined') {
+          const okL = safeLocalSet('mira_tunisia_students_list', JSON.stringify(studentsList));
+          if (typeof activeStudentId !== 'undefined' && activeStudentId) {
+            safeLocalSet('mira_tunisia_active_student_id', activeStudentId);
+          }
+          results.push(okL ? 'التلاميذ ✓' : 'التلاميذ ✗');
+          if (!okL) ok = false;
+        }
+      } catch (e) { ok = false; results.push('التلاميذ ✗'); }
+
+      try {
+        if (typeof studentLessons !== 'undefined' && typeof activeStudentId !== 'undefined') {
+          let all = {};
+          try { all = JSON.parse(localStorage.getItem('mira_tunisia_lessons') || '{}'); } catch (e) {}
+          all[activeStudentId || 'default'] = studentLessons;
+          const okLess = safeLocalSet('mira_tunisia_lessons', JSON.stringify(all));
+          results.push(okLess ? 'الدروس ✓' : 'الدروس ✗');
+          if (!okLess) ok = false;
+        }
+      } catch (e) { results.push('الدروس ✗'); }
+
+      try {
+        if (typeof studentGrades !== 'undefined' && typeof getGradesKey === 'function') {
+          const okG = safeLocalSet(getGradesKey(), JSON.stringify(studentGrades));
+          results.push(okG ? 'الأعداد ✓' : 'الأعداد ✗');
+        } else if (typeof studentGrades !== 'undefined') {
+          safeLocalSet('mira_tunisian_grades_20_default', JSON.stringify(studentGrades));
+          results.push('الأعداد ✓');
+        }
+      } catch (e) { results.push('الأعداد ✗'); }
+
+      // تحديث وقت آخر مزامنة
+      try { localStorage.setItem('mira_last_sync', new Date().toISOString()); } catch (e) {}
+
+      const name = (typeof studentProfile !== 'undefined' && studentProfile.name) ? studentProfile.name : 'البَطَلَة';
+      const msg = ok
+        ? '✅ تَمَّتِ المُزَامَنَةُ!<br>' + name + '<br><span style="font-size:11px;opacity:.9">' + results.join(' · ') + '</span>'
+        : '⚠️ مُزَامَنَةٌ جُزْئِيَّةٌ<br><span style="font-size:11px">' + results.join(' · ') + '</span><br>حَاوِلِي تَصْغِيرَ الصُّوَرِ';
+      showSyncToast(msg, ok);
+      try { speakVoice(ok ? 'تَمَّتِ المُزَامَنَةُ بِنَجَاحٍ' : 'مُزَامَنَةٌ جُزْئِيَّةٌ'); } catch (e) {}
+    } catch (err) {
+      console.error(err);
+      showSyncToast('❌ فَشِلَتِ المُزَامَنَةُ — حَاوِلِي مَرَّةً أُخْرَى', false);
+    }
+    if (btn) {
+      setTimeout(() => {
+        btn.disabled = false;
+        btn.innerHTML = '<span>🔄</span><span>مُزَامَنَةٌ</span>';
+      }, 800);
+    }
+  }
+  // ضمان الوصول العام
+  window.syncData = syncData;
 
   function getAppShareBase() {
     try {
@@ -1809,22 +2333,36 @@
 
   function speakVoice(text, onEnd) {
     if (!text) { if (typeof onEnd === 'function') onEnd(); return; }
-    if (!('speechSynthesis' in window)) {
-      alert('مُتَصَفِّحُكِ لَا يَدْعَمُ القِرَاءَةَ الصَّوْتِيَّةَ. جَرِّبِي كُروم أَوْ سَافَارِي عَلَى الهَاتِفِ.');
-      if (typeof onEnd === 'function') onEnd();
+    const done = () => { if (typeof onEnd === 'function') onEnd(); };
+
+    // دعم Android WebView / جسر أصلي إن وُجد
+    try {
+      if (window.Android && typeof window.Android.speak === 'function') {
+        window.Android.speak(String(text));
+        setTimeout(done, Math.min(8000, String(text).length * 80));
+        return;
+      }
+    } catch (e) {}
+
+    const synth = window.speechSynthesis || window.webkitSpeechSynthesis;
+    if (!synth || typeof SpeechSynthesisUtterance === 'undefined') {
+      // لا نعرض تنبيهاً مزعجاً — الصمت أفضل من إيقاف الاستخدام
+      console.warn('TTS غير متوفر على هذا الجهاز/المتصفح');
+      done();
       return;
     }
+
     ensureSpeechVoices(function(voices) {
-      try { window.speechSynthesis.cancel(); } catch (e) {}
-      // Chrome يحتاج resume أحياناً
-      try { window.speechSynthesis.resume(); } catch (e) {}
+      try { synth.cancel(); } catch (e) {}
+      try { if (synth.resume) synth.resume(); } catch (e) {}
       const u = new SpeechSynthesisUtterance(String(text));
       u.rate = 0.88;
       u.pitch = 1.05;
       u.volume = 1;
-      const arVoice = (voices || []).find(v => /ar[-_]SA/i.test(v.lang))
-        || (voices || []).find(v => /ar[-_]TN|ar[-_]EG|ar[-_]AE|ar[-_]MA|ar[-_]DZ/i.test(v.lang))
-        || (voices || []).find(v => /^ar/i.test(v.lang) || /arabic|arab/i.test(v.name));
+      const list = voices && voices.length ? voices : (synth.getVoices() || []);
+      const arVoice = list.find(v => /ar[-_]SA/i.test(v.lang))
+        || list.find(v => /ar[-_]TN|ar[-_]EG|ar[-_]AE|ar[-_]MA|ar[-_]DZ/i.test(v.lang))
+        || list.find(v => /^ar/i.test(v.lang) || /arabic|arab/i.test(v.name));
       if (arVoice) {
         u.voice = arVoice;
         u.lang = arVoice.lang;
@@ -1832,23 +2370,22 @@
         u.lang = 'ar-SA';
       }
       let finished = false;
-      const done = () => {
+      const finish = () => {
         if (finished) return;
         finished = true;
-        if (typeof onEnd === 'function') onEnd();
+        done();
       };
-      u.onend = done;
-      u.onerror = done;
+      u.onend = finish;
+      u.onerror = finish;
       setTimeout(() => {
         try {
-          window.speechSynthesis.speak(u);
-          // بعض المتصفحات توقف الكلام إذا لم يكن هناك تفاعل — نحاول resume
-          setTimeout(() => { try { window.speechSynthesis.resume(); } catch (e) {} }, 200);
+          synth.speak(u);
+          setTimeout(() => { try { if (synth.resume) synth.resume(); } catch (e) {} }, 250);
         } catch (e) {
           console.warn('speech error', e);
-          done();
+          finish();
         }
-      }, 100);
+      }, 60);
     });
   }
 
@@ -2177,14 +2714,14 @@ let tempLessonPhoto = '';
 function createDefaultStudent() {
   return {
     id: 'mira-default',
-    name: "مِيرَا الأَمُورِي",
+    name: "مِيرَا الاَمُورَا",
     school: "المَدْرَسَةُ الابْتِدَائِيَّةُ مِلْيَار - أَرِيَانَة",
     grade: "السَّنَةُ الثَّالِثَةُ أَسَاسِي - فَوْج (أ)",
     idCode: "TN-2026-AR-8012",
     birthdate: "2017-04-14",
     blood: "A+",
     phone: "98 223 344",
-    guardian: "السَّيِّد الأَمُورِي (وَلِيُّ الأَمْرِ)",
+    guardian: "السَّيِّد الاَمُورَا (وَلِيُّ الأَمْرِ)",
     height: "126 سم",
     weight: "25 كغ",
     allergy: "لَا تُوجَدُ حَسَاسِيَّةٌ دَوَائِيَّةٌ مَعْلُومَةٌ. تُفَضَّلُ اللَّمْجَةُ الصِّحِّيَّةُ الطَّازَجَةُ.",
@@ -2193,24 +2730,86 @@ function createDefaultStudent() {
   };
 }
 
-function loadStudentsList() {
+function storageGet(key) {
   try {
-    const raw = localStorage.getItem(STUDENTS_KEY);
-    if (raw) {
-      studentsList = JSON.parse(raw);
-    } else {
-      studentsList = [createDefaultStudent()];
-      saveStudentsList();
-    }
+    const v = localStorage.getItem(key);
+    if (v !== null && v !== undefined && v !== '') return v;
+  } catch (e) {}
+  try {
+    const v = sessionStorage.getItem(key);
+    if (v !== null && v !== undefined && v !== '') return v;
+  } catch (e) {}
+  return null;
+}
+
+function storageSet(key, value) {
+  let ok = false;
+  try {
+    localStorage.setItem(key, value);
+    ok = true;
   } catch (e) {
-    studentsList = [createDefaultStudent()];
+    console.warn('localStorage set fail', key, e);
   }
   try {
-    activeStudentId = localStorage.getItem(ACTIVE_STUDENT_KEY) || studentsList[0]?.id || null;
+    sessionStorage.setItem(key, value);
+    ok = true;
+  } catch (e) {}
+  return ok;
+}
+
+function loadStudentsList() {
+  try {
+    let raw = storageGet(STUDENTS_KEY);
+    // مفتاح احتياطي قديم
+    if (!raw) {
+      try {
+        const oldProf = storageGet('tunisia_student_profile_mira');
+        if (oldProf) {
+          const p = JSON.parse(oldProf);
+          const s = createDefaultStudent();
+          Object.assign(s, {
+            name: p.name || s.name,
+            school: p.school || s.school,
+            grade: p.grade || s.grade,
+            idCode: p.id || s.idCode,
+            birthdate: p.birthdate || s.birthdate,
+            blood: p.blood || s.blood,
+            phone: p.phone || s.phone,
+            guardian: p.guardian || s.guardian,
+            height: p.height || s.height,
+            weight: p.weight || s.weight,
+            allergy: p.allergy || s.allergy,
+            avatar: p.avatar || s.avatar,
+            isEmoji: !!p.isEmoji
+          });
+          studentsList = [s];
+          storageSet(STUDENTS_KEY, JSON.stringify(studentsList));
+          raw = JSON.stringify(studentsList);
+        }
+      } catch (e) {}
+    }
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        studentsList = parsed;
+      } else {
+        studentsList = [createDefaultStudent()];
+      }
+    } else {
+      studentsList = [createDefaultStudent()];
+      storageSet(STUDENTS_KEY, JSON.stringify(studentsList));
+    }
+  } catch (e) {
+    console.warn('loadStudentsList', e);
+    if (!studentsList || !studentsList.length) {
+      studentsList = [createDefaultStudent()];
+    }
+  }
+  try {
+    activeStudentId = storageGet(ACTIVE_STUDENT_KEY) || studentsList[0]?.id || null;
   } catch (e) {
     activeStudentId = studentsList[0]?.id || null;
   }
-  // مزامنة studentProfile من التلميذ النشط
   const active = studentsList.find(s => s.id === activeStudentId) || studentsList[0];
   if (active) {
     activeStudentId = active.id;
@@ -2220,14 +2819,61 @@ function loadStudentsList() {
 
 function saveStudentsList() {
   try {
-    localStorage.setItem(STUDENTS_KEY, JSON.stringify(studentsList));
-    if (activeStudentId) localStorage.setItem(ACTIVE_STUDENT_KEY, activeStudentId);
+    // احفظ كل صورة في مفتاح مستقل، والقائمة بدون data URL طويل
+    const slim = studentsList.map(s => {
+      const copy = { ...s };
+      if (copy.avatar && String(copy.avatar).startsWith('data:')) {
+        if (typeof saveAvatarForStudent === 'function') {
+          saveAvatarForStudent(copy.id, copy.avatar, false);
+        }
+        copy.avatar = '__LOCAL_AVATAR__';
+        copy.isEmoji = false;
+      }
+      return copy;
+    });
+    // احتفظ بالصور في الذاكرة الحية للقائمة المعروضة
+    studentsList.forEach((s, i) => {
+      if (s.avatar && String(s.avatar).startsWith('data:')) {
+        // أبقِ في الذاكرة؛ التخزين تم أعلاه
+      } else if (slim[i] && slim[i].avatar === '__LOCAL_AVATAR__') {
+        const loaded = typeof loadAvatarForStudent === 'function' ? loadAvatarForStudent(s.id) : null;
+        if (loaded) s.avatar = loaded;
+      }
+    });
+    const payload = JSON.stringify(slim);
+    let ok = false;
+    try {
+      localStorage.setItem(STUDENTS_KEY, payload);
+      ok = true;
+    } catch (e) {
+      try { sessionStorage.setItem(STUDENTS_KEY, payload); ok = true; } catch (e2) {}
+    }
+    if (typeof storageSet === 'function') storageSet(STUDENTS_KEY, payload);
+    if (activeStudentId) {
+      try { localStorage.setItem(ACTIVE_STUDENT_KEY, activeStudentId); } catch (e) {}
+      if (typeof storageSet === 'function') storageSet(ACTIVE_STUDENT_KEY, activeStudentId);
+    }
+    return ok;
   } catch (e) {
     console.warn('students storage error', e);
+    return false;
   }
 }
 
 function applyStudentToProfile(s) {
+  let avatar = s.avatar || "🌸";
+  let isEmoji = !!s.isEmoji;
+  // استرجاع من التخزين المنفصل دائماً إن وُجد
+  const loaded = typeof loadAvatarForStudent === 'function' ? loadAvatarForStudent(s.id) : null;
+  if (loaded && String(loaded).startsWith('data:')) {
+    avatar = loaded;
+    isEmoji = false;
+    s.avatar = loaded;
+    s.isEmoji = false;
+  } else if (avatar === '__LOCAL_AVATAR__') {
+    avatar = '🌸';
+    isEmoji = true;
+  }
   studentProfile = {
     name: s.name,
     school: s.school,
@@ -2240,14 +2886,20 @@ function applyStudentToProfile(s) {
     height: s.height || "120 سم",
     weight: s.weight || "25 كغ",
     allergy: s.allergy || "",
-    avatar: s.avatar || "🌸",
-    isEmoji: !!s.isEmoji
+    avatar: avatar,
+    isEmoji: isEmoji
   };
 }
 
 function syncActiveStudentFromProfile() {
   const idx = studentsList.findIndex(s => s.id === activeStudentId);
   if (idx === -1) return;
+  // احفظ الصورة أولاً
+  if (studentProfile.avatar && String(studentProfile.avatar).startsWith('data:')) {
+    if (typeof saveAvatarForStudent === 'function') {
+      saveAvatarForStudent(activeStudentId, studentProfile.avatar, false);
+    }
+  }
   studentsList[idx] = {
     ...studentsList[idx],
     name: studentProfile.name,
@@ -2261,7 +2913,9 @@ function syncActiveStudentFromProfile() {
     height: studentProfile.height,
     weight: studentProfile.weight,
     allergy: studentProfile.allergy,
-    avatar: studentProfile.avatar,
+    avatar: (studentProfile.avatar && String(studentProfile.avatar).startsWith('data:'))
+      ? studentProfile.avatar
+      : studentProfile.avatar,
     isEmoji: studentProfile.isEmoji
   };
   saveStudentsList();
@@ -2280,9 +2934,15 @@ function renderStudentsList() {
 
   box.innerHTML = studentsList.map(s => {
     const isActive = s.id === activeStudentId;
-    const avatarHtml = s.isEmoji
-      ? `<span class="text-2xl">${s.avatar || '🌸'}</span>`
-      : `<img src="${s.avatar}" class="w-full h-full object-cover rounded-lg" alt=""/>`;
+    let av = s.avatar;
+    if (av === '__LOCAL_AVATAR__' || (!s.isEmoji && av && !String(av).startsWith('data:') && !String(av).startsWith('http'))) {
+      const loaded = typeof loadAvatarForStudent === 'function' ? loadAvatarForStudent(s.id) : null;
+      if (loaded) av = loaded;
+    }
+    const showImg = av && (String(av).startsWith('data:') || String(av).startsWith('http'));
+    const avatarHtml = (!showImg || s.isEmoji)
+      ? `<span class="text-2xl">${(s.isEmoji ? s.avatar : null) || '🌸'}</span>`
+      : `<img src="${av}" class="w-full h-full object-cover rounded-lg" alt=""/>`;
     return `
       <div class="flex items-center justify-between gap-2 p-2 rounded-xl border-2 ${isActive ? 'border-pink-400 bg-pink-50' : 'border-slate-200 bg-white'} transition">
         <button class="flex items-center gap-2 flex-1 text-right cursor-pointer min-w-0" onclick="switchStudent('${s.id}')">
@@ -2485,9 +3145,22 @@ function loadLessonsForActive() {
 
 function saveLessonsForActive() {
   try {
-    const all = JSON.parse(localStorage.getItem(LESSONS_KEY) || '{}');
-    all[activeStudentId] = studentLessons;
-    localStorage.setItem(LESSONS_KEY, JSON.stringify(all));
+    let all = {};
+    try {
+      const raw = (typeof storageGet === 'function') ? storageGet(LESSONS_KEY) : localStorage.getItem(LESSONS_KEY);
+      all = JSON.parse(raw || '{}');
+    } catch (e) { all = {}; }
+    // تقليص الصور الكبيرة
+    const slimLessons = (studentLessons || []).map(l => {
+      const c = { ...l };
+      if (c.photo && String(c.photo).startsWith('data:') && c.photo.length > 15000) c.photo = '';
+      return c;
+    });
+    all[activeStudentId || 'default'] = slimLessons;
+    studentLessons = slimLessons;
+    const payload = JSON.stringify(all);
+    if (typeof storageSet === 'function') storageSet(LESSONS_KEY, payload);
+    else localStorage.setItem(LESSONS_KEY, payload);
   } catch (e) {
     console.warn('lessons storage', e);
   }
@@ -2496,9 +3169,12 @@ function saveLessonsForActive() {
 function handleLessonPhoto(event) {
   const file = event.target.files?.[0];
   if (!file) return;
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    tempLessonPhoto = e.target.result;
+  if (!file.type || !file.type.startsWith('image/')) {
+    alert('الرَّجَاءُ اخْتِيَارُ صُورَةٍ');
+    return;
+  }
+  const applyPhoto = (dataUrl) => {
+    tempLessonPhoto = dataUrl;
     const box = document.getElementById('lesson-photo-preview-box');
     const img = document.getElementById('lesson-photo-preview');
     const st = document.getElementById('lesson-photo-status');
@@ -2506,7 +3182,13 @@ function handleLessonPhoto(event) {
     if (box) box.classList.remove('hidden');
     if (st) st.innerText = '✅ تَمَّ اخْتِيَارُ الصُّورَةِ';
   };
-  reader.readAsDataURL(file);
+  if (typeof compressImageToDataUrl === 'function') {
+    compressImageToDataUrl(file, 600, 0.7, applyPhoto);
+  } else {
+    const reader = new FileReader();
+    reader.onload = (e) => applyPhoto(e.target.result);
+    reader.readAsDataURL(file);
+  }
 }
 
 function clearLessonPhoto() {
@@ -2636,6 +3318,19 @@ function renderLessonsUI() {
   `).join('');
 }
 
+function autoPersistAll() {
+  try {
+    if (typeof syncActiveStudentFromProfile === 'function') syncActiveStudentFromProfile();
+    if (typeof saveStudentsList === 'function') saveStudentsList();
+    if (typeof saveProfileToStorage === 'function') saveProfileToStorage();
+    if (typeof saveLessonsForActive === 'function') saveLessonsForActive();
+    if (typeof saveGradesToStorage === 'function') saveGradesToStorage();
+    if (typeof saveStarsToStorage === 'function') saveStarsToStorage();
+  } catch (e) {
+    console.warn('autoPersist', e);
+  }
+}
+
 // تهيئة عند التحميل
 window.addEventListener('DOMContentLoaded', () => {
   loadStudentsList();
@@ -2648,10 +3343,20 @@ window.addEventListener('DOMContentLoaded', () => {
 window.addEventListener('hashchange', () => {
   if (typeof importLessonFromHash === 'function') importLessonFromHash();
 });
+// حفظ تلقائي عند مغادرة الصفحة أو إخفائها (مهم للهاتف وAPK)
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'hidden') autoPersistAll();
+});
+window.addEventListener('pagehide', autoPersistAll);
+window.addEventListener('beforeunload', autoPersistAll);
+// حفظ دوري كل 20 ثانية
+setInterval(autoPersistAll, 20000);
+
 // تنفيذ فوري أيضاً
 loadStudentsList();
 renderStudentsList();
 loadLessonsForActive();
 if (typeof initGradesSystem === 'function') initGradesSystem();
+if (typeof renderT1MathLessons === 'function') renderT1MathLessons();
 </script>
 </body></html>
