@@ -1,0 +1,2814 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="ar"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>تطبيق أبطال الثالثة أساسي - ملف التلميذة ميرا الأموري</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Cairo', sans-serif;
+      user-select: none;
+      -webkit-user-select: none;
+      background: linear-gradient(135deg, #fef3c7 0%, #fed7aa 50%, #fef08a 100%);
+      min-height: 100vh;
+      margin: 0;
+      padding: 0;
+    }
+    .pulsing-dot { animation: pulse-ring 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+    @keyframes pulse-ring {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(1.3); }
+    }
+    .problem-pill-active {
+      background: linear-gradient(to right, #ea580c, #c2410c) !important;
+      color: #ffffff !important;
+      border-color: #9a3412 !important;
+      box-shadow: 0 4px 10px -2px rgba(234, 88, 12, 0.4);
+    }
+    .math-pill-active {
+      background: linear-gradient(to right, #2563eb, #1d4ed8) !important;
+      color: #ffffff !important;
+    }
+  </style>
+</head>
+<body class="p-2 sm:p-5 flex flex-col items-center justify-start min-h-screen">
+<!-- رأس الصفحة والتحكم العلوي -->
+<header class="w-full max-w-xl mb-3 flex flex-col gap-2 px-2">
+<div class="flex items-center justify-between gap-2">
+<div class="flex items-center gap-2">
+<span class="text-3xl drop-shadow">🇹🇳</span>
+<div>
+<div class="flex items-center gap-1.5">
+<h1 class="text-base sm:text-lg font-black text-amber-950 leading-tight">أَبْطَالُ الثَّالِثَةِ أَسَاسِي</h1>
+<span class="bg-red-600 text-white text-[10px] font-extrabold px-1.5 py-0.5 rounded-full shadow-xs">تُونِس</span>
+</div>
+<p class="text-xs text-amber-800 font-bold">نُصُوصُ وَمَسَائِلُ الرِّيَاضِيَّاتِ 🌟 المِنْهَاجُ الرَّسْمِيُّ التُّونِسِيُّ</p>
+</div>
+</div>
+</div>
+<!-- شريط المزامنة السحابية الحية -->
+<div class="bg-gradient-to-r from-emerald-950 via-slate-900 to-teal-950 text-white p-2.5 rounded-2xl flex items-center justify-between gap-2 shadow-md border-2 border-emerald-500/40 text-xs">
+<div class="flex items-center gap-2 overflow-hidden">
+<span class="w-3 h-3 rounded-full bg-emerald-400 pulsing-dot shrink-0"></span>
+<div class="text-right">
+<div class="font-black text-[11px] text-emerald-200">📡 السَّحَابَةُ الحَيَّةُ: Live Cloud Hub</div>
+<div class="text-[10px] text-slate-300 font-bold">مُزَامَنَةٌ فَوْرِيَّةٌ + Instant Lesson Link (وَاتْسَاب)</div>
+</div>
+</div>
+<div class="flex items-center gap-1 shrink-0">
+<button id="btn-sync-cloud" type="button" class="bg-emerald-500 hover:bg-emerald-600 active:scale-95 text-emerald-950 font-black px-2 py-1.5 rounded-xl shadow transition flex items-center gap-1 cursor-pointer text-[10px]" onclick="window.syncData && window.syncData()">
+<span>🔄</span><span>مُزَامَنَةٌ</span>
+</button>
+<button class="bg-green-500 hover:bg-green-600 active:scale-95 text-white font-black px-2 py-1.5 rounded-xl shadow transition flex items-center gap-1 cursor-pointer text-[10px]" onclick="shareAppWhatsApp()">
+<span>💬</span><span>وَاتْسَاب</span>
+</button>
+</div>
+</div>
+</header>
+<!-- الإطار الرئيسي للتطبيق -->
+<main class="w-full max-w-xl bg-white/95 backdrop-blur rounded-3xl shadow-2xl border-4 border-amber-300 overflow-hidden flex flex-col relative mb-4">
+<!-- بطاقة بطل اليوم ورصيد النجوم -->
+<section class="bg-gradient-to-r from-pink-500 via-rose-500 to-amber-500 p-4 text-white relative shadow">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-13 h-13 bg-white/20 backdrop-blur-md rounded-2xl p-1 border-2 border-white/40 flex items-center justify-center text-3xl shadow-inner overflow-hidden" id="header-avatar-container">
+          🌸
+        </div>
+<div>
+<div class="flex items-center gap-1.5">
+<span class="text-[10px] bg-black/25 px-2 py-0.5 rounded-full font-extrabold text-amber-100" id="header-grade-badge">السَّنَةُ الثَّالِثَةُ أَسَاسِي</span>
+<span class="text-[10px] bg-red-700/80 px-2 py-0.5 rounded-full font-extrabold text-white">أَرِيَانَة 🇹🇳</span>
+</div>
+<h2 class="text-lg font-black mt-1 text-white drop-shadow-sm" id="header-student-name">البَطَلَةُ مِيرَا الأَمُورِي 🌟</h2>
+<p class="text-[11px] text-pink-100 font-bold" id="header-school-name">المَدْرَسَةُ الابْتِدَائِيَّةُ مِلْيَار - أَرِيَانَة</p>
+</div>
+</div>
+<!-- رصيد النجوم -->
+<div class="bg-white/25 backdrop-blur-md px-3.5 py-2 rounded-2xl border border-white/40 flex items-center gap-2 shadow">
+<span class="text-2xl animate-spin" style="animation-duration: 6s;">⭐</span>
+<div class="flex flex-col items-center">
+<span class="font-black text-xl text-yellow-200 leading-none" id="star-count">335</span>
+<span class="text-[10px] font-bold text-amber-100">نَجْمَة</span>
+</div>
+</div>
+</div>
+<!-- أزرار التبويبات العلوية مع إبراز ملفي كافتراضي -->
+<div class="grid grid-cols-4 sm:grid-cols-8 gap-1 mt-4 text-[9px] sm:text-xs font-black">
+<button class="py-2 px-0.5 bg-yellow-300 text-amber-950 font-black rounded-xl ring-2 ring-white/80 shadow flex items-center justify-center gap-0.5 transition cursor-pointer" id="tab-profile" onclick="switchTab('profile')">🪪 <span>مِلَفِّي</span></button>
+<button class="py-2 px-0.5 bg-amber-800/40 hover:bg-white/20 text-white rounded-xl flex items-center justify-center gap-0.5 transition cursor-pointer" id="tab-problems" onclick="switchTab('problems')">🧩 <span>المَسَائِل</span></button>
+<button class="py-2 px-0.5 bg-amber-800/40 hover:bg-white/20 text-white rounded-xl flex items-center justify-center gap-0.5 transition cursor-pointer" id="tab-notebook" onclick="switchTab('notebook')">📝 <span>دُرُوسِي</span></button>
+<button class="py-2 px-0.5 bg-amber-800/40 hover:bg-white/20 text-white rounded-xl flex items-center justify-center gap-0.5 transition cursor-pointer" id="tab-math" onclick="switchTab('math')">📐 <span>الحِسَاب</span></button>
+<button class="py-2 px-0.5 bg-amber-800/40 hover:bg-white/20 text-white rounded-xl flex items-center justify-center gap-0.5 transition cursor-pointer" id="tab-reading" onclick="switchTab('reading')">📖 <span>القِرَاءَة</span></button>
+<button class="py-2 px-0.5 bg-amber-800/40 hover:bg-white/20 text-white rounded-xl flex items-center justify-center gap-0.5 transition cursor-pointer" id="tab-grammar" onclick="switchTab('grammar')">✍️ <span>القَوَاعِد</span></button>
+<button class="py-2 px-0.5 bg-amber-800/40 hover:bg-white/20 text-white rounded-xl flex items-center justify-center gap-0.5 transition cursor-pointer" id="tab-science" onclick="switchTab('science')">🔬 <span>الإِيقَاظ</span></button>
+<button class="py-2 px-0.5 bg-amber-800/40 hover:bg-white/20 text-white rounded-xl flex items-center justify-center gap-0.5 transition cursor-pointer" id="tab-materials" onclick="switchTab('materials')">🎒 <span>الحَقِيبَة</span></button>
+</div>
+</section>
+<!-- ============================================== -->
+<!-- 0. قسم ملف التلميذ والملف الشخصي (نشط افتراضياً) -->
+<!-- ============================================== -->
+<div class="p-4 space-y-4" id="section-profile">
+<!-- بانر الهوية المدرسية والصحية -->
+<div class="bg-gradient-to-r from-pink-600 via-rose-600 to-amber-600 text-white p-4 rounded-2xl shadow-md flex items-center justify-between">
+<div>
+<div class="flex items-center gap-1.5">
+<span class="text-[10px] bg-white/20 backdrop-blur-md px-2 py-0.5 rounded-full font-black text-yellow-200">المِلَفُّ الرَّسْمِيُّ 🪪</span>
+<span class="text-[10px] bg-red-600 px-2 py-0.5 rounded-full font-bold">أَرِيَانَة - تُونِس 🇹🇳</span>
+</div>
+<h3 class="text-base sm:text-lg font-black mt-1">مِلَفُّ التِّلْمِيذَةِ المَدْرَسِيُّ وَالصِّحِّيُّ</h3>
+<p class="text-xs text-pink-100 font-bold">بِطَاقَةُ التِّلْمِيذَةِ مِيرَا الأَمُورِي • مَدْرَسَةُ مِلْيَار - أَرِيَانَة</p>
+</div>
+<span class="text-4xl">🌸</span>
+</div>
+<!-- أزرار الإجراءات الرئيسية: إضافة تلميذ، تعديل، حذف، طباعة -->
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+<button class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-black py-2.5 px-3 rounded-2xl shadow-md flex items-center justify-center gap-1.5 text-xs transition active:scale-95 border-2 border-emerald-300/60 cursor-pointer" onclick="openAddStudentModal()">
+<span>➕</span><span>إِضَافَةُ تِلْمِيذٍ</span>
+</button>
+<button class="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-black py-2.5 px-3 rounded-2xl shadow-md flex items-center justify-center gap-1.5 text-xs transition active:scale-95 border-2 border-amber-300/60 cursor-pointer" onclick="openEditModal()">
+<span>✏️</span><span>تَعْدِيلُ المِلَفِّ</span>
+</button>
+<button class="bg-gradient-to-r from-red-500 to-rose-600 hover:from-red-600 hover:to-rose-700 text-white font-black py-2.5 px-3 rounded-2xl shadow-md flex items-center justify-center gap-1.5 text-xs transition active:scale-95 border-2 border-red-300/60 cursor-pointer" onclick="openResetModal()">
+<span>🗑️</span><span>حَذْفٌ / إِعَادَةُ ضَبْطٍ</span>
+</button>
+<button class="bg-slate-100 hover:bg-slate-200 text-slate-800 font-black py-2.5 px-3 rounded-2xl shadow-sm flex items-center justify-center gap-1.5 text-xs transition active:scale-95 border-2 border-slate-300 cursor-pointer" onclick="window.print()">
+<span>🖨️</span><span>طِبَاعَةٌ</span>
+</button>
+</div>
+<!-- قائمة التلاميذ المسجلين -->
+<div class="bg-white border-2 border-indigo-200 rounded-2xl p-3.5 shadow-sm space-y-2.5">
+<div class="flex items-center justify-between border-b pb-2 border-indigo-100">
+<div class="flex items-center gap-2">
+<span class="text-xl">👨‍🎓</span>
+<h4 class="text-sm font-black text-indigo-950">قَائِمَةُ التَّلَامِيذِ المُسَجَّلِينَ</h4>
+</div>
+<span class="text-[10px] font-black bg-indigo-100 text-indigo-800 px-2 py-0.5 rounded-full" id="students-count-badge">1 تِلْمِيذ</span>
+</div>
+<div class="space-y-2 max-h-48 overflow-y-auto" id="students-list-container">
+<!-- يُملأ ديناميكياً -->
+</div>
+</div>
+<!-- بطاقة الهوية المدرسية -->
+<div class="bg-white border-2 border-pink-200 rounded-2xl p-4 shadow-sm space-y-3.5">
+<div class="flex items-center justify-between border-b pb-2 border-pink-100">
+<div class="flex items-center gap-2">
+<span class="text-xl">🪪</span>
+<h4 class="text-sm sm:text-base font-black text-pink-950">بِطَاقَةُ الهُوِيَّةِ المَدْرَسِيَّةِ لِلتِّلْمِيذَةِ</h4>
+</div>
+<span class="bg-emerald-50 text-emerald-800 border border-emerald-200 text-[10px] font-black px-2 py-0.5 rounded-full flex items-center gap-1">
+<span>✅</span><span>مُسَجَّلَةٌ رَسْمِيًّا</span>
+</span>
+</div>
+<div class="flex flex-col sm:flex-row items-center gap-4 bg-gradient-to-br from-pink-50/70 via-rose-50/50 to-amber-50/60 p-3 rounded-2xl border border-pink-200">
+<div class="relative flex flex-col items-center">
+<div class="w-24 h-24 rounded-2xl bg-white border-3 border-pink-400 overflow-hidden flex items-center justify-center shadow-md relative group" id="student-avatar-frame">
+<img alt="صورة التلميذة ميرا الأموري" class="w-full h-full object-cover" id="student-avatar-img" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCrm-u9f7V1NIlfZQUTXgbLdviaXst12XpXgEeS1_kdX-8HdMGNyizlYkTAA7OedpC4ftN0JTdAPR-q7cUlIgqsmTsNXP5l6t7gIOoR8hUX3_bC4tsv5EOdES2to5sl4I8WI6qk7ReETSijRZxOke3xGoWMZ0bWK0fHfRMEzbrdALv-2cK6ADv78Hz5jwwqNrchIBBsWYAJKieFYBDsY8GjEZ2DxupprvOXlfws8B3UavYXFoh9T79r6Q"/>
+<div class="text-5xl hidden" id="student-avatar-emoji">🌸</div>
+</div>
+<label class="mt-2 bg-pink-600 hover:bg-pink-700 text-white text-[11px] font-black px-2.5 py-1 rounded-xl shadow cursor-pointer transition flex items-center gap-1 active:scale-95" for="avatar-file-input">
+<span>📷</span><span>تَغْيِيرُ الصُّورَةِ</span>
+</label>
+<input accept="image/*" class="hidden" id="avatar-file-input" onchange="updateStudentPhoto(event)" type="file"/>
+</div>
+<div class="flex-1 w-full space-y-2 text-right">
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+<div class="bg-white p-2.5 rounded-xl border border-pink-200 shadow-xs">
+<span class="block text-[10px] text-slate-500 font-bold mb-0.5">الاسْمُ وَاللَّقَبُ:</span>
+<span class="font-black text-sm text-pink-950 block" id="card-name-display">مِيرَا الأَمُورِي</span>
+</div>
+<div class="bg-white p-2.5 rounded-xl border border-pink-200 shadow-xs">
+<span class="block text-[10px] text-slate-500 font-bold mb-0.5">المَدْرَسَةُ الابْتِدَائِيَّةُ:</span>
+<span class="font-black text-xs text-slate-800 block" id="card-school-display">المَدْرَسَةُ الابْتِدَائِيَّةُ مِلْيَار - أَرِيَانَة</span>
+</div>
+<div class="bg-white p-2.5 rounded-xl border border-pink-200 shadow-xs">
+<span class="block text-[10px] text-slate-500 font-bold mb-0.5">المُسْتَوَى وَالفَوْجُ:</span>
+<span class="font-black text-xs text-slate-800 block" id="card-grade-display">السَّنَةُ الثَّالِثَةُ أَسَاسِي - فَوْج (أ)</span>
+</div>
+<div class="bg-white p-2.5 rounded-xl border border-pink-200 shadow-xs">
+<span class="block text-[10px] text-slate-500 font-bold mb-0.5">رَقْمُ التَّسْجِيلِ المَدْرَسِيِّ:</span>
+<span class="font-mono font-black text-xs text-slate-800 block" id="card-id-display">TN-2026-AR-8012</span>
+</div>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-xs">
+<div class="bg-pink-50 border border-pink-200 p-2 rounded-xl">
+<span class="block text-[10px] font-bold text-pink-800">رَصِيدُ النُّجُومِ</span>
+<span class="text-base font-black text-amber-600" id="profile-stars-display">⭐ 335</span>
+</div>
+<div class="bg-amber-50 border border-amber-300 p-2 rounded-xl shadow-xs">
+<span class="block text-[10px] font-bold text-amber-900">المُعَدَّلُ العَامُّ (نِظَام 20)</span>
+<span class="text-base font-black text-amber-600" id="profile-average-badge">🏆 <span id="avg-grade-display">18.9</span> / 20</span>
+</div>
+<div class="bg-emerald-50 border border-emerald-200 p-2 rounded-xl">
+<span class="block text-[10px] font-bold text-emerald-800">المُسْتَوَى</span>
+<span class="text-base font-black text-emerald-600">بَطَلَةٌ مُتَمَيِّزَةٌ 🥇</span>
+</div>
+<div class="bg-sky-50 border border-sky-200 p-2 rounded-xl">
+<span class="block text-[10px] font-bold text-sky-800">الحُضُورُ وَالمُوَاظَبَةُ</span>
+<span class="text-base font-black text-sky-600">100% 🌟</span>
+</div>
+</div>
+</div>
+<!-- الدفتر الصحي المدرسي -->
+<div class="bg-white border-2 border-amber-300 rounded-2xl p-4 shadow-sm space-y-3.5" id="grades-system-container">
+<div class="flex items-center justify-between border-b pb-2.5 border-amber-200 flex-wrap gap-2">
+<div class="flex items-center gap-2">
+<span class="text-2xl">🎖️</span>
+<div>
+<h4 class="text-sm sm:text-base font-black text-amber-950">سِجِلُّ أَعْدَادِ الإِنْجَازَاتِ المَدْرَسِيَّةِ (نِظَامُ 1 إِلَى 20) 📝</h4>
+<p class="text-[11px] text-amber-800 font-bold">تَقْيِيمُ الأَعْمَالِ المَدْرَسِيَّةِ وَالمَسَائِلِ بِالأَعْدَادِ التُّونِسِيَّةِ مَعَ الحِفْظِ التِّلْقَائِيِّ الدَّائِمِ</p>
+</div>
+</div>
+<div class="flex items-center gap-1.5 bg-gradient-to-r from-amber-500 to-orange-500 text-white px-3 py-1.5 rounded-xl shadow-xs text-xs font-black">
+<span>المُعَدَّلُ الحَالِيُّ:</span>
+<span class="text-sm font-mono text-yellow-200" id="grades-top-avg">18.90 / 20</span>
+<span>🏆</span>
+</div>
+</div>
+<!-- ملخص ذكي للأداء والمعدل التونسي العام -->
+<div class="bg-gradient-to-br from-amber-50 via-orange-50 to-pink-50 border border-amber-200 rounded-2xl p-3 flex flex-col sm:flex-row items-center justify-between gap-3">
+<div class="flex items-center gap-3 w-full sm:w-auto">
+<div class="w-13 h-13 rounded-2xl bg-amber-500 text-white font-black text-xl flex items-center justify-center shadow shrink-0" id="grade-circle-avg">18.9</div>
+<div>
+<div class="text-xs font-black text-amber-950">مُعَدَّلُ الإِنْجَازَاتِ التَّرَاكُمِيُّ: <span class="text-emerald-700 font-bold" id="grades-status-text">مُتَفَوِّقَةٌ جِدًّا (حَسَنٌ جِدًّا 🌟)</span></div>
+<div class="text-[10px] text-slate-600 font-bold mt-0.5">عَدَدُ الأَعْمَالِ المُقَيَّمَةِ: <span class="font-mono font-black text-slate-800" id="grades-total-count">5 أَعْمَال</span> • حِفْظٌ دَائِمٌ فِي جِهَازِكِ</div>
+</div>
+</div>
+<div class="w-full sm:w-48 space-y-1">
+<div class="flex items-center justify-between text-[10px] font-black text-slate-700">
+<span>نِسْبَةُ الإِتْقَانِ:</span>
+<span class="font-mono text-amber-700" id="grades-pct-text">94.5%</span>
+</div>
+<div class="w-full bg-slate-200 h-3 rounded-full overflow-hidden shadow-inner">
+<div class="bg-gradient-to-r from-amber-500 to-emerald-500 h-full rounded-full transition" id="grades-progress-bar" style="width: 94.5%;"></div>
+</div>
+</div>
+</div>
+<!-- استمارة رصد أو تسجيل عدد جديد -->
+<div class="bg-slate-50 border-2 border-slate-200 rounded-2xl p-3.5 space-y-3">
+<div class="flex items-center justify-between text-xs font-black text-slate-800">
+<span class="flex items-center gap-1.5 text-amber-950">
+<span>➕</span><span id="grade-form-mode-title">رَصْدُ وَتَسْجِيلُ عَدَدِ إِنجَازٍ جَدِيدٍ (مِنْ 1 إِلَى 20):</span>
+</span>
+<button class="hidden text-[10px] text-rose-600 hover:text-rose-700 font-bold underline cursor-pointer" id="grade-cancel-edit-btn" onclick="cancelEditGrade()">إِلْغَاءُ التَّعْدِيلِ ✕</button>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
+<div>
+<label class="block text-[10px] font-bold text-slate-600 mb-0.5">نَوْعُ العَمَلِ / المَادَّةُ:</label>
+<select class="w-full font-black text-xs p-2 rounded-xl border border-slate-300 bg-white text-right focus:border-amber-500 focus:ring-0" id="grade-input-subject">
+<option value="📐 رياضيات وحساب">📐 رياضيات وحساب</option>
+<option value="📖 قراءة ونصوص">📖 قراءة ونصوص</option>
+<option value="✍️ قواعد ولغة">✍️ قواعد ولغة</option>
+<option value="🔬 إيقاظ علمي">🔬 إيقاظ علمي</option>
+<option value="📸 كراس الدرس اليومي">📸 كراس الدرس اليومي</option>
+<option value="🎨 محفوظات ورسم">🎨 محفوظات ورسم</option>
+</select>
+</div>
+<div>
+<label class="block text-[10px] font-bold text-slate-600 mb-0.5">عُنْوَانُ الإِنْجَازِ أَوْ الوَضْعِيَّةِ:</label>
+<input class="w-full font-black text-xs p-2 rounded-xl border border-slate-300 bg-white text-right focus:border-amber-500 focus:ring-0" id="grade-input-title" placeholder="مِثَال: حَلُّ مَسْأَلَةِ الشِّرَاءِ" type="text"/>
+</div>
+<div class="grid grid-cols-2 gap-1.5">
+<div>
+<label class="block text-[10px] font-bold text-slate-600 mb-0.5">العَدَدُ (من 1 إلى 20):</label>
+<input class="w-full font-mono font-black text-xs p-2 rounded-xl border border-slate-300 bg-white text-center focus:border-amber-500 focus:ring-0 text-amber-950" id="grade-input-score" max="20" min="1" placeholder="20" step="0.25" type="number" value="20"/>
+</div>
+<div>
+<label class="block text-[10px] font-bold text-slate-600 mb-0.5">مُلَاحَظَةُ الأُسْتَاذِ:</label>
+<input class="w-full font-black text-xs p-2 rounded-xl border border-slate-300 bg-white text-right focus:border-amber-500 focus:ring-0" id="grade-input-note" placeholder="مُمْتَازٌ 🌟" type="text"/>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-end gap-2 pt-1">
+<button class="w-full sm:w-auto bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-black py-2 px-5 rounded-xl shadow-xs text-xs flex items-center justify-center gap-1.5 cursor-pointer active:scale-95 transition" id="grade-save-btn" onclick="saveGradeItem()">
+<span>💾</span><span id="grade-save-btn-text">تَسْجِيلُ العَدَدِ فِي الذَّاكِرَةِ (+حفظ دائم)</span>
+</button>
+</div>
+</div>
+<!-- قائمة الأعداد والتقييمات التونسية المسجلة -->
+<div class="space-y-2">
+<div class="flex items-center justify-between text-xs font-black text-amber-950">
+<span>📜 الأَعْدَادُ المُسَجَّلَةُ لِمِيرَا الأَمُورِي:</span>
+<span class="text-[10px] text-slate-500 font-bold">تُحْفَظُ فِي LocalStorage لَا تَضِيعُ أَبَدًا 💾</span>
+</div>
+<div class="space-y-2" id="grades-list-container">
+<!-- يتم ملء عناصر الأعداد ديناميكياً بواسطة جافاسكريبت -->
+</div>
+</div>
+</div><div class="bg-white border-2 border-emerald-300 rounded-2xl p-4 shadow-sm space-y-3.5">
+<div class="flex items-center justify-between border-b pb-2 border-emerald-200">
+<div class="flex items-center gap-2">
+<span class="text-xl">🩺</span>
+<h4 class="text-sm sm:text-base font-black text-emerald-950">الدَّفْتَرُ الصِّحِّيُّ المَدْرَسِيُّ (صِحَّةُ مَدْرَسَةِ مِلْيَار)</h4>
+</div>
+<span class="bg-red-50 text-red-700 border border-red-200 text-xs font-black px-2 py-0.5 rounded-lg flex items-center gap-1 font-mono">
+<span>🩸</span><span id="profile-blood-badge">A+ إِيجَابِي</span>
+</span>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-xs">
+<div class="bg-slate-50 border border-slate-200 p-2.5 rounded-xl">
+<span class="text-[10px] text-slate-500 font-bold block">📏 الطُّول</span>
+<span class="text-xs font-black text-slate-800 font-mono" id="card-height-display">126 سم</span>
+</div>
+<div class="bg-slate-50 border border-slate-200 p-2.5 rounded-xl">
+<span class="text-[10px] text-slate-500 font-bold block">⚖️ الوَزْن</span>
+<span class="text-xs font-black text-slate-800 font-mono" id="card-weight-display">25 كغ</span>
+</div>
+<div class="bg-slate-50 border border-slate-200 p-2.5 rounded-xl">
+<span class="text-[10px] text-slate-500 font-bold block">👁️ حِدَّةُ البَصَر</span>
+<span class="text-xs font-black text-emerald-700 font-mono">10/10 مُمْتَاز</span>
+</div>
+<div class="bg-slate-50 border border-slate-200 p-2.5 rounded-xl">
+<span class="text-[10px] text-slate-500 font-bold block">🏃 اللَّيَاقَةُ البَدَنِيَّة</span>
+<span class="text-xs font-black text-blue-700">مُؤَهَّلَةٌ لِلرِّيَاضَة ✅</span>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex items-center gap-1.5 text-xs font-black text-emerald-900">
+<span>💉</span><span>جَدْوَلُ التَّلَاقِيحِ المَدْرَسِيَّةِ الرَّسْمِيَّةِ:</span>
+</div>
+<div class="space-y-1.5 text-xs">
+<div class="flex items-center justify-between p-2 rounded-xl bg-emerald-50 border border-emerald-200">
+<div class="flex items-center gap-2">
+<span class="text-emerald-700 text-sm">✅</span>
+<div>
+<div class="font-black text-emerald-950 text-xs">تَلْقِيحُ الدِّفْتِيرْيَا وَالتِّتَانُوس (dTC)</div>
+<span class="text-[10px] text-emerald-800">مُقَرَّرُ السَّنَةِ الثَّالِثَةِ أَسَاسِي - تَمَّ بِمَدْرَسَةِ مِلْيَار</span>
+</div>
+</div>
+<span class="text-[10px] font-mono font-bold bg-white text-emerald-900 px-2 py-0.5 rounded-lg border border-emerald-200">أُكْتُوبِر 2025</span>
+</div>
+<div class="flex items-center justify-between p-2 rounded-xl bg-emerald-50 border border-emerald-200">
+<div class="flex items-center gap-2">
+<span class="text-emerald-700 text-sm">✅</span>
+<div>
+<div class="font-black text-emerald-950 text-xs">فَحْصُ العُيُونِ وَالفَمِ وَالأَسْنَانِ المَدْرَسِيُّ</div>
+<span class="text-[10px] text-emerald-800">سَلِيمٌ مَعَ مُتَابَعَةٍ وِقَائِيَّةٍ نِصْفَ سَنَوِيَّةٍ</span>
+</div>
+</div>
+<span class="text-[10px] font-mono font-bold bg-white text-emerald-900 px-2 py-0.5 rounded-lg border border-emerald-200">نُوفَمْبِر 2025</span>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+<div class="bg-amber-50/80 border border-amber-200 p-2.5 rounded-xl">
+<span class="font-black text-amber-950 flex items-center gap-1 mb-1">
+<span>⚠️</span><span>الحَسَاسِيَّةُ وَالمُلَاحَظَاتُ الطِّبِّيَّةُ:</span>
+</span>
+<p class="text-[11px] font-bold text-amber-900 leading-relaxed" id="card-allergy-display">
+لَا تُوجَدُ حَسَاسِيَّةٌ دَوَائِيَّةٌ مَعْلُومَةٌ. تُفَضَّلُ اللَّمْجَةُ الصِّحِّيَّةُ الطَّازَجَةُ.
+</p>
+</div>
+<div class="bg-sky-50 border border-sky-200 p-2.5 rounded-xl">
+<span class="font-black text-sky-950 flex items-center gap-1 mb-1">
+<span>📞</span><span>اتِّصَالُ الطَّوَارِئِ (وَلِيُّ الأَمْرِ):</span>
+</span>
+<div class="space-y-1 text-[11px] font-bold text-sky-900">
+<div class="flex items-center justify-between">
+<span id="card-guardian-title">وَلِيُّ الأَمْرِ: السَّيِّد الأَمُورِي</span>
+<a class="bg-sky-600 hover:bg-sky-700 text-white font-mono text-[10px] font-black px-2 py-0.5 rounded-lg flex items-center gap-1" href="tel:21698223344" id="card-phone-btn">
+<span>📞</span><span id="card-phone-display">98 223 344</span>
+</a>
+</div>
+<div class="flex items-center justify-between">
+<span>المَنْطِقَةُ: وِلَايَةُ أَرِيَانَة</span>
+<span class="text-[10px] font-bold text-slate-600">تُونِس 🇹🇳</span>
+</div>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between gap-2 pt-1">
+<button class="flex-1 bg-pink-600 hover:bg-pink-700 active:scale-95 text-white font-black py-2.5 rounded-xl shadow transition text-xs flex items-center justify-center gap-1.5 cursor-pointer" onclick="openEditModal()">
+<span>✏️</span><span>تَعْدِيلُ بَيَانَاتِ التِّلْمِيذَةِ</span>
+</button>
+<button class="bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-300 font-black px-3.5 py-2.5 rounded-xl shadow-xs transition text-xs flex items-center gap-1 cursor-pointer" onclick="openResetModal()">
+<span>🗑️</span><span>حَذْفٌ / إِعَادَةُ ضَبْطٍ</span>
+</button>
+</div>
+</div>
+</div>
+<!-- ============================================== -->
+<!-- 1. قسم نصوص ومسائل الرياضيات التفاعلية -->
+<!-- ============================================== -->
+<div class="p-4 space-y-4 hidden" id="section-problems">
+<!-- رأس وبانر قسم المسائل -->
+<div class="bg-gradient-to-r from-orange-600 via-amber-600 to-yellow-600 text-white p-4 rounded-2xl shadow-md flex items-center justify-between">
+<div>
+<div class="flex items-center gap-1.5">
+<span class="text-[10px] bg-white/20 backdrop-blur-md px-2 py-0.5 rounded-full font-black text-yellow-200">وَضْعِيَّاتٌ إِدْمَاجِيَّةٌ 🧩</span>
+<span class="text-[10px] bg-red-600 px-2 py-0.5 rounded-full font-bold">تُونِس 🇹🇳</span>
+</div>
+<h3 class="text-base sm:text-lg font-black mt-1">نُصُوصُ وَضْعِيَّاتِ وَمَسَائِلِ الرِّيَاضِيَّاتِ التَّفَاعُلِيَّةِ</h3>
+<p class="text-xs text-orange-100 font-bold">حَلُّ مَسَائِلَ كِتَابِيَّةٍ مِنَ الوَاقِعِ التُّونِسِيِّ خُطْوَةً بِخُطْوَةٍ بِالصَّوْتِ 🔊</p>
+</div>
+<span class="text-4xl">📚</span>
+</div>
+<!-- أزرار اختيار الوضعية من المنهاج التونسي -->
+<div class="grid grid-cols-3 gap-1.5 bg-orange-50/90 p-1.5 rounded-2xl border-2 border-orange-200 text-[10px] sm:text-xs font-black">
+<button class="prob-nav-btn py-2 px-1 rounded-xl text-center transition cursor-pointer problem-pill-active" id="prob-btn-0" onclick="loadProblem(0)">
+        🏪 1. مَكْتَبَةُ المَدْرَسَةِ
+      </button>
+<button class="prob-nav-btn py-2 px-1 rounded-xl bg-white text-slate-700 border border-orange-200 hover:bg-orange-100 text-center transition cursor-pointer" id="prob-btn-1" onclick="loadProblem(1)">
+        🫒 2. مَوْسِمُ الزَّيْتُونِ
+      </button>
+<button class="prob-nav-btn py-2 px-1 rounded-xl bg-white text-slate-700 border border-orange-200 hover:bg-orange-100 text-center transition cursor-pointer" id="prob-btn-2" onclick="loadProblem(2)">
+        🌸 3. مِهْرَجَانُ الزُّهُورِ
+      </button>
+</div>
+<!-- بطاقة نص الوضعية مع المشهد والقراءة الصوتية المشكولة -->
+<div class="bg-gradient-to-br from-amber-50 to-orange-50 border-3 border-amber-300 rounded-2xl p-4 shadow-sm space-y-3.5">
+<div class="flex items-center justify-between border-b pb-2 border-amber-200 flex-wrap gap-2">
+<div class="flex items-center gap-2">
+<span class="w-8 h-8 rounded-xl bg-orange-500 text-white font-black flex items-center justify-center text-sm shadow" id="prob-badge-icon">🏪</span>
+<div>
+<h4 class="text-sm sm:text-base font-black text-amber-950" id="prob-title">الوَضْعِيَّةُ 1: شِرَاءُ أَدَوَاتٍ مِنْ مَكْتَبَةِ مَدْرَسَةِ مِلْيَار</h4>
+<span class="text-[10px] font-bold text-orange-800" id="prob-context">السِّيَاقُ: النُّقُودُ التُّونِسِيَّةُ (المِلِيم) وَالمُشْتَرَيَاتُ</span>
+</div>
+</div>
+<button class="text-xs bg-amber-500 hover:bg-amber-600 text-white font-black px-3 py-1.5 rounded-xl shadow flex items-center gap-1 cursor-pointer transition active:scale-95" onclick="speakProblemText()">
+<span id="prob-speak-icon">🔊</span>
+<span>اسْتَمِعْ لِنَصِّ المَسْأَلَةِ</span>
+</button>
+</div>
+<!-- صندوق نص المسألة الكامل مع التشكيل -->
+<div class="bg-white p-3.5 rounded-xl border-2 border-amber-200 text-slate-900 shadow-inner space-y-2">
+<div class="flex items-center gap-1.5 text-xs font-black text-orange-900">
+<span>📜</span>
+<span>نَصُّ الوَضْعِيَّةِ الكِتَابِيَّةِ (المِنْهَاجُ التُّونِسِيُّ):</span>
+</div>
+<p class="text-xs sm:text-sm font-black leading-relaxed text-slate-800" id="prob-full-text">
+          «اشْتَرَتْ مِيرَا مِنْ مَكْتَبَةِ المَدْرَسَةِ قِصَّةً بِـ 2450 مِلِيمًا وَكُرَّاسًا بِـ 1350 مِلِيمًا، وَدَفَعَتْ لِلْمَكْتَبِيِّ وَرَقَةً نَقْدِيَّةً مِنْ فِئَةِ 5000 مِلِيمٍ. احْسِبْ ثَمَنَ المُشْتَرَيَاتِ؟ وَكَمْ أَرْجَعَ لَهَا المَكْتَبِيُّ؟»
+        </p>
+</div>
+<!-- تفكيك المعطيات الذكي (اللفظية، العددية، المطلوب) -->
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
+<div class="bg-sky-50 border-2 border-sky-200 rounded-xl p-2.5">
+<div class="font-black text-sky-900 flex items-center gap-1 mb-1">
+<span>📝</span><span>المُعْطَيَاتُ اللَّفْظِيَّةُ:</span>
+</div>
+<p class="text-[11px] font-bold text-sky-800" id="prob-verbal-data">شِرَاءُ قِصَّةٍ وَكُرَّاسٍ، وَدَفْعُ وَرَقَةٍ نَقْدِيَّةٍ لِلْمَكْتَبِيِّ.</p>
+</div>
+<div class="bg-emerald-50 border-2 border-emerald-200 rounded-xl p-2.5">
+<div class="font-black text-emerald-900 flex items-center gap-1 mb-1">
+<span>🔢</span><span>المُعْطَيَاتُ العَدَدِيَّةُ:</span>
+</div>
+<p class="text-[11px] font-bold text-emerald-800 font-mono" id="prob-num-data">2450 مِلِيم، 1350 مِلِيم، 5000 مِلِيم</p>
+</div>
+<div class="bg-amber-50 border-2 border-amber-200 rounded-xl p-2.5">
+<div class="font-black text-amber-900 flex items-center gap-1 mb-1">
+<span>🎯</span><span>المَطْلُوبُ:</span>
+</div>
+<p class="text-[11px] font-bold text-amber-800" id="prob-target-data">1) ثَمَنُ المُشْتَرَيَاتِ؟ 2) المَبْلَغُ المُرْجَعُ؟</p>
+</div>
+</div>
+<!-- تمثيل بصري للمسألة -->
+<div class="bg-white rounded-xl border-2 border-amber-200 p-2.5 flex items-center justify-around gap-2 text-center" id="prob-visual-container"></div>
+<!-- حل المسألة التفاعلي خطوة بخطوة -->
+<div class="bg-white border-2 border-orange-300 rounded-2xl p-3.5 shadow-sm space-y-3">
+<div class="flex items-center justify-between">
+<span class="text-xs font-black text-orange-950 flex items-center gap-1">
+<span>✏️</span><span>مَرَاحِلُ الحَلِّ التَّفَاعُلِيَّةِ (تَحَدِّي البَطَلَةِ)</span>
+</span>
+<span class="text-xs font-bold text-amber-600 bg-amber-100 px-2 py-0.5 rounded-lg">+15 ⭐</span>
+</div>
+<!-- الخطوة 1 -->
+<div class="space-y-2 border-b pb-3 border-orange-100" id="prob-step-1-box">
+<div class="text-xs font-black text-slate-800">
+<span id="step1-question-label">1. لِحِسَابِ ثَمَنِ المَشْتَرَيَاتِ، مَا هِيَ العَمَلِيَّةُ المُنَاسِبَةُ؟</span>
+</div>
+<div class="grid grid-cols-3 gap-2 pt-1" id="step1-op-buttons">
+<button class="py-2 px-2 bg-slate-50 hover:bg-orange-100 border-2 border-slate-300 rounded-xl font-black text-xs cursor-pointer" onclick="checkProblemOp(1, '+')">
+              ➕ جَمْعٌ (+)
+            </button>
+<button class="py-2 px-2 bg-slate-50 hover:bg-orange-100 border-2 border-slate-300 rounded-xl font-black text-xs cursor-pointer" onclick="checkProblemOp(1, '-')">
+              ➖ طَرْحٌ (-)
+            </button>
+<button class="py-2 px-2 bg-slate-50 hover:bg-orange-100 border-2 border-slate-300 rounded-xl font-black text-xs cursor-pointer" onclick="checkProblemOp(1, '×')">
+              ✖️ ضَرْبٌ (×)
+            </button>
+</div>
+<div class="text-[11px] font-black p-2 rounded-xl hidden text-center" id="step1-feedback"></div>
+<!-- حساب ناتج الخطوة 1 -->
+<div class="hidden space-y-2 pt-1" id="step1-calc-box">
+<div class="flex items-center gap-2">
+<span class="text-xs font-black text-slate-700 whitespace-nowrap" id="step1-calc-prompt">اِحْسِبْ:</span>
+<input class="w-28 p-1.5 text-xs font-black border-2 border-orange-300 rounded-lg text-center bg-orange-50/50" id="step1-calc-input" placeholder="أَدْخِلِ النَّاتِجَ" type="number"/>
+<button class="bg-orange-500 hover:bg-orange-600 text-white font-black text-xs px-3 py-1.5 rounded-lg cursor-pointer" onclick="checkProblemCalc(1)">
+                تَأْكِيدٌ ✅
+              </button>
+</div>
+<div class="text-[11px] font-black p-2 rounded-xl hidden text-center" id="step1-calc-feedback"></div>
+</div>
+</div>
+<!-- الخطوة 2 -->
+<div class="space-y-2 pt-1" id="prob-step-2-box">
+<div class="text-xs font-black text-slate-800">
+<span id="step2-question-label">2. لِحِسَابِ المَبْلَغِ المُرْجَعِ (مَا أَرْجَعَهُ المَكْتَبِيُّ لِمِيرَا):</span>
+</div>
+<div class="grid grid-cols-3 gap-2 pt-1" id="step2-op-buttons">
+<button class="py-2 px-2 bg-slate-50 hover:bg-orange-100 border-2 border-slate-300 rounded-xl font-black text-xs cursor-pointer" onclick="checkProblemOp(2, '+')">
+              ➕ جَمْعٌ (+)
+            </button>
+<button class="py-2 px-2 bg-slate-50 hover:bg-orange-100 border-2 border-slate-300 rounded-xl font-black text-xs cursor-pointer" onclick="checkProblemOp(2, '-')">
+              ➖ طَرْحٌ (-)
+            </button>
+<button class="py-2 px-2 bg-slate-50 hover:bg-orange-100 border-2 border-slate-300 rounded-xl font-black text-xs cursor-pointer" onclick="checkProblemOp(2, '×')">
+              ✖️ ضَرْبٌ (×)
+            </button>
+</div>
+<div class="text-[11px] font-black p-2 rounded-xl hidden text-center" id="step2-feedback"></div>
+<!-- حساب ناتج الخطوة 2 -->
+<div class="hidden space-y-2 pt-1" id="step2-calc-box">
+<div class="flex items-center gap-2">
+<span class="text-xs font-black text-slate-700 whitespace-nowrap" id="step2-calc-prompt">اِحْسِبْ:</span>
+<input class="w-28 p-1.5 text-xs font-black border-2 border-orange-300 rounded-lg text-center bg-orange-50/50" id="step2-calc-input" placeholder="أَدْخِلِ النَّاتِجَ" type="number"/>
+<button class="bg-orange-500 hover:bg-orange-600 text-white font-black text-xs px-3 py-1.5 rounded-lg cursor-pointer" onclick="checkProblemCalc(2)">
+                تَأْكِيدٌ ✅
+              </button>
+</div>
+<div class="text-[11px] font-black p-2 rounded-xl hidden text-center" id="step2-calc-feedback"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- ============================================== -->
+<!-- 2. قسم دفتر الدروس اليومية (المصور والكاميرا) -->
+<!-- ============================================== -->
+<div class="p-4 space-y-4 hidden" id="section-notebook">
+<div class="bg-gradient-to-r from-amber-400 via-orange-400 to-amber-500 text-amber-950 p-3.5 rounded-2xl shadow-sm border-2 border-amber-300 flex items-center justify-between">
+<div>
+<h3 class="text-sm sm:text-base font-black">دَفْتَرُ دُرُوسِي اليَوْمِيَّةِ 📝📸</h3>
+<p class="text-xs font-bold text-amber-950/90 mt-0.5">صَوِّرْ كُرَّاسَكَ بِالكَامِيرَا أَوِ ارْفَعْ صُورَةً — يُحْفَظُ فِي جِهَازِكَ!</p>
+</div>
+<span class="text-4xl">📔</span>
+</div>
+<!-- استمارة إضافة / تعديل درس -->
+<div class="bg-white border-2 border-amber-300 rounded-2xl p-3.5 shadow-sm space-y-3" id="lesson-form-box">
+<div class="flex items-center justify-between text-xs font-black text-amber-950">
+<span class="flex items-center gap-1.5"><span>➕</span><span id="lesson-form-title">إِضَافَةُ دَرْسٍ جَدِيدٍ بِصُورَةٍ:</span></span>
+<button class="hidden text-[10px] text-rose-600 font-bold underline cursor-pointer" id="lesson-cancel-edit-btn" onclick="cancelEditLesson()">إِلْغَاءُ التَّعْدِيلِ ✕</button>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+<div>
+<label class="block text-[10px] font-bold text-slate-600 mb-0.5">المَادَّةُ:</label>
+<select class="w-full font-black text-xs p-2 rounded-xl border border-slate-300 bg-white text-right" id="lesson-input-subject">
+<option value="📐 رياضيات">📐 رياضيات</option>
+<option value="📖 قراءة">📖 قراءة</option>
+<option value="✍️ قواعد">✍️ قواعد</option>
+<option value="🔬 إيقاظ علمي">🔬 إيقاظ علمي</option>
+<option value="🎨 رسم ومحفوظات">🎨 رسم ومحفوظات</option>
+<option value="📝 أخرى">📝 أخرى</option>
+</select>
+</div>
+<div>
+<label class="block text-[10px] font-bold text-slate-600 mb-0.5">عُنْوَانُ الدَّرْسِ:</label>
+<input class="w-full font-black text-xs p-2 rounded-xl border border-slate-300 bg-white text-right" id="lesson-input-title" placeholder="مِثَال: حَلُّ مَسْأَلَةِ المَكْتَبَةِ" type="text"/>
+</div>
+</div>
+<div>
+<label class="block text-[10px] font-bold text-slate-600 mb-0.5">مُلَاحَظَةٌ / مُلَخَّصٌ:</label>
+<textarea class="w-full font-bold text-xs p-2 rounded-xl border border-slate-300 bg-white text-right h-16 resize-none" id="lesson-input-note" placeholder="كَتَبْتُ فِي الكُرَّاسِ..."></textarea>
+<button type="button" class="mt-1.5 w-full bg-sky-500 hover:bg-sky-600 text-white font-black text-xs py-2 rounded-xl cursor-pointer flex items-center justify-center gap-1.5" onclick="speakLessonNote()">
+<span>🔊</span><span>قِرَاءَةُ العُنْوَانِ وَالمُلَاحَظَةِ بِالصَّوْتِ</span>
+</button>
+</div>
+<!-- الكاميرا ورفع الصورة -->
+<div class="bg-amber-50 border-2 border-dashed border-amber-300 rounded-xl p-3 space-y-2">
+<div class="flex items-center justify-between text-xs font-black text-amber-900">
+<span>📷 صُورَةُ الكُرَّاسِ / الدَّرْسِ:</span>
+<span class="text-[10px] text-slate-500" id="lesson-photo-status">لَمْ تُخْتَرْ صُورَةٌ بَعْدُ</span>
+</div>
+<div class="flex flex-wrap gap-2">
+<label class="flex-1 min-w-[120px] bg-pink-600 hover:bg-pink-700 text-white font-black text-xs py-2.5 px-3 rounded-xl shadow cursor-pointer flex items-center justify-center gap-1.5 active:scale-95 transition">
+<span>📸</span><span>الكَامِيرَا</span>
+<input accept="image/*" capture="environment" class="hidden" id="lesson-camera-input" onchange="handleLessonPhoto(event)" type="file"/>
+</label>
+<label class="flex-1 min-w-[120px] bg-indigo-600 hover:bg-indigo-700 text-white font-black text-xs py-2.5 px-3 rounded-xl shadow cursor-pointer flex items-center justify-center gap-1.5 active:scale-95 transition">
+<span>🖼️</span><span>مِنَ المَعْرَضِ</span>
+<input accept="image/*" class="hidden" id="lesson-gallery-input" onchange="handleLessonPhoto(event)" type="file"/>
+</label>
+<button class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-black text-xs py-2.5 px-3 rounded-xl cursor-pointer" onclick="clearLessonPhoto()" type="button">مسح الصورة</button>
+</div>
+<div class="hidden rounded-xl overflow-hidden border-2 border-amber-300 h-36 bg-slate-100" id="lesson-photo-preview-box">
+<img alt="معاينة" class="w-full h-full object-cover" id="lesson-photo-preview"/>
+</div>
+</div>
+<button class="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-black py-2.5 rounded-xl shadow text-xs flex items-center justify-center gap-1.5 cursor-pointer active:scale-95 transition" id="lesson-save-btn" onclick="saveLessonItem()">
+<span>💾</span><span id="lesson-save-btn-text">حِفْظُ الدَّرْسِ فِي الذَّاكِرَةِ</span>
+</button>
+</div>
+<!-- قائمة الدروس -->
+<div class="space-y-2">
+<div class="flex items-center justify-between text-xs font-black text-amber-950">
+<span>📜 الدُّرُوسُ المُسَجَّلَةُ:</span>
+<span class="text-[10px] text-slate-500 font-bold" id="lessons-count-text">0 دَرْس</span>
+</div>
+<div class="space-y-2" id="notebook-lessons-container">
+<!-- ديناميكي -->
+</div>
+</div>
+</div>
+<!-- ============================================== -->
+<!-- 3. قسم الرياضيات — البرنامج الرسمي التونسي سنة 3 أساسي -->
+<!-- ============================================== -->
+<div class="p-4 space-y-4 hidden" id="section-math">
+<div class="bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 text-white p-4 rounded-2xl shadow-md flex items-center justify-between">
+<div>
+<span class="text-[10px] bg-white/20 px-2 py-0.5 rounded-full font-black text-yellow-300">المِنْهَاجُ التُّونِسِيُّ الرَّسْمِيُّ 🇹🇳</span>
+<h3 class="text-base sm:text-lg font-black mt-1">الرِّيَاضِيَّاتُ — السَّنَةُ الثَّالِثَةُ أَسَاسِي</h3>
+<p class="text-xs text-blue-100 font-bold">أَعْدَادٌ 0→9999 • جَمْعٌ وَطَرْحٌ • جَدَاوِلُ الضَّرْبِ • هَنْدَسَةٌ • نُقُودٌ</p>
+</div>
+<span class="text-4xl">📐</span>
+</div>
+<!-- محاور البرنامج -->
+<div class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-[10px] font-black">
+<button class="bg-sky-100 border-2 border-sky-300 rounded-xl p-2 text-sky-950 cursor-pointer hover:bg-sky-200" onclick="setMathMode('numbers')">🔢 الأَعْدَادُ</button>
+<button class="bg-amber-100 border-2 border-amber-300 rounded-xl p-2 text-amber-950 cursor-pointer hover:bg-amber-200" onclick="setMathMode('ops')">➕ جَمْعٌ وَطَرْحٌ</button>
+<button class="bg-emerald-100 border-2 border-emerald-300 rounded-xl p-2 text-emerald-950 cursor-pointer hover:bg-emerald-200" onclick="setMathMode('mult')">✖️ جَدَاوِلُ الضَّرْبِ</button>
+<button class="bg-violet-100 border-2 border-violet-300 rounded-xl p-2 text-violet-950 cursor-pointer hover:bg-violet-200" onclick="setMathMode('money')">💰 النُّقُودُ</button>
+<button class="bg-rose-100 border-2 border-rose-300 rounded-xl p-2 text-rose-950 cursor-pointer hover:bg-rose-200" onclick="setMathMode('geo')">📏 الهَنْدَسَةُ</button>
+<button class="bg-indigo-100 border-2 border-indigo-300 rounded-xl p-2 text-indigo-950 cursor-pointer hover:bg-indigo-200" onclick="setMathMode('mental')">🧠 حِسَابٌ ذِهْنِيٌّ</button>
+</div>
+<!-- منطقة التمرين الديناميكية -->
+<div class="bg-white p-3.5 rounded-2xl border-2 border-blue-200 space-y-3" id="math-exercise-box">
+<div class="flex items-center justify-between">
+<span class="text-xs font-black text-blue-900" id="math-mode-label">✖️ جَدَاوِلُ الضَّرْبِ (2 إِلَى 9)</span>
+<button class="text-[10px] bg-blue-100 hover:bg-blue-200 text-blue-900 font-black px-2 py-1 rounded-lg cursor-pointer" onclick="nextMathExercise()">تَمْرِينٌ جَدِيدٌ 🔄</button>
+</div>
+<div class="text-center space-y-2">
+<div class="text-2xl font-black text-blue-700 bg-blue-50 py-3 rounded-xl font-mono" id="math-question">6 × 4 = ؟</div>
+<input class="w-32 mx-auto block p-2 text-center text-lg font-black border-2 border-blue-300 rounded-xl bg-blue-50/50" id="math-answer-input" placeholder="؟" type="number" onkeydown="if(event.key==='Enter')checkMathAnswer()"/>
+<div class="grid grid-cols-3 gap-2" id="math-choices"></div>
+<button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-black text-xs py-2.5 rounded-xl cursor-pointer" onclick="checkMathAnswer()">✅ تَحَقَّقْ مِنَ الإِجَابَةِ</button>
+<div class="text-xs font-black hidden p-2 rounded-xl" id="math-feedback"></div>
+</div>
+<div class="flex items-center justify-between text-[10px] font-bold text-slate-600">
+<span>صَحِيحٌ: <span id="math-correct-count" class="text-emerald-600">0</span></span>
+<span>خَطَأٌ: <span id="math-wrong-count" class="text-rose-600">0</span></span>
+<span id="math-hint-text" class="text-amber-700"></span>
+</div>
+</div>
+<!-- ملخص محاور المنهاج -->
+<div class="bg-slate-50 border border-slate-200 rounded-xl p-3 text-[10px] font-bold text-slate-700 space-y-1">
+<div class="font-black text-slate-900 text-xs mb-1">📚 مِنَ البَرْنَامَجِ الرَّسْمِيِّ (س3 أَسَاسِي تُونِس):</div>
+<div>• الأَعْدَادُ مِنْ 0 إِلَى 9999: قِرَاءَةٌ، كِتَابَةٌ، مُقَارَنَةٌ، تَرْتِيبٌ، تَفْكِيكٌ</div>
+<div>• الجَمْعُ وَالطَّرْحُ بِالاِحْتِفَاظِ عَلَى أَعْدَادٍ ذَاتِ 4 أَرْقَامٍ</div>
+<div>• جَدَاوِلُ الضَّرْبِ 2←9 وَالضَّرْبُ فِي عَدَدٍ ذِي رَقْمٍ وَاحِدٍ</div>
+<div>• النُّقُودُ التُّونِسِيَّةُ (المِلِيم وَالدِّينَار)</div>
+<div>• المُرَبَّعُ وَالمُسْتَطِيلُ: تَعَرُّفٌ وَحِسَابُ المُحِيطِ</div>
+</div>
+</div>
+<!-- ============================================== -->
+<!-- 4. قسم القراءة التونسية -->
+<!-- ============================================== -->
+<div class="p-4 space-y-4 hidden" id="section-reading">
+<div class="bg-gradient-to-r from-sky-500 to-blue-600 text-white p-4 rounded-2xl shadow flex items-center justify-between">
+<div>
+<h3 class="text-lg font-black">نُصُوصُ القِرَاءَةِ التُّونِسِيَّةُ 📖</h3>
+<p class="text-xs text-sky-100">فِي حَدِيقَةِ البَلْفِيدِير بِتُونِسَ 🇹🇳 — قِرَاءَةٌ مُتَتَالِيَةٌ</p>
+</div>
+<span class="text-4xl">🌳</span>
+</div>
+<div class="space-y-2" id="reading-paragraphs">
+<div class="bg-white p-3.5 rounded-2xl border-2 border-sky-200 text-sm font-black leading-loose text-slate-800 shadow-inner reading-para" data-text="ذَهَبَتْ مِيرَا مَعَ عَائِلَتِهَا إِلَى مُنْتَزَهِ البَلْفِيدِير بِتُونِسَ العَاصِمَةِ.">
+<span class="text-[10px] bg-sky-100 text-sky-800 px-1.5 py-0.5 rounded-md font-bold">1</span>
+      «ذَهَبَتْ مِيرَا مَعَ عَائِلَتِهَا إِلَى مُنْتَزَهِ البَلْفِيدِير بِتُونِسَ العَاصِمَةِ.»
+    </div>
+<div class="bg-white p-3.5 rounded-2xl border-2 border-sky-200 text-sm font-black leading-loose text-slate-800 shadow-inner reading-para" data-text="شَاهَدَتِ الأَسَدَ الشُّجَاعَ، وَالغَزَالَ اللَّطِيفَ.">
+<span class="text-[10px] bg-sky-100 text-sky-800 px-1.5 py-0.5 rounded-md font-bold">2</span>
+      «شَاهَدَتِ الأَسَدَ الشُّجَاعَ، وَالغَزَالَ اللَّطِيفَ.»
+    </div>
+<div class="bg-white p-3.5 rounded-2xl border-2 border-sky-200 text-sm font-black leading-loose text-slate-800 shadow-inner reading-para" data-text="وَقَضَتْ يَوْمًا بَهِيجًا تَحْتَ الأَشْجَارِ العَالِيَةِ.">
+<span class="text-[10px] bg-sky-100 text-sky-800 px-1.5 py-0.5 rounded-md font-bold">3</span>
+      «وَقَضَتْ يَوْمًا بَهِيجًا تَحْتَ الأَشْجَارِ العَالِيَةِ.»
+    </div>
+</div>
+<div class="grid grid-cols-2 gap-2">
+<button class="bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs py-2.5 rounded-xl shadow cursor-pointer" onclick="startAutoReading()">
+      🔊 قِرَاءَةٌ مُتَتَالِيَةٌ تِلْقَائِيًّا
+    </button>
+<button class="bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold text-xs py-2.5 rounded-xl shadow cursor-pointer" onclick="stopSpeaking()">
+      ⏹️ إِيقَافُ الصَّوْتِ
+    </button>
+</div>
+</div>
+<!-- ============================================== -->
+<!-- 5. قسم قواعد اللغة -->
+<!-- ============================================== -->
+<div class="p-4 space-y-4 hidden" id="section-grammar">
+<div class="bg-gradient-to-r from-emerald-500 to-teal-600 text-white p-4 rounded-2xl shadow flex items-center justify-between">
+<div>
+<h3 class="text-lg font-black">قَوَاعِدُ اللُّغَةِ (نَحْوٌ وَصَرْفٌ) ✍️</h3>
+<p class="text-xs text-emerald-100">أَقْسَامُ الكَلَامِ (اسْمٌ، فِعْلٌ، حَرْفٌ)</p>
+</div>
+<span class="text-4xl">📝</span>
+</div>
+<div class="bg-white border-2 border-emerald-200 rounded-2xl p-4 text-center space-y-3">
+<span class="text-xs font-bold text-emerald-800">مَا هُوَ نَوْعُ كَلِمَةِ «تَرْكُضُ»؟</span>
+<div class="grid grid-cols-3 gap-2">
+<button class="py-2.5 bg-sky-100 border border-sky-300 font-black text-xs rounded-xl cursor-pointer" onclick="checkGrammarAns('اسم')">اسْمٌ</button>
+<button class="py-2.5 bg-amber-100 border border-amber-300 font-black text-xs rounded-xl cursor-pointer" onclick="checkGrammarAns('فعل')">فِعْلٌ ✅</button>
+<button class="py-2.5 bg-purple-100 border border-purple-300 font-black text-xs rounded-xl cursor-pointer" onclick="checkGrammarAns('حرف')">حَرْفٌ</button>
+</div>
+<div class="text-xs font-black hidden p-2 rounded-xl" id="grammar-fb"></div>
+</div>
+</div>
+<!-- ============================================== -->
+<!-- 6. قسم الإيقاظ العلمي -->
+<!-- ============================================== -->
+<div class="p-4 space-y-4 hidden" id="section-science">
+<div class="bg-gradient-to-r from-teal-500 to-cyan-600 text-white p-4 rounded-2xl shadow flex items-center justify-between">
+<div>
+<h3 class="text-lg font-black">الإِيقَاظُ العِلْمِيُّ 🔬</h3>
+<p class="text-xs text-teal-100">حَرَكَاتُ التَّنَفُّسِ: الشَّهِيقُ وَالزَّفِيرُ</p>
+</div>
+<span class="text-4xl">🫁</span>
+</div>
+<div class="grid grid-cols-2 gap-2 text-center text-xs">
+<div class="bg-teal-50 border-2 border-teal-300 rounded-xl p-3">
+<span class="font-black text-teal-900 block mb-1">1. الشَّهِيقُ</span>
+<span class="text-3xl">🫁</span>
+<p class="text-[11px] text-teal-800 font-bold mt-1">يَدْخُلُ الهَوَاءُ ⬆️ يَعْلُو الصَّدْرُ</p>
+</div>
+<div class="bg-cyan-50 border-2 border-cyan-300 rounded-xl p-3">
+<span class="font-black text-cyan-900 block mb-1">2. الزَّفِيرُ</span>
+<span class="text-3xl">💨</span>
+<p class="text-[11px] text-cyan-800 font-bold mt-1">يَخْرُجُ الهَوَاءُ ⬇️ يَنْخَفِضُ الصَّدْرُ</p>
+</div>
+</div>
+</div>
+<!-- ============================================== -->
+<!-- 7. قسم الحقيبة المدرسية -->
+<!-- ============================================== -->
+<div class="p-4 space-y-4 hidden" id="section-materials">
+<div class="bg-gradient-to-r from-amber-600 to-red-600 text-white p-4 rounded-2xl shadow flex items-center justify-between">
+<div>
+<h3 class="text-lg font-black">حَقِيبَةُ المُسْتَلْزَمَاتِ 🎒</h3>
+<p class="text-xs text-amber-100">كُرَّاسَاتٌ وَبِطَاقَاتُ المَوَادِّ التَّعْلِيمِيَّةِ</p>
+</div>
+<span class="text-4xl">📑</span>
+</div>
+<div class="bg-white border-2 border-amber-200 rounded-2xl p-3.5 space-y-2">
+<h4 class="text-xs font-black text-amber-950">كُرَّاسُ الأَنْشِطَةِ وَمَسَائِلِ الرِّيَاضِيَّاتِ</h4>
+<p class="text-xs text-slate-600">المِنْهَاجُ التُّونِسِيُّ المُعْتَمَدُ لِلسَّنَةِ الثَّالِثَةِ مِنْ التَّعْلِيمِ الأَسَاسِيِّ - مَدْرَسَةُ مِلْيَار (أَرِيَانَة) 🇹🇳</p>
+</div>
+</div>
+<!-- شريط التنقل السفلي -->
+<nav class="bg-amber-100/95 border-t-2 border-amber-200 px-1 py-2 flex items-center justify-around text-xs font-black text-amber-900">
+<button class="flex flex-col items-center gap-0.5 text-pink-600 cursor-pointer" id="bnav-profile" onclick="switchTab('profile')">
+<span class="text-base sm:text-lg">🪪</span>
+<span class="text-[9px] sm:text-[10px]">مِلَفِّي</span>
+</button>
+<button class="flex flex-col items-center gap-0.5 text-slate-700 cursor-pointer" id="bnav-problems" onclick="switchTab('problems')">
+<span class="text-base sm:text-lg">🧩</span>
+<span class="text-[9px] sm:text-[10px]">المَسَائِل</span>
+</button>
+<button class="flex flex-col items-center gap-0.5 text-slate-700 cursor-pointer" id="bnav-notebook" onclick="switchTab('notebook')">
+<span class="text-base sm:text-lg">📝</span>
+<span class="text-[9px] sm:text-[10px]">دُرُوسِي</span>
+</button>
+<button class="flex flex-col items-center gap-0.5 text-slate-700 cursor-pointer" id="bnav-math" onclick="switchTab('math')">
+<span class="text-base sm:text-lg">📐</span>
+<span class="text-[9px] sm:text-[10px]">الحِسَاب</span>
+</button>
+<button class="flex flex-col items-center gap-0.5 text-slate-700 cursor-pointer" id="bnav-reading" onclick="switchTab('reading')">
+<span class="text-base sm:text-lg">📖</span>
+<span class="text-[9px] sm:text-[10px]">القِرَاءَة</span>
+</button>
+<button class="flex flex-col items-center gap-0.5 text-slate-700 cursor-pointer" id="bnav-grammar" onclick="switchTab('grammar')">
+<span class="text-base sm:text-lg">✍️</span>
+<span class="text-[9px] sm:text-[10px]">القَوَاعِد</span>
+</button>
+<button class="flex flex-col items-center gap-0.5 text-slate-700 cursor-pointer" id="bnav-science" onclick="switchTab('science')">
+<span class="text-base sm:text-lg">🔬</span>
+<span class="text-[9px] sm:text-[10px]">الإِيقَاظ</span>
+</button>
+<button class="flex flex-col items-center gap-0.5 text-slate-700 cursor-pointer" id="bnav-materials" onclick="switchTab('materials')">
+<span class="text-base sm:text-lg">🎒</span>
+<span class="text-[9px] sm:text-[10px]">الحَقِيبَة</span>
+</button>
+</nav>
+</main>
+<footer class="text-center text-xs text-amber-900 font-black space-y-1 pb-4">
+<p>💡 تطبيق أبطال الثالثة أساسي - ملف التلميذة ميرا الأموري (مدرسة مليار - أريانة، تونس)</p>
+<p class="text-[11px] text-amber-800/80 font-bold">يعمل متصلاً وبالكامل دون اتصال إنترنت عند تحميله على الهاتف أو الحاسوب 🇹🇳</p>
+</footer>
+<!-- ============================================== -->
+<!-- نافذة تعديل بيانات الملف الشخصي (Modal) -->
+<!-- ============================================== -->
+<div class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-3 z-50 hidden" id="edit-profile-modal">
+<div class="bg-white rounded-3xl shadow-2xl border-4 border-pink-400 w-full max-w-lg max-h-[92vh] flex flex-col overflow-hidden animate-fade-in">
+<!-- رأس النافذة -->
+<div class="bg-gradient-to-r from-pink-600 to-rose-600 text-white p-3.5 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="text-2xl">✏️</span>
+<div>
+<h3 class="text-sm sm:text-base font-black">تَعْدِيلُ بَيَانَاتِ التِّلْمِيذَةِ (مِيرَا الأَمُورِي)</h3>
+<p class="text-[10px] text-pink-100 font-bold">تحديث البيانات المدرسية والشخصية والصحية</p>
+</div>
+</div>
+<button class="w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 text-white font-black flex items-center justify-center cursor-pointer transition" onclick="closeEditModal()">✕</button>
+</div>
+<!-- محتوى النموذج -->
+<div class="p-4 overflow-y-auto space-y-3.5 text-xs text-right">
+<!-- صورة التلميذة والمعاينة -->
+<div class="flex items-center gap-3 p-3 bg-pink-50/70 rounded-2xl border border-pink-200">
+<div class="w-16 h-16 rounded-2xl bg-white border-2 border-pink-400 overflow-hidden shrink-0 flex items-center justify-center shadow-xs">
+<img alt="معاينة الصورة" class="w-full h-full object-cover" id="modal-avatar-preview" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDdqi5u02yplvUbdy8eib_hXYsLosa_TrRpjpdModMenLMttjXsllNH4qNTrwYKSm-tZq2Uq8Qc3P9P_3oHrsq4dYzg5Q3eWAe3mX9u532olR529k65CD9DcgBGkUx8m1-yytwpF2BVJVNSAFtfTLkDgOB462aBne_H1M8cpn5oSmVxbWQngWOn205_z3naO5RhIT2KPxZZURbi6RiZMTgfY10-73lvAQeZy1MN3c5BCaaN7lzC6rT_Cg"/>
+</div>
+<div class="space-y-1">
+<label class="block text-[11px] font-black text-pink-950">صُورَةُ التِّلْمِيذَةِ الشَّخْصِيَّةُ:</label>
+<div class="flex items-center gap-2 flex-wrap">
+<label class="bg-pink-600 hover:bg-pink-700 text-white text-[11px] font-black px-3 py-1.5 rounded-xl cursor-pointer shadow-xs inline-flex items-center gap-1 active:scale-95" for="modal-avatar-file">
+<span>📷</span><span>رَفْعُ صُورَةٍ جَدِيدَةٍ</span>
+</label>
+<input accept="image/*" class="hidden" id="modal-avatar-file" onchange="handleModalImageUpload(event)" type="file"/>
+<button class="bg-amber-100 hover:bg-amber-200 text-amber-900 text-[10px] font-black px-2 py-1.5 rounded-xl cursor-pointer" onclick="useDefaultAvatar()">
+🌸 رَمْزٌ تَفَاعُلِيٌّ
+</button>
+</div>
+</div>
+</div>
+<!-- الحقول الأساسية -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+<div>
+<label class="block text-[11px] font-black text-slate-700 mb-1">الاسْمُ وَاللَّقَبُ:</label>
+<input class="w-full font-black text-xs p-2 rounded-xl border-2 border-pink-200 focus:border-pink-500 focus:ring-0 text-right bg-slate-50 focus:bg-white" id="modal-input-name" placeholder="مِيرَا الأَمُورِي" type="text"/>
+</div>
+<div>
+<label class="block text-[11px] font-black text-slate-700 mb-1">المَدْرَسَةُ الابْتِدَائِيَّةُ:</label>
+<input class="w-full font-black text-xs p-2 rounded-xl border-2 border-pink-200 focus:border-pink-500 focus:ring-0 text-right bg-slate-50 focus:bg-white" id="modal-input-school" placeholder="المَدْرَسَةُ الابْتِدَائِيَّةُ مِلْيَار - أَرِيَانَة" type="text"/>
+</div>
+<div>
+<label class="block text-[11px] font-black text-slate-700 mb-1">المُسْتَوَى المَدْرَسِيُّ:</label>
+<input class="w-full font-black text-xs p-2 rounded-xl border-2 border-pink-200 focus:border-pink-500 focus:ring-0 text-right bg-slate-50 focus:bg-white" id="modal-input-grade" placeholder="السَّنَةُ الثَّالِثَةُ أَسَاسِي" type="text"/>
+</div>
+<div>
+<label class="block text-[11px] font-black text-slate-700 mb-1">رَقْمُ التَّسْجِيلِ / المُعَرِّفُ:</label>
+<input class="w-full font-mono font-black text-xs p-2 rounded-xl border-2 border-pink-200 focus:border-pink-500 focus:ring-0 text-right bg-slate-50 focus:bg-white" id="modal-input-id" placeholder="TN-2026-AR-8012" type="text"/>
+</div>
+<div>
+<label class="block text-[11px] font-black text-slate-700 mb-1">تَارِيخُ الوِلَادَةِ:</label>
+<input class="w-full font-black text-xs p-2 rounded-xl border-2 border-pink-200 focus:border-pink-500 focus:ring-0 text-right bg-slate-50 focus:bg-white" id="modal-input-birthdate" type="date" value="2017-04-14"/>
+</div>
+<div>
+<label class="block text-[11px] font-black text-slate-700 mb-1">فَصِيلَةُ الدَّمِ:</label>
+<select class="w-full font-black text-xs p-2 rounded-xl border-2 border-pink-200 focus:border-pink-500 focus:ring-0 text-right bg-slate-50 focus:bg-white" id="modal-input-blood">
+<option value="A+">A+ (إِيجَابِي)</option>
+<option value="O+">O+ (إِيجَابِي)</option>
+<option value="B+">B+ (إِيجَابِي)</option>
+<option value="AB+">AB+ (إِيجَابِي)</option>
+<option value="A-">A- (سَلْبِي)</option>
+<option value="O-">O- (سَلْبِي)</option>
+<option value="B-">B- (سَلْبِي)</option>
+<option value="AB-">AB- (سَلْبِي)</option>
+</select>
+</div>
+<div>
+<label class="block text-[11px] font-black text-slate-700 mb-1">الطُّولُ (سم):</label>
+<input class="w-full font-mono font-black text-xs p-2 rounded-xl border-2 border-pink-200 focus:border-pink-500 focus:ring-0 text-right bg-slate-50 focus:bg-white" id="modal-input-height" placeholder="126" type="number" min="50" max="200"/>
+</div>
+<div>
+<label class="block text-[11px] font-black text-slate-700 mb-1">الوَزْنُ (كغ):</label>
+<input class="w-full font-mono font-black text-xs p-2 rounded-xl border-2 border-pink-200 focus:border-pink-500 focus:ring-0 text-right bg-slate-50 focus:bg-white" id="modal-input-weight" placeholder="25" type="number" min="10" max="100" step="0.5"/>
+</div>
+<div>
+<label class="block text-[11px] font-black text-slate-700 mb-1">هَاتِفُ الطَّوَارِئِ (وَلِيُّ الأَمْرِ):</label>
+<input class="w-full font-mono font-black text-xs p-2 rounded-xl border-2 border-pink-200 focus:border-pink-500 focus:ring-0 text-right bg-slate-50 focus:bg-white" id="modal-input-phone" placeholder="98 223 344" type="tel"/>
+</div>
+<div>
+<label class="block text-[11px] font-black text-slate-700 mb-1">صِفَةُ وَلِيِّ الأَمْرِ:</label>
+<input class="w-full font-black text-xs p-2 rounded-xl border-2 border-pink-200 focus:border-pink-500 focus:ring-0 text-right bg-slate-50 focus:bg-white" id="modal-input-guardian" placeholder="السَّيِّد الأَمُورِي (وَلِيُّ الأَمْرِ)" type="text"/>
+</div>
+</div>
+<!-- الحساسيات والملاحظات -->
+<div>
+<label class="block text-[11px] font-black text-slate-700 mb-1">الحَسَاسِيَّةُ وَالمُلَاحَظَاتُ الصِّحِّيَّةُ:</label>
+<textarea class="w-full font-bold text-xs p-2 rounded-xl border-2 border-pink-200 focus:border-pink-500 focus:ring-0 text-right bg-slate-50 focus:bg-white h-16 resize-none" id="modal-input-allergy" placeholder="لَا تُوجَدُ حَسَاسِيَّةٌ دَوَائِيَّةٌ مَعْلُومَةٌ. تُفَضَّلُ اللَّمْجَةُ الصِّحِّيَّةُ..."></textarea>
+</div>
+</div>
+<!-- أزرار الحفظ والإلغاء -->
+<div class="p-3 bg-slate-50 border-t border-pink-100 flex items-center justify-end gap-2">
+<button class="bg-slate-200 hover:bg-slate-300 text-slate-800 font-black px-4 py-2 rounded-xl cursor-pointer text-xs transition" onclick="closeEditModal()">
+إِلْغَاءٌ
+</button>
+<button class="bg-gradient-to-r from-pink-600 to-rose-600 hover:from-pink-700 hover:to-rose-700 text-white font-black px-5 py-2 rounded-xl cursor-pointer text-xs shadow-md transition active:scale-95 flex items-center gap-1.5" onclick="saveProfileFromModal()">
+<span>💾</span><span>حِفْظُ التَّغْيِيرَاتِ</span>
+</button>
+</div>
+</div>
+</div>
+<!-- ============================================== -->
+<!-- نافذة تأكيد حذف / إعادة تعيين البيانات (Modal) -->
+<!-- ============================================== -->
+<div class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-3 z-50 hidden" id="reset-confirm-modal">
+<div class="bg-white rounded-3xl shadow-2xl border-4 border-rose-400 w-full max-w-sm overflow-hidden animate-fade-in text-center p-5 space-y-4">
+<div class="w-16 h-16 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center text-3xl mx-auto border-2 border-rose-300">
+    🗑️
+  </div>
+<div class="space-y-1">
+<h3 class="text-base font-black text-rose-950">إِعَادَةُ تَعْيِينِ أَوْ حَذْفُ المِلَفِّ؟</h3>
+<p class="text-xs font-bold text-slate-600 leading-relaxed">
+      هَلْ أَنْتَ مُتَأَكِّدٌ مِنْ رَغْبَتِكَ فِي إِعَادَةِ ضَبْطِ بَيَانَاتِ البَطَلَةِ <b>مِيرَا الأَمُورِي</b> لِلْحَالَةِ الاِفْتِرَاضِيَّةِ أَوْ حَذْفِ التَّعْدِيلَاتِ المَحْفُوظَةِ؟
+    </p>
+</div>
+<div class="bg-amber-50 p-2.5 rounded-xl border border-amber-200 text-[11px] font-bold text-amber-900 text-right">
+<span>💡 تَنْبِيهٌ:</span> يُمْكِنُكَ دَوْمًا البَدْءُ مِنْ جَدِيدٍ وَإِدْخَالُ بَيَانَاتِكَ أَوْ تَعْدِيلُهَا بِكُلِّ سُهُولَةٍ!
+  </div>
+<div class="flex items-center justify-center gap-2 pt-2">
+<button class="flex-1 bg-slate-200 hover:bg-slate-300 text-slate-800 font-black py-2.5 rounded-xl cursor-pointer text-xs transition" onclick="closeResetModal()">
+      تَرَاجُعٌ
+    </button>
+<button class="flex-1 bg-rose-600 hover:bg-rose-700 text-white font-black py-2.5 rounded-xl cursor-pointer text-xs shadow-md transition active:scale-95 flex items-center justify-center gap-1" onclick="executeResetProfile()">
+<span>🗑️</span><span>تَأْكِيدُ الحَذْفِ</span>
+</button>
+</div>
+</div>
+</div>
+<!-- نافذة درس مشترك — Instant Lesson Link -->
+<div class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-3 z-50 hidden" id="shared-lesson-modal">
+<div class="bg-white rounded-3xl shadow-2xl border-4 border-emerald-400 w-full max-w-sm overflow-hidden text-center p-5 space-y-3">
+<div class="text-4xl">🎁</div>
+<h3 class="text-base font-black text-emerald-950">دَرْسٌ مُشْتَرَكٌ جَدِيدٌ 🌟</h3>
+<p class="text-xs font-bold text-slate-600">وَصَلَكَ دَرْسٌ عَبْرَ Instant Lesson Link</p>
+<div class="bg-emerald-50 border-2 border-emerald-200 rounded-xl p-3 text-right space-y-1.5">
+<div class="text-[10px] font-bold text-emerald-800">مِنْ: <span id="shared-lesson-from" class="font-black">—</span></div>
+<div class="text-[10px] font-bold text-slate-600"><span id="shared-lesson-subject">—</span></div>
+<div class="text-sm font-black text-slate-900" id="shared-lesson-title">—</div>
+<div class="text-xs text-slate-700" id="shared-lesson-note">—</div>
+</div>
+<button class="w-full bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-black py-2.5 rounded-xl text-xs cursor-pointer shadow" onclick="acceptSharedLesson()">
+📥 حِفْظُ الدَّرْسِ فِي دَفْتَرِي (+20 ⭐)
+</button>
+<button class="w-full bg-slate-200 text-slate-800 font-black py-2 rounded-xl text-xs cursor-pointer" onclick="closeSharedLessonModal()">إِغْلَاق</button>
+</div>
+</div>
+<script>
+  let stars = 335;
+  const STARS_STORAGE_KEY = 'mira_tunisia_stars';
+
+  // البيانات الافتراضية للتلميذة ميرا الأموري - مدرسة مليار أريانة
+  const DEFAULT_STUDENT_PROFILE = {
+    name: "مِيرَا الأَمُورِي",
+    school: "المَدْرَسَةُ الابْتِدَائِيَّةُ مِلْيَار - أَرِيَانَة",
+    grade: "السَّنَةُ الثَّالِثَةُ أَسَاسِي - فَوْج (أ)",
+    id: "TN-2026-AR-8012",
+    birthdate: "2017-04-14",
+    blood: "A+",
+    phone: "98 223 344",
+    guardian: "السَّيِّد الأَمُورِي (وَلِيُّ الأَمْرِ)",
+    height: "126 سم",
+    weight: "25 كغ",
+    allergy: "لَا تُوجَدُ حَسَاسِيَّةٌ دَوَائِيَّةٌ مَعْلُومَةٌ. تُفَضَّلُ اللَّمْجَةُ الصِّحِّيَّةُ الطَّازَجَةُ.",
+    avatar: "https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=300&q=80",
+    isEmoji: false
+  };
+
+  let studentProfile = { ...DEFAULT_STUDENT_PROFILE };
+
+  // نصوص ومسائل الرياضيات التونسية المعدلة لميرا ومدرسة مليار
+  const tunisianMathProblems = [
+    {
+      id: 0,
+      title: "الوَضْعِيَّةُ 1: شِرَاءُ أَدَوَاتٍ مِنْ مَكْتَبَةِ مَدْرَسَةِ مِلْيَار",
+      icon: "🏪",
+      context: "السِّيَاقُ: النُّقُودُ التُّونِسِيَّةُ (المِلِيم) وَالمُشْتَرَيَاتُ",
+      fullText: "«اشْتَرَتْ مِيرَا مِنْ مَكْتَبَةِ مَدْرَسَةِ مِلْيَار بِأَرِيَانَة قِصَّةً بِـ 2450 مِلِيمًا وَكُرَّاسًا بِـ 1350 مِلِيمًا، وَدَفَعَتْ لِلْمَكْتَبِيِّ وَرَقَةً نَقْدِيَّةً مِنْ فِئَةِ 5000 مِلِيمٍ. احْسِبْ ثَمَنَ المُشْتَرَيَاتِ؟ وَكَمْ أَرْجَعَ لَهَا المَكْتَبِيُّ؟»",
+      verbalData: "شِرَاءُ قِصَّةٍ وَكُرَّاسٍ، وَدَفْعُ وَرَقَةٍ نَقْدِيَّةٍ لِلْمَكْتَبِيِّ.",
+      numData: "2450 مِلِيم (القِصَّة)، 1350 مِلِيم (الكُرَّاس)، 5000 مِلِيم (المَبْلَغُ).",
+      targetData: "1) ثَمَنُ المُشْتَرَيَاتِ؟ 2) المَبْلَغُ المُرْجَعُ؟",
+      visualHtml: `
+        <div class="flex items-center gap-1.5 p-2 bg-amber-50 rounded-lg border border-amber-200">
+          <span class="text-2xl">📖</span><span class="text-xs font-bold text-amber-950">قِصَّة: 2450 مِلِيم</span>
+        </div>
+        <span class="text-xl font-black text-amber-700">➕</span>
+        <div class="flex items-center gap-1.5 p-2 bg-blue-50 rounded-lg border border-blue-200">
+          <span class="text-2xl">📓</span><span class="text-xs font-bold text-blue-950">كُرَّاس: 1350 مِلِيم</span>
+        </div>
+        <span class="text-xl font-black text-slate-500">⬅️</span>
+        <div class="flex items-center gap-1.5 p-2 bg-emerald-50 rounded-lg border border-emerald-200">
+          <span class="text-2xl">💵</span><span class="text-xs font-bold text-emerald-950">دَفَعَتْ: 5000 مِلِيم</span>
+        </div>
+      `,
+      step1: {
+        label: "1. لِحِسَابِ ثَمَنِ المَشْتَرَيَاتِ، مَا هِيَ العَمَلِيَّةُ المُنَاسِبَةُ؟",
+        correctOp: "+",
+        hint: "نَجْمَعُ ثَمَنَ القِصَّةِ مَعَ ثَمَنِ الكُرَّاسِ!",
+        calcPrompt: "اِحْسِبْ (2450 + 1350) =",
+        correctResult: 3800
+      },
+      step2: {
+        label: "2. لِحِسَابِ المَبْلَغِ المُرْجَعِ (مَا أَرْجَعَهُ المَكْتَبِيُّ لِمِيرَا):",
+        correctOp: "-",
+        hint: "نَطْرَحُ ثَمَنَ المُشْتَرَيَاتِ (3800) مِنَ المَبْلَغِ المَدْفُوعِ (5000)!",
+        calcPrompt: "اِحْسِبْ (5000 - 3800) =",
+        correctResult: 1200
+      }
+    },
+    {
+      id: 1,
+      title: "الوَضْعِيَّةُ 2: جَنْيُ الزَّيْتُونِ فِي ضَيْعَةِ الجَدِّ كَامِل",
+      icon: "🫒",
+      context: "السِّيَاقُ: مَوْسِمُ الزَّيْتُونِ بِصَفَاقِسَ وَسِيدِي بُوزِيد (الكِيلُوغْرَام)",
+      fullText: "«جَنَى الجَدُّ كَامِلٌ فِي اليَوْمِ الأَوَّلِ 4 أَكْيَاسٍ مِنَ الزَّيْتُونِ فِي كُلِّ كِيسٍ 35 كِيلُوغْرَامًا، وَفِي اليَوْمِ الثَّانِي جَنَى 180 كِيلُوغْرَامًا. سَاعِدْ مِيرَا فِي حِسَابِ مَحْصُولِ اليَوْمِ الأَوَّلِ وَكَامِلِ المَحْصُولِ فِي اليَوْمَيْنِ!»",
+      verbalData: "جَنْيُ أَكْيَاسِ زَيْتُونٍ مُتَسَاوِيَةِ الكُتْلَةِ ثُمَّ إِضَافَةُ مَحْصُولِ اليَوْمِ الثَّانِي.",
+      numData: "4 أَكْيَاسٍ، 35 كغ فِي الكِيسِ، 180 كغ فِي اليَوْمِ الثَّانِي.",
+      targetData: "1) مَحْصُولُ اليَوْمِ الأَوَّلِ. 2) كَامِلُ المَحْصُولِ فِي اليَوْمَيْنِ.",
+      visualHtml: `
+        <div class="flex items-center gap-1.5 p-2 bg-emerald-50 rounded-lg border border-emerald-200">
+          <span class="text-2xl">🫒</span><span class="text-xs font-bold text-emerald-950">4 أَكْيَاسٍ × 35 kg</span>
+        </div>
+        <span class="text-xl font-black text-emerald-700">➕</span>
+        <div class="flex items-center gap-1.5 p-2 bg-teal-50 rounded-lg border border-teal-200">
+          <span class="text-2xl">🚜</span><span class="text-xs font-bold text-teal-950">اليَوْم 2: 180 kg</span>
+        </div>
+      `,
+      step1: {
+        label: "1. لِحِسَابِ مَحْصُولِ اليَوْمِ الأَوَّلِ (4 أَكْيَاسٍ فِي كُلِّ كِيسٍ 35 كغ):",
+        correctOp: "×",
+        hint: "نَسْتَعْمِلُ عَمَلِيَّةَ الضَّرْبِ: عَدَدُ الأَكْيَاسِ × كُتْلَةِ الكِيسِ!",
+        calcPrompt: "اِحْسِبْ (4 × 35) =",
+        correctResult: 140
+      },
+      step2: {
+        label: "2. لِحِسَابِ كَامِلِ المَحْصُولِ فِي اليَوْمَيْنِ مَعًا:",
+        correctOp: "+",
+        hint: "نَجْمَعُ مَحْصُولَ اليَوْمِ الأَوَّلِ (140 كغ) مَعَ مَحْصُولِ اليَوْمِ الثَّانِي (180 كغ)!",
+        calcPrompt: "اِحْسِبْ (140 + 180) =",
+        correctResult: 320
+      }
+    },
+    {
+      id: 2,
+      title: "الوَضْعِيَّةُ 3: مِهْرَجَانُ الزُّهُورِ وَتَوْزِيعُ الجَوَائِزِ بِمَدْرَسَةِ مِلْيَار",
+      icon: "🌸",
+      context: "السِّيَاقُ: مِهْرَجَانُ الرَّبِيعِ التُّونِسِيِّ وَحِسَابُ الأَعْدَادِ",
+      fullText: "«أَعَدَّتْ مَدْرَسَةُ مِلْيَار 6 بَاقَاتٍ مِنَ الوَرْدِ، فِي كُلِّ بَاقَةٍ 5 وَرْدَاتٍ لِتَكْرِيمِ المُتَفَوِّقِينَ، ثُمَّ أَهْدَتْ مِيرَا وَصَدِيقَاتُهَا 20 وَرْدَةً فِي الصَّبَاحِ. احْسِبْ مَجْمُوعَ الوَرْدَاتِ؟ وَكَمْ وَرْدَةً بَقِيَتْ؟»",
+      verbalData: "تَحْضِيرُ بَاقَاتِ وَرْدٍ مُتَسَاوِيَةٍ وَإِهْدَاءُ جُزْءٍ مِنْهَا.",
+      numData: "6 بَاقَاتٍ، 5 وَرْدَاتٍ فِي البَاقَةِ، إِهْدَاءُ 20 وَرْدَةً.",
+      targetData: "1) مَجْمُوعُ الوَرْدَاتِ. 2) الوَرْدَاتُ المُتَبَقِّيَةُ.",
+      visualHtml: `
+        <div class="flex items-center gap-1.5 p-2 bg-pink-50 rounded-lg border border-pink-200">
+          <span class="text-2xl">💐</span><span class="text-xs font-bold text-pink-950">6 بَاقَاتٍ فِي كُلِّ بَاقَةٍ 5</span>
+        </div>
+        <span class="text-xl font-black text-pink-600">➖</span>
+        <div class="flex items-center gap-1.5 p-2 bg-purple-50 rounded-lg border border-purple-200">
+          <span class="text-2xl">🎁</span><span class="text-xs font-bold text-purple-950">أُهْدِيَتْ 20 وَرْدَةً</span>
+        </div>
+      `,
+      step1: {
+        label: "1. لِحِسَابِ مَجْمُوعِ الوَرْدَاتِ فِي البَاقَاتِ السِّتِّ:",
+        correctOp: "×",
+        hint: "عَمَلِيَّةُ الضَّرْبِ: عَدَدُ البَاقَاتِ × عَدَدِ الوَرْدَاتِ فِي البَاقَةِ!",
+        calcPrompt: "اِحْسِبْ (6 × 5) =",
+        correctResult: 30
+      },
+      step2: {
+        label: "2. لِحِسَابِ عَدَدِ الوَرْدَاتِ البَاقِيَةِ بَعْدَ إِهْدَاءِ 20 وَرْدَةً:",
+        correctOp: "-",
+        hint: "نَطْرَحُ عَدَدَ الوَرْدَاتِ المُهْدَاةِ مِنَ المَجْمُوعِ الكُلِّيِّ!",
+        calcPrompt: "اِحْسِبْ (30 - 20) =",
+        correctResult: 10
+      }
+    }
+  ];
+
+  let currentProblemIdx = 0;
+  let tempAvatarSrc = "";
+
+  // تحميل البيانات عند بدء الصفحة (بعد تحميل قائمة التلاميذ)
+  window.addEventListener('DOMContentLoaded', () => {
+    // لا نحمّل الملف القديم هنا حتى لا نكتب فوق بيانات التلاميذ
+    if (typeof loadStudentsList === 'function') {
+      loadStudentsList();
+      renderStudentsList();
+      loadLessonsForActive();
+    } else {
+      loadProfileFromStorage();
+    }
+    renderProfileUI();
+    switchTab('profile');
+    loadProblem(0);
+    // تحضير أصوات القراءة مسبقاً
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.getVoices();
+      window.speechSynthesis.onvoiceschanged = () => { window.speechSynthesis.getVoices(); };
+    }
+  });
+
+  function loadProfileFromStorage() {
+    try {
+      const saved = localStorage.getItem('tunisia_student_profile_mira');
+      if (saved) {
+        studentProfile = JSON.parse(saved);
+      } else {
+        studentProfile = { ...DEFAULT_STUDENT_PROFILE };
+      }
+    } catch (e) {
+      studentProfile = { ...DEFAULT_STUDENT_PROFILE };
+    }
+    try {
+      const savedStars = localStorage.getItem(STARS_STORAGE_KEY);
+      if (savedStars !== null) {
+        stars = parseInt(savedStars, 10) || 335;
+      }
+    } catch (e) {
+      stars = 335;
+    }
+  }
+
+  function saveProfileToStorage() {
+    try {
+      const payload = JSON.stringify(studentProfile);
+      if (typeof safeLocalSet === 'function') {
+        safeLocalSet('tunisia_student_profile_mira', payload);
+      } else {
+        localStorage.setItem('tunisia_student_profile_mira', payload);
+      }
+      localStorage.setItem(STARS_STORAGE_KEY, String(stars));
+    } catch (e) {
+      console.warn("Storage quota or disabled", e);
+      try {
+        if (studentProfile.avatar && String(studentProfile.avatar).length > 4000) {
+          studentProfile.avatar = '🌸';
+          studentProfile.isEmoji = true;
+        }
+        localStorage.setItem('tunisia_student_profile_mira', JSON.stringify(studentProfile));
+        localStorage.setItem(STARS_STORAGE_KEY, String(stars));
+      } catch (e2) {}
+    }
+  }
+
+  function saveStarsToStorage() {
+    try {
+      localStorage.setItem(STARS_STORAGE_KEY, String(stars));
+    } catch (e) {}
+  }
+
+  function renderProfileUI() {
+    // 1. تحديث الهيدر العلوي
+    const hName = document.getElementById('header-student-name');
+    const hSchool = document.getElementById('header-school-name');
+    const hAvatar = document.getElementById('header-avatar-container');
+    if (hName) hName.innerText = `البَطَلَةُ ${studentProfile.name} 🌟`;
+    if (hSchool) hSchool.innerText = studentProfile.school;
+    if (hAvatar) {
+      if (studentProfile.isEmoji) {
+        hAvatar.innerHTML = `<span class="text-3xl">${studentProfile.avatar}</span>`;
+      } else {
+        hAvatar.innerHTML = `<img src="${studentProfile.avatar}" alt="صورة البطلة" class="w-full h-full object-cover rounded-xl"/>`;
+      }
+    }
+
+    // 2. تحديث بطاقة الهوية
+    const cName = document.getElementById('card-name-display');
+    const cSchool = document.getElementById('card-school-display');
+    const cGrade = document.getElementById('card-grade-display');
+    const cId = document.getElementById('card-id-display');
+    const cHeight = document.getElementById('card-height-display');
+    const cWeight = document.getElementById('card-weight-display');
+    const cBlood = document.getElementById('profile-blood-badge');
+    const cAllergy = document.getElementById('card-allergy-display');
+    const cGuardian = document.getElementById('card-guardian-title');
+    const cPhone = document.getElementById('card-phone-display');
+    const cPhoneBtn = document.getElementById('card-phone-btn');
+
+    if (cName) cName.innerText = studentProfile.name;
+    if (cSchool) cSchool.innerText = studentProfile.school;
+    if (cGrade) cGrade.innerText = studentProfile.grade;
+    if (cId) cId.innerText = studentProfile.id;
+    if (cHeight) cHeight.innerText = studentProfile.height;
+    if (cWeight) cWeight.innerText = studentProfile.weight;
+    if (cBlood) {
+      const rh = (studentProfile.blood || '').includes('-') ? 'سَلْبِي' : 'إِيجَابِي';
+      cBlood.innerText = `${studentProfile.blood} ${rh}`;
+    }
+    if (cAllergy) cAllergy.innerText = studentProfile.allergy;
+    // تحديث رصيد النجوم
+    const starEl = document.getElementById('star-count');
+    const pStarEl = document.getElementById('profile-stars-display');
+    if (starEl) starEl.innerText = stars;
+    if (pStarEl) pStarEl.innerText = `⭐ ${stars}`;
+    if (cGuardian) cGuardian.innerText = studentProfile.guardian;
+    if (cPhone) cPhone.innerText = studentProfile.phone;
+    if (cPhoneBtn) cPhoneBtn.href = `tel:216${studentProfile.phone.replace(/\s+/g, '')}`;
+
+    // الصورة في البطاقة
+    const imgEl = document.getElementById('student-avatar-img');
+    const emojiEl = document.getElementById('student-avatar-emoji');
+    if (studentProfile.isEmoji) {
+      if (imgEl) imgEl.classList.add('hidden');
+      if (emojiEl) {
+        emojiEl.innerText = studentProfile.avatar;
+        emojiEl.classList.remove('hidden');
+      }
+    } else {
+      if (emojiEl) emojiEl.classList.add('hidden');
+      if (imgEl) {
+        imgEl.src = studentProfile.avatar;
+        imgEl.classList.remove('hidden');
+      }
+    }
+  }
+
+  // التبديل بين التبويبات
+  function switchTab(tabId) {
+    const tabs = ['profile', 'problems', 'notebook', 'math', 'reading', 'grammar', 'science', 'materials'];
+    tabs.forEach(t => {
+      const section = document.getElementById(`section-${t}`);
+      const btn = document.getElementById(`tab-${t}`);
+      const bnav = document.getElementById(`bnav-${t}`);
+      if (section) section.classList.add('hidden');
+      if (btn) {
+        btn.className = 'py-2 px-0.5 bg-amber-800/40 hover:bg-white/20 text-white rounded-xl flex items-center justify-center gap-0.5 transition cursor-pointer';
+      }
+      if (bnav) bnav.className = 'flex flex-col items-center gap-0.5 text-slate-700 cursor-pointer';
+    });
+
+    const activeSec = document.getElementById(`section-${tabId}`);
+    const activeBtn = document.getElementById(`tab-${tabId}`);
+    const activeBnav = document.getElementById(`bnav-${tabId}`);
+    if (activeSec) activeSec.classList.remove('hidden');
+    if (activeBtn) {
+      activeBtn.className = 'py-2 px-0.5 bg-yellow-300 text-amber-950 font-black rounded-xl ring-2 ring-white/80 shadow flex items-center justify-center gap-0.5 transition cursor-pointer';
+    }
+    if (activeBnav) activeBnav.className = 'flex flex-col items-center gap-0.5 text-pink-600 font-black cursor-pointer';
+    if (tabId === 'math' && typeof nextMathExercise === 'function') {
+      try { nextMathExercise(); } catch (e) {}
+    }
+  }
+
+  // نافذة تعديل بيانات الملف
+  function openEditModal() {
+    try { isAddingNewStudent = false; } catch (e) {}
+    tempAvatarSrc = studentProfile.avatar || '';
+    document.getElementById('modal-input-name').value = studentProfile.name;
+    document.getElementById('modal-input-school').value = studentProfile.school;
+    document.getElementById('modal-input-grade').value = studentProfile.grade;
+    document.getElementById('modal-input-id').value = studentProfile.id;
+    document.getElementById('modal-input-birthdate').value = studentProfile.birthdate;
+    document.getElementById('modal-input-blood').value = studentProfile.blood;
+    document.getElementById('modal-input-phone').value = studentProfile.phone;
+    document.getElementById('modal-input-guardian').value = studentProfile.guardian;
+    document.getElementById('modal-input-allergy').value = studentProfile.allergy;
+    // الطول والوزن (استخراج الرقم من النص)
+    const hNum = parseFloat(String(studentProfile.height || '126').replace(/[^\d.]/g, '')) || 126;
+    const wNum = parseFloat(String(studentProfile.weight || '25').replace(/[^\d.]/g, '')) || 25;
+    const hInput = document.getElementById('modal-input-height');
+    const wInput = document.getElementById('modal-input-weight');
+    if (hInput) hInput.value = hNum;
+    if (wInput) wInput.value = wNum;
+
+    const preview = document.getElementById('modal-avatar-preview');
+    if (studentProfile.isEmoji) {
+      preview.src = "https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=300&q=80";
+    } else {
+      preview.src = studentProfile.avatar;
+    }
+
+    document.getElementById('edit-profile-modal').classList.remove('hidden');
+  }
+
+  function closeEditModal() {
+    document.getElementById('edit-profile-modal').classList.add('hidden');
+  }
+
+  function compressImageToDataUrl(file, maxW, quality, cb) {
+    const reader = new FileReader();
+    reader.onerror = () => alert('تَعَذَّرَ قِرَاءَةُ الصُّورَةِ');
+    reader.onload = function(e) {
+      const img = new Image();
+      img.onerror = () => alert('تَعَذَّرَ تَحْمِيلُ الصُّورَةِ');
+      img.onload = function() {
+        const canvas = document.createElement('canvas');
+        let w = img.width, h = img.height;
+        if (w > maxW) { h = Math.round(h * maxW / w); w = maxW; }
+        canvas.width = w; canvas.height = h;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, w, h);
+        try {
+          cb(canvas.toDataURL('image/jpeg', quality));
+        } catch (err) {
+          cb(e.target.result);
+        }
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function handleModalImageUpload(event) {
+    const file = event.target.files && event.target.files[0];
+    if (!file) return;
+    if (!file.type || !file.type.startsWith('image/')) {
+      alert('الرَّجَاءُ اخْتِيَارُ صُورَةٍ صَالِحَةٍ');
+      return;
+    }
+    compressImageToDataUrl(file, 400, 0.75, function(dataUrl) {
+      tempAvatarSrc = dataUrl;
+      const preview = document.getElementById('modal-avatar-preview');
+      if (preview) preview.src = dataUrl;
+    });
+  }
+
+  function useDefaultAvatar() {
+    tempAvatarSrc = "🌸";
+    const preview = document.getElementById('modal-avatar-preview');
+    if (preview) preview.src = "https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=300&q=80";
+    alert('تَمَّ اخْتِيَارُ زَهْرَةِ الرَّبِيعِ 🌸 كَرَمْزٍ لِلْبَطَلَةِ!');
+  }
+
+  function updateStudentPhoto(event) {
+    const file = event.target.files && event.target.files[0];
+    if (!file) return;
+    if (!file.type || !file.type.startsWith('image/')) {
+      alert('الرَّجَاءُ اخْتِيَارُ صُورَةٍ صَالِحَةٍ');
+      return;
+    }
+    compressImageToDataUrl(file, 400, 0.75, function(dataUrl) {
+      studentProfile.avatar = dataUrl;
+      studentProfile.isEmoji = false;
+      if (typeof syncActiveStudentFromProfile === 'function') syncActiveStudentFromProfile();
+      if (typeof saveStudentsList === 'function') saveStudentsList();
+      saveProfileToStorage();
+      renderProfileUI();
+      if (typeof confetti === 'function') confetti({ particleCount: 35, spread: 60 });
+      speakVoice('تَمَّ تَحْدِيثُ الصُّورَةِ الشَّخْصِيَّةِ بِنَجَاحٍ!');
+    });
+  }
+
+  // الحفظ الفعلي معرّف لاحقاً في سكربت إدارة التلاميذ (saveProfileFromModal)
+  // لتجنب الكتابة فوق قائمة التلاميذ
+
+  // نافذة تأكيد الحذف وإعادة التعيين
+  function openResetModal() {
+    document.getElementById('reset-confirm-modal').classList.remove('hidden');
+  }
+
+  function closeResetModal() {
+    document.getElementById('reset-confirm-modal').classList.add('hidden');
+  }
+
+  function executeResetProfile() {
+    studentProfile = { ...DEFAULT_STUDENT_PROFILE };
+    stars = 335;
+    localStorage.removeItem('tunisia_student_profile_mira');
+    localStorage.removeItem(STARS_STORAGE_KEY);
+    localStorage.removeItem('mira_tunisian_grades_20');
+    renderProfileUI();
+    if (typeof initGradesSystem === 'function') initGradesSystem();
+    closeResetModal();
+    alert('تَمَّتْ إِعَادَةُ ضَبْطِ المِلَفِّ وَالنُّجُومِ وَالأَعْدَادِ إِلَى البَيَانَاتِ النَّمُوذَجِيَّةِ لِلتِّلْمِيذَةِ مِيرَا الأَمُورِي بِمَدْرَسَةِ مِلْيَار 🌸');
+  }
+
+  // وظائف المسائل والرياضيات
+  function loadProblem(idx) {
+    currentProblemIdx = idx;
+    const prob = tunisianMathProblems[idx];
+    if (!prob) return;
+
+    for (let i = 0; i < 3; i++) {
+      const btn = document.getElementById(`prob-btn-${i}`);
+      if (btn) {
+        btn.className = (i === idx)
+          ? 'prob-nav-btn py-2 px-1 rounded-xl text-center transition cursor-pointer problem-pill-active'
+          : 'prob-nav-btn py-2 px-1 rounded-xl bg-white text-slate-700 border border-orange-200 hover:bg-orange-100 text-center transition cursor-pointer';
+      }
+    }
+
+    document.getElementById('prob-badge-icon').innerText = prob.icon;
+    document.getElementById('prob-title').innerText = prob.title;
+    document.getElementById('prob-context').innerText = prob.context;
+    document.getElementById('prob-full-text').innerText = prob.fullText;
+    document.getElementById('prob-verbal-data').innerText = prob.verbalData;
+    document.getElementById('prob-num-data').innerText = prob.numData;
+    document.getElementById('prob-target-data').innerText = prob.targetData;
+    document.getElementById('prob-visual-container').innerHTML = prob.visualHtml;
+
+    document.getElementById('step1-question-label').innerText = prob.step1.label;
+    document.getElementById('step2-question-label').innerText = prob.step2.label;
+    document.getElementById('step1-calc-prompt').innerText = prob.step1.calcPrompt;
+    document.getElementById('step2-calc-prompt').innerText = prob.step2.calcPrompt;
+
+    ['step1-feedback', 'step1-calc-box', 'step1-calc-feedback', 'step2-feedback', 'step2-calc-box', 'step2-calc-feedback'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.classList.add('hidden');
+    });
+
+    const in1 = document.getElementById('step1-calc-input');
+    const in2 = document.getElementById('step2-calc-input');
+    if (in1) in1.value = '';
+    if (in2) in2.value = '';
+  }
+
+  function speakProblemText() {
+    const prob = tunisianMathProblems[currentProblemIdx];
+    if (prob) speakVoice(prob.fullText);
+  }
+
+  function checkProblemOp(step, selectedOp) {
+    const prob = tunisianMathProblems[currentProblemIdx];
+    if (!prob) return;
+    const stepData = (step === 1) ? prob.step1 : prob.step2;
+    const fb = document.getElementById(`step${step}-feedback`);
+    const calcBox = document.getElementById(`step${step}-calc-box`);
+
+    fb.classList.remove('hidden');
+    if (selectedOp === stepData.correctOp) {
+      fb.className = 'text-[11px] font-black p-2 rounded-xl text-center bg-emerald-100 text-emerald-900 border border-emerald-300';
+      fb.innerHTML = `🌟 أَحْسَنْتِ يَا مِيرَا صَحِيحٌ! ${stepData.hint}`;
+      if (calcBox) calcBox.classList.remove('hidden');
+      addStars(5);
+      if (typeof confetti === 'function') confetti({ particleCount: 30, spread: 50 });
+      speakVoice('أَحْسَنْتِ يَا بَطَلَة! اخْتِيَارٌ صَحِيحٌ. اِحْسِبِي النَّاتِجَ الآنَ.');
+    } else {
+      fb.className = 'text-[11px] font-black p-2 rounded-xl text-center bg-rose-100 text-rose-900 border border-rose-300';
+      fb.innerHTML = `فَكِّرِي جَيِّدًا يَا مِيرَا! ${stepData.hint}`;
+      speakVoice('فَكِّرِي جَيِّدًا، وَحَاوِلِي مَرَّةً أُخْرَى!');
+    }
+  }
+
+  function checkProblemCalc(step) {
+    const prob = tunisianMathProblems[currentProblemIdx];
+    if (!prob) return;
+    const stepData = (step === 1) ? prob.step1 : prob.step2;
+    const input = document.getElementById(`step${step}-calc-input`);
+    const fb = document.getElementById(`step${step}-calc-feedback`);
+
+    const val = parseInt(input.value.trim(), 10);
+    fb.classList.remove('hidden');
+
+    if (val === stepData.correctResult) {
+      fb.className = 'text-[11px] font-black p-2 rounded-xl text-center bg-emerald-100 text-emerald-900 border border-emerald-300';
+      fb.innerHTML = `🎉 مُمْتَازٌ جِدًّا يَا مِيرَا! النَّاتِجُ صَحِيحٌ = ${stepData.correctResult}`;
+      addStars(10);
+      if (typeof confetti === 'function') confetti({ particleCount: 60, spread: 60 });
+      speakVoice(`رَائِعٌ جِدًّا يَا عَبْقَرِيَّة! الإِجَابَةُ هِيَ ${stepData.correctResult}.`);
+    } else {
+      fb.className = 'text-[11px] font-black p-2 rounded-xl text-center bg-amber-100 text-amber-900 border border-amber-300';
+      fb.innerHTML = `أَعِيدِي الحِسَابَ بِتَأَنٍّ يَا مِيرَا!`;
+      speakVoice('حَاوِلِي مَرَّةً أُخْرَى وَاحْسِبِي بِتَأَنٍّ.');
+    }
+  }
+
+  function addStars(num) {
+    stars += num;
+    const el = document.getElementById('star-count');
+    const pEl = document.getElementById('profile-stars-display');
+    if (el) el.innerText = stars;
+    if (pEl) pEl.innerText = `⭐ ${stars}`;
+    saveStarsToStorage();
+  }
+
+  function answerQuickMath(ans, isCorrect) {
+    // توافق مع الاستدعاءات القديمة
+    if (isCorrect) {
+      addStars(10);
+      speakVoice('إِجَابَةٌ صَحِيحَةٌ!');
+    } else {
+      speakVoice('حَاوِلِي مَرَّةً أُخْرَى!');
+    }
+  }
+
+  /* ========== تمارين الرياضيات — البرنامج التونسي س3 ========== */
+  let mathMode = 'mult';
+  let mathCurrent = { q: '', answer: 0, hint: '' };
+  let mathCorrect = 0, mathWrong = 0;
+
+  function randInt(a, b) { return Math.floor(Math.random() * (b - a + 1)) + a; }
+
+  function setMathMode(mode) {
+    mathMode = mode;
+    const labels = {
+      numbers: '🔢 الأَعْدَادُ (0 إِلَى 9999) — مُقَارَنَةٌ وَتَفْكِيكٌ',
+      ops: '➕ جَمْعٌ وَطَرْحٌ بِالاِحْتِفَاظِ',
+      mult: '✖️ جَدَاوِلُ الضَّرْبِ (2 إِلَى 9)',
+      money: '💰 النُّقُودُ التُّونِسِيَّةُ (مِلِيم)',
+      geo: '📏 الهَنْدَسَةُ — مُحِيطُ المُرَبَّعِ وَالمُسْتَطِيلِ',
+      mental: '🧠 الحِسَابُ الذِّهْنِيُّ السَّرِيعُ'
+    };
+    const el = document.getElementById('math-mode-label');
+    if (el) el.innerText = labels[mode] || mode;
+    nextMathExercise();
+  }
+
+  function nextMathExercise() {
+    const fb = document.getElementById('math-feedback');
+    if (fb) fb.classList.add('hidden');
+    const input = document.getElementById('math-answer-input');
+    if (input) input.value = '';
+    let q = '', answer = 0, hint = '', choices = [];
+
+    if (mathMode === 'mult') {
+      const a = randInt(2, 9), b = randInt(2, 9);
+      answer = a * b;
+      q = `${a} × ${b} = ؟`;
+      hint = `${a} × ${b} = ${a} مَرَّات ${b}`;
+      choices = shuffleUnique([answer, answer + randInt(1, 5), Math.max(0, answer - randInt(1, 5)), a + b]);
+    } else if (mathMode === 'ops') {
+      if (Math.random() < 0.5) {
+        const a = randInt(100, 999), b = randInt(10, 200);
+        answer = a + b;
+        q = `${a} + ${b} = ؟`;
+        hint = 'جَمْعٌ بِالاِحْتِفَاظِ';
+      } else {
+        const a = randInt(200, 999), b = randInt(10, Math.min(199, a - 1));
+        answer = a - b;
+        q = `${a} − ${b} = ؟`;
+        hint = 'طَرْحٌ بِالاِسْتِعَارَةِ';
+      }
+      choices = shuffleUnique([answer, answer + randInt(1, 20), Math.max(0, answer - randInt(1, 20)), answer + 10]);
+    } else if (mathMode === 'numbers') {
+      const n = randInt(1000, 9999);
+      const type = randInt(0, 2);
+      if (type === 0) {
+        // تفكيك الآلاف
+        const thousands = Math.floor(n / 1000);
+        answer = thousands;
+        q = `كَمْ أَلْفًا فِي العَدَدِ ${n}؟`;
+        hint = `${n} = ${thousands}000 + ...`;
+      } else if (type === 1) {
+        const a = randInt(100, 999), b = randInt(100, 999);
+        answer = a > b ? 1 : (a < b ? 2 : 0);
+        q = `أَيُّهُمَا أَكْبَرُ؟ ① ${a}   ② ${b}  (أَدْخِلْ 1 أَوْ 2)`;
+        hint = 'قَارِنِي الرَّقْمَ بِالرَّقْمِ مِنَ اليَسَارِ';
+        choices = [1, 2];
+      } else {
+        answer = n % 10;
+        q = `مَا هُوَ رَقْمُ الآحَادِ فِي ${n}؟`;
+        hint = 'الآحَادُ هِيَ آخِرُ رَقْمٍ مِنَ اليَمِينِ';
+      }
+      if (!choices.length) choices = shuffleUnique([answer, (answer + 1) % 10, (answer + 2) % 10, (answer + 3) % 10]);
+    } else if (mathMode === 'money') {
+      // تونسي: 1000 مليم = 1 دينار
+      const items = [
+        { name: 'قَلَم', price: 450 },
+        { name: 'كُرَّاس', price: 1200 },
+        { name: 'مِمْحَاة', price: 300 },
+        { name: 'مِسْطَرَة', price: 800 },
+        { name: 'حَقِيبَة', price: 25000 }
+      ];
+      const item = items[randInt(0, items.length - 1)];
+      const type = randInt(0, 1);
+      if (type === 0) {
+        answer = item.price;
+        q = `ثَمَنُ ${item.name} = ${item.price} مِلِيم. كَمْ مِلِيمًا؟`;
+        hint = '1 دِينَار = 1000 مِلِيم';
+      } else {
+        const pay = item.price + randInt(1, 5) * 500;
+        answer = pay - item.price;
+        q = `اِشْتَرَيْتِ ${item.name} بِـ ${item.price} مِلِيم وَدَفَعْتِ ${pay} مِلِيم. كَمْ يُرْجَعُ؟`;
+        hint = 'المَبْلَغُ المُرْجَعُ = المَدْفُوعُ − الثَّمَنُ';
+      }
+      choices = shuffleUnique([answer, answer + 100, Math.max(0, answer - 100), answer + 50]);
+    } else if (mathMode === 'geo') {
+      if (Math.random() < 0.5) {
+        const side = randInt(3, 15);
+        answer = 4 * side;
+        q = `مُرَبَّعٌ ضِلْعُهُ ${side} سْم. مَا مُحِيطُهُ؟`;
+        hint = 'مُحِيطُ المُرَبَّعِ = 4 × الضِّلْعُ';
+      } else {
+        const L = randInt(5, 20), W = randInt(2, L - 1);
+        answer = 2 * (L + W);
+        q = `مُسْتَطِيلٌ طُولُهُ ${L} سْم وَعَرْضُهُ ${W} سْم. مَا مُحِيطُهُ؟`;
+        hint = 'مُحِيطُ المُسْتَطِيلِ = 2 × (الطُّولُ + العَرْضُ)';
+      }
+      choices = shuffleUnique([answer, answer + randInt(2, 8), Math.max(0, answer - randInt(2, 6)), answer + 4]);
+    } else { // mental
+      const a = randInt(5, 20), b = randInt(2, 9);
+      const ops = ['+', '−', '×'];
+      const op = ops[randInt(0, 2)];
+      if (op === '+') { answer = a + b; q = `${a} + ${b} = ؟`; }
+      else if (op === '−') { answer = a - b; q = `${a} − ${b} = ؟`; }
+      else { answer = a * b; q = `${a} × ${b} = ؟`; }
+      hint = 'اِحْسِبِي ذِهْنِيًّا بِسُرْعَةٍ';
+      choices = shuffleUnique([answer, answer + randInt(1, 5), Math.max(0, answer - randInt(1, 5)), answer + 2]);
+    }
+
+    mathCurrent = { q, answer, hint };
+    const qEl = document.getElementById('math-question');
+    if (qEl) qEl.innerText = q;
+    const hintEl = document.getElementById('math-hint-text');
+    if (hintEl) hintEl.innerText = '';
+    const chBox = document.getElementById('math-choices');
+    if (chBox) {
+      chBox.innerHTML = choices.map(c =>
+        `<button class="py-2 bg-slate-100 hover:bg-blue-100 font-black rounded-xl text-xs cursor-pointer border border-slate-200" onclick="document.getElementById('math-answer-input').value=${c};checkMathAnswer()">${c}</button>`
+      ).join('');
+    }
+  }
+
+  function shuffleUnique(arr) {
+    const u = [...new Set(arr.map(Number))];
+    for (let i = u.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [u[i], u[j]] = [u[j], u[i]];
+    }
+    return u.slice(0, 4);
+  }
+
+  function checkMathAnswer() {
+    const input = document.getElementById('math-answer-input');
+    const fb = document.getElementById('math-feedback');
+    if (!input || !fb) return;
+    const val = parseInt(input.value, 10);
+    fb.classList.remove('hidden');
+    if (val === mathCurrent.answer) {
+      mathCorrect++;
+      fb.className = 'text-xs font-black p-2 rounded-xl bg-emerald-100 text-emerald-900 border border-emerald-300';
+      fb.innerText = `🎉 صَحِيحٌ! الإِجَابَةُ = ${mathCurrent.answer}`;
+      addStars(5);
+      speakVoice('أَحْسَنْتِ! إِجَابَةٌ صَحِيحَةٌ');
+      if (typeof confetti === 'function') confetti({ particleCount: 40, spread: 50 });
+      setTimeout(() => nextMathExercise(), 1200);
+    } else {
+      mathWrong++;
+      fb.className = 'text-xs font-black p-2 rounded-xl bg-amber-100 text-amber-900 border border-amber-300';
+      fb.innerText = `لَيْسَتْ صَحِيحَةً. تَلْمِيحٌ: ${mathCurrent.hint}`;
+      const hintEl = document.getElementById('math-hint-text');
+      if (hintEl) hintEl.innerText = mathCurrent.hint;
+      speakVoice('حَاوِلِي مَرَّةً أُخْرَى');
+    }
+    const cc = document.getElementById('math-correct-count');
+    const wc = document.getElementById('math-wrong-count');
+    if (cc) cc.innerText = mathCorrect;
+    if (wc) wc.innerText = mathWrong;
+  }
+
+  // تهيئة تمرين أولي عند فتح التبويب
+  window._initMathOnTab = function() {
+    if (document.getElementById('math-question') && !mathCurrent.q) nextMathExercise();
+  };
+
+  function checkGrammarAns(type) {
+    const fb = document.getElementById('grammar-fb');
+    fb.classList.remove('hidden');
+    if (type === 'فعل') {
+      fb.className = 'text-xs font-black p-2 rounded-xl bg-emerald-100 text-emerald-900';
+      fb.innerText = '🎉 صَحِيحٌ! «تَرْكُضُ» فِعْلٌ مُضَارِعٌ يَدُلُّ عَلَى حَرَكَةٍ.';
+      addStars(5);
+      speakVoice('صَحِيحٌ! تَرْكُضُ فِعْلٌ.');
+    } else {
+      fb.className = 'text-xs font-black p-2 rounded-xl bg-rose-100 text-rose-900';
+      fb.innerText = 'فَكِّرِي، «تَرْكُضُ» تَدُلُّ عَلَى حَرَكَةٍ وَعَمَلٍ!';
+    }
+  }
+
+  function showSyncToast(msg, ok) {
+    let t = document.getElementById('sync-toast');
+    if (!t) {
+      t = document.createElement('div');
+      t.id = 'sync-toast';
+      t.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);z-index:9999;padding:12px 20px;border-radius:16px;font-family:Cairo,sans-serif;font-weight:900;font-size:13px;box-shadow:0 8px 24px rgba(0,0,0,.25);max-width:90%;text-align:center;transition:opacity .3s';
+      document.body.appendChild(t);
+    }
+    t.style.background = ok ? 'linear-gradient(135deg,#059669,#0d9488)' : 'linear-gradient(135deg,#dc2626,#e11d48)';
+    t.style.color = '#fff';
+    t.innerHTML = msg;
+    t.style.opacity = '1';
+    clearTimeout(t._hide);
+    t._hide = setTimeout(() => { t.style.opacity = '0'; }, 3500);
+  }
+
+  function safeLocalSet(key, value) {
+    try {
+      localStorage.setItem(key, value);
+      return true;
+    } catch (e) {
+      // محاولة تخفيف الحجم: إزالة الصور الكبيرة
+      try {
+        if (typeof studentsList !== 'undefined' && Array.isArray(studentsList)) {
+          studentsList.forEach(s => {
+            if (s.avatar && String(s.avatar).length > 5000) {
+              s.avatar = '🌸';
+              s.isEmoji = true;
+            }
+          });
+        }
+        if (typeof studentProfile !== 'undefined' && studentProfile.avatar && String(studentProfile.avatar).length > 5000) {
+          studentProfile.avatar = '🌸';
+          studentProfile.isEmoji = true;
+        }
+        if (typeof studentLessons !== 'undefined' && Array.isArray(studentLessons)) {
+          studentLessons.forEach(l => {
+            if (l.photo && String(l.photo).length > 8000) l.photo = '';
+          });
+        }
+        localStorage.setItem(key, value);
+        return true;
+      } catch (e2) {
+        console.warn('storage fail', key, e2);
+        return false;
+      }
+    }
+  }
+
+  function syncData() {
+    const btn = document.getElementById('btn-sync-cloud') || document.querySelector('[id="btn-sync-cloud"]');
+    if (btn) {
+      btn.disabled = true;
+      btn.innerHTML = '<span>⏳</span><span>جَارٍ...</span>';
+    }
+    let ok = true;
+    const results = [];
+    try {
+      // مزامنة الملف
+      if (typeof syncActiveStudentFromProfile === 'function') {
+        try { syncActiveStudentFromProfile(); } catch (e) {}
+      }
+      try {
+        if (typeof studentProfile !== 'undefined') {
+          const okP = safeLocalSet('tunisia_student_profile_mira', JSON.stringify(studentProfile));
+          results.push(okP ? 'الملف ✓' : 'الملف ✗');
+          if (!okP) ok = false;
+        }
+      } catch (e) { ok = false; results.push('الملف ✗'); }
+
+      try {
+        const okS = safeLocalSet((typeof STARS_STORAGE_KEY !== 'undefined' ? STARS_STORAGE_KEY : 'mira_tunisia_stars'), String(typeof stars !== 'undefined' ? stars : 0));
+        results.push(okS ? 'النجوم ✓' : 'النجوم ✗');
+      } catch (e) { results.push('النجوم ✗'); }
+
+      try {
+        if (typeof studentsList !== 'undefined') {
+          const okL = safeLocalSet('mira_tunisia_students_list', JSON.stringify(studentsList));
+          if (typeof activeStudentId !== 'undefined' && activeStudentId) {
+            safeLocalSet('mira_tunisia_active_student_id', activeStudentId);
+          }
+          results.push(okL ? 'التلاميذ ✓' : 'التلاميذ ✗');
+          if (!okL) ok = false;
+        }
+      } catch (e) { ok = false; results.push('التلاميذ ✗'); }
+
+      try {
+        if (typeof studentLessons !== 'undefined' && typeof activeStudentId !== 'undefined') {
+          let all = {};
+          try { all = JSON.parse(localStorage.getItem('mira_tunisia_lessons') || '{}'); } catch (e) {}
+          all[activeStudentId || 'default'] = studentLessons;
+          const okLess = safeLocalSet('mira_tunisia_lessons', JSON.stringify(all));
+          results.push(okLess ? 'الدروس ✓' : 'الدروس ✗');
+          if (!okLess) ok = false;
+        }
+      } catch (e) { results.push('الدروس ✗'); }
+
+      try {
+        if (typeof studentGrades !== 'undefined' && typeof getGradesKey === 'function') {
+          const okG = safeLocalSet(getGradesKey(), JSON.stringify(studentGrades));
+          results.push(okG ? 'الأعداد ✓' : 'الأعداد ✗');
+        } else if (typeof studentGrades !== 'undefined') {
+          safeLocalSet('mira_tunisian_grades_20_default', JSON.stringify(studentGrades));
+          results.push('الأعداد ✓');
+        }
+      } catch (e) { results.push('الأعداد ✗'); }
+
+      // تحديث وقت آخر مزامنة
+      try { localStorage.setItem('mira_last_sync', new Date().toISOString()); } catch (e) {}
+
+      const name = (typeof studentProfile !== 'undefined' && studentProfile.name) ? studentProfile.name : 'البَطَلَة';
+      const msg = ok
+        ? '✅ تَمَّتِ المُزَامَنَةُ!<br>' + name + '<br><span style="font-size:11px;opacity:.9">' + results.join(' · ') + '</span>'
+        : '⚠️ مُزَامَنَةٌ جُزْئِيَّةٌ<br><span style="font-size:11px">' + results.join(' · ') + '</span><br>حَاوِلِي تَصْغِيرَ الصُّوَرِ';
+      showSyncToast(msg, ok);
+      try { speakVoice(ok ? 'تَمَّتِ المُزَامَنَةُ بِنَجَاحٍ' : 'مُزَامَنَةٌ جُزْئِيَّةٌ'); } catch (e) {}
+    } catch (err) {
+      console.error(err);
+      showSyncToast('❌ فَشِلَتِ المُزَامَنَةُ — حَاوِلِي مَرَّةً أُخْرَى', false);
+    }
+    if (btn) {
+      setTimeout(() => {
+        btn.disabled = false;
+        btn.innerHTML = '<span>🔄</span><span>مُزَامَنَةٌ</span>';
+      }, 800);
+    }
+  }
+  // ضمان الوصول العام
+  window.syncData = syncData;
+
+  function getAppShareBase() {
+    try {
+      return window.location.href.split('#')[0].split('?')[0];
+    } catch (e) {
+      return 'https://kassas2369-arch.github.io/-/';
+    }
+  }
+
+  function shareAppWhatsApp() {
+    const name = (typeof studentProfile !== 'undefined' && studentProfile.name) ? studentProfile.name : 'بَطَلُ الثَّالِثَةِ';
+    const starsN = (typeof stars !== 'undefined') ? stars : 0;
+    const link = getAppShareBase();
+    const msg = `🌟 أَبْطَالُ الثَّالِثَةِ أَسَاسِي 🇹🇳\n\nأَنَا ${name} — رَصِيدِي ${starsN} نَجْمَة ⭐\n\n📡 Live Cloud Hub + Instant Lesson Link\n\n🔗 افْتَحِ التَّطْبِيقَ:\n${link}`;
+    window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank');
+  }
+
+  function buildLessonShareLink(lesson) {
+    // Instant Lesson Link: بيانات الدرس في الهاش (بدون صورة كبيرة لتفادي طول الرابط)
+    const payload = {
+      v: 1,
+      t: lesson.title || '',
+      s: lesson.subject || '',
+      n: lesson.note || '',
+      d: lesson.date || '',
+      from: (typeof studentProfile !== 'undefined' && studentProfile.name) ? studentProfile.name : ''
+    };
+    const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
+    return getAppShareBase() + '#lesson=' + encoded;
+  }
+
+  function shareLessonWhatsApp(lessonId) {
+    const list = (typeof studentLessons !== 'undefined') ? studentLessons : [];
+    const lesson = list.find(l => l.id === lessonId || String(l.id) === String(lessonId));
+    if (!lesson) {
+      alert('لَمْ يُوجَدِ الدَّرْسُ');
+      return;
+    }
+    const link = buildLessonShareLink(lesson);
+    const name = (typeof studentProfile !== 'undefined' && studentProfile.name) ? studentProfile.name : 'زَمِيل';
+    const msg = `📚 دَرْسٌ فَوْرِيٌّ — Instant Lesson Link\n\n👤 مِنْ: ${name}\n📌 ${lesson.subject || ''}\n📝 ${lesson.title || ''}\n💬 ${lesson.note || '—'}\n📅 ${lesson.date || ''}\n\n🔗 افْتَحِ الدَّرْسَ مُبَاشَرَةً:\n${link}\n\n🇹🇳 أَبْطَالُ الثَّالِثَةِ أَسَاسِي`;
+    window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank');
+  }
+
+  function shareLessonSMS(lessonId) {
+    const list = (typeof studentLessons !== 'undefined') ? studentLessons : [];
+    const lesson = list.find(l => l.id === lessonId || String(l.id) === String(lessonId));
+    if (!lesson) return;
+    const link = buildLessonShareLink(lesson);
+    const body = `دَرْسٌ: ${lesson.title} — ${link}`;
+    window.location.href = 'sms:?body=' + encodeURIComponent(body);
+  }
+
+  function copyLessonLink(lessonId) {
+    const list = (typeof studentLessons !== 'undefined') ? studentLessons : [];
+    const lesson = list.find(l => l.id === lessonId || String(l.id) === String(lessonId));
+    if (!lesson) return;
+    const link = buildLessonShareLink(lesson);
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(link).then(() => {
+        alert('✅ تَمَّ نَسْخُ Instant Lesson Link!\nأَرْسِلْهُ بِالوَاتْسَابِ أَوِ الرَّسَائِلِ.');
+      }).catch(() => prompt('اِنْسَخِ الرَّابِطَ:', link));
+    } else {
+      prompt('اِنْسَخِ الرَّابِطَ:', link);
+    }
+  }
+
+  function importLessonFromHash() {
+    try {
+      const hash = window.location.hash || '';
+      if (!hash.startsWith('#lesson=')) return;
+      const raw = hash.slice('#lesson='.length);
+      const json = decodeURIComponent(escape(atob(raw)));
+      const data = JSON.parse(json);
+      if (!data || !data.t) return;
+      const title = data.t || 'دَرْسٌ مُشْتَرَكٌ';
+      const subject = data.s || '📝 أخرى';
+      const note = data.n || '';
+      const from = data.from || 'زَمِيل';
+      const box = document.getElementById('shared-lesson-modal');
+      if (box) {
+        document.getElementById('shared-lesson-from').innerText = from;
+        document.getElementById('shared-lesson-subject').innerText = subject;
+        document.getElementById('shared-lesson-title').innerText = title;
+        document.getElementById('shared-lesson-note').innerText = note || '—';
+        box.dataset.payload = JSON.stringify(data);
+        box.classList.remove('hidden');
+      } else {
+        if (confirm(`وَصَلَ دَرْسٌ مِنْ ${from}:\n${subject}\n${title}\n\nهَلْ تُرِيدُ حِفْظَهُ فِي دَفْتَرِكَ؟`)) {
+          acceptSharedLesson(data);
+        }
+      }
+    } catch (e) {
+      console.warn('import lesson', e);
+    }
+  }
+
+  function acceptSharedLesson(data) {
+    if (!data) {
+      try {
+        const box = document.getElementById('shared-lesson-modal');
+        data = JSON.parse(box.dataset.payload || '{}');
+      } catch (e) { return; }
+    }
+    if (typeof studentLessons === 'undefined') return;
+    const today = new Date();
+    const dateStr = data.d || `${today.getFullYear()}/${String(today.getMonth()+1).padStart(2,'0')}/${String(today.getDate()).padStart(2,'0')}`;
+    studentLessons.unshift({
+      id: Date.now(),
+      subject: data.s || '📝 أخرى',
+      title: data.t || 'دَرْسٌ مُشْتَرَكٌ',
+      note: (data.n || '') + (data.from ? ` (مِنْ: ${data.from})` : ''),
+      photo: '',
+      date: dateStr
+    });
+    if (typeof saveLessonsForActive === 'function') saveLessonsForActive();
+    if (typeof renderLessonsUI === 'function') renderLessonsUI();
+    if (typeof addStars === 'function') addStars(20);
+    const box = document.getElementById('shared-lesson-modal');
+    if (box) box.classList.add('hidden');
+    // مسح الهاش حتى لا يُعاد الاستيراد
+    try { history.replaceState(null, '', window.location.pathname + window.location.search); } catch (e) {}
+    if (typeof confetti === 'function') confetti({ particleCount: 50, spread: 60 });
+    speakVoice('تَمَّ حِفْظُ الدَّرْسِ المُشْتَرَكِ فِي دَفْتَرِكَ');
+    if (typeof switchTab === 'function') switchTab('notebook');
+  }
+
+  function closeSharedLessonModal() {
+    const box = document.getElementById('shared-lesson-modal');
+    if (box) box.classList.add('hidden');
+    try { history.replaceState(null, '', window.location.pathname + window.location.search); } catch (e) {}
+  }
+
+  let _speechReady = false;
+  function ensureSpeechVoices(cb) {
+    if (!('speechSynthesis' in window)) { if (cb) cb([]); return; }
+    let voices = window.speechSynthesis.getVoices() || [];
+    if (voices.length) { _speechReady = true; if (cb) cb(voices); return; }
+    window.speechSynthesis.onvoiceschanged = function() {
+      voices = window.speechSynthesis.getVoices() || [];
+      _speechReady = true;
+      if (cb) cb(voices);
+    };
+    // محاولة إضافية
+    setTimeout(() => {
+      voices = window.speechSynthesis.getVoices() || [];
+      if (cb) cb(voices);
+    }, 300);
+  }
+
+  function speakVoice(text, onEnd) {
+    if (!text) { if (typeof onEnd === 'function') onEnd(); return; }
+    if (!('speechSynthesis' in window)) {
+      alert('مُتَصَفِّحُكِ لَا يَدْعَمُ القِرَاءَةَ الصَّوْتِيَّةَ. جَرِّبِي كُروم أَوْ سَافَارِي عَلَى الهَاتِفِ.');
+      if (typeof onEnd === 'function') onEnd();
+      return;
+    }
+    ensureSpeechVoices(function(voices) {
+      try { window.speechSynthesis.cancel(); } catch (e) {}
+      // Chrome يحتاج resume أحياناً
+      try { window.speechSynthesis.resume(); } catch (e) {}
+      const u = new SpeechSynthesisUtterance(String(text));
+      u.rate = 0.88;
+      u.pitch = 1.05;
+      u.volume = 1;
+      const arVoice = (voices || []).find(v => /ar[-_]SA/i.test(v.lang))
+        || (voices || []).find(v => /ar[-_]TN|ar[-_]EG|ar[-_]AE|ar[-_]MA|ar[-_]DZ/i.test(v.lang))
+        || (voices || []).find(v => /^ar/i.test(v.lang) || /arabic|arab/i.test(v.name));
+      if (arVoice) {
+        u.voice = arVoice;
+        u.lang = arVoice.lang;
+      } else {
+        u.lang = 'ar-SA';
+      }
+      let finished = false;
+      const done = () => {
+        if (finished) return;
+        finished = true;
+        if (typeof onEnd === 'function') onEnd();
+      };
+      u.onend = done;
+      u.onerror = done;
+      setTimeout(() => {
+        try {
+          window.speechSynthesis.speak(u);
+          // بعض المتصفحات توقف الكلام إذا لم يكن هناك تفاعل — نحاول resume
+          setTimeout(() => { try { window.speechSynthesis.resume(); } catch (e) {} }, 200);
+        } catch (e) {
+          console.warn('speech error', e);
+          done();
+        }
+      }, 100);
+    });
+  }
+
+  // قراءة سلسلة نصوص متتالية تلقائياً
+  function speakSequence(texts, idx) {
+    idx = idx || 0;
+    if (!texts || idx >= texts.length) return;
+    // تمييز الفقرة الحالية
+    document.querySelectorAll('.reading-para').forEach((el, i) => {
+      if (i === idx) {
+        el.classList.add('ring-2', 'ring-sky-500', 'bg-sky-50');
+      } else {
+        el.classList.remove('ring-2', 'ring-sky-500', 'bg-sky-50');
+      }
+    });
+    speakVoice(texts[idx], () => speakSequence(texts, idx + 1));
+  }
+
+  function startAutoReading() {
+    const paras = Array.from(document.querySelectorAll('.reading-para'));
+    const texts = paras.map(p => p.getAttribute('data-text') || p.innerText).filter(Boolean);
+    if (texts.length === 0) {
+      speakVoice('لَا يُوجَدُ نَصٌّ لِلقِرَاءَةِ');
+      return;
+    }
+    speakSequence(texts, 0);
+  }
+
+  function stopSpeaking() {
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+    }
+    document.querySelectorAll('.reading-para').forEach(el => {
+      el.classList.remove('ring-2', 'ring-sky-500', 'bg-sky-50');
+    });
+  }
+
+  function speakLessonNote() {
+    const note = document.getElementById('lesson-input-note')?.value?.trim();
+    const title = document.getElementById('lesson-input-title')?.value?.trim();
+    const text = [title, note].filter(Boolean).join('. ');
+    if (!text) {
+      speakVoice('اِكْتُبِي مُلَاحَظَةً أَوْ عُنْوَانًا أَوَّلًا');
+      return;
+    }
+    speakVoice(text);
+  }
+</script>
+<script>
+  const GRADES_STORAGE_KEY_BASE = 'mira_tunisian_grades_20';
+  function getGradesKey() {
+    const sid = (typeof activeStudentId !== 'undefined' && activeStudentId) ? activeStudentId : 'default';
+    return GRADES_STORAGE_KEY_BASE + '_' + sid;
+  }
+  const DEFAULT_GRADES = [
+    {
+      id: 1,
+      subject: '📐 رياضيات وحساب',
+      title: 'مَسْأَلَةُ الرِّيَاضِيَّاتِ وَالعَمَلِيَّاتُ (مَكْتَبَةُ مِلْيَار)',
+      score: 18.5,
+      note: 'مُمْتَازٌ 🌟 حَلٌّ نَمُوذَجِيٌّ',
+      date: '2026/09/26'
+    },
+    {
+      id: 2,
+      subject: '🔬 إيقاظ علمي',
+      title: 'تَجْرِبَةُ الإِيقَاظِ العِلْمِيِّ وَحَرَكَاتِ التَّنَفُّسِ',
+      score: 20,
+      note: 'كَامِلَةٌ - بَطَلَةُ القِسْمِ 🥇',
+      date: '2026/09/25'
+    },
+    {
+      id: 3,
+      subject: '📖 قراءة ونصوص',
+      title: 'نَصُّ القِرَاءَةِ التُّونِسِيُّ (حَدِيقَةُ البَلْفِيدِير)',
+      score: 19,
+      note: 'مُمْتَازٌ جِدًّا ✨ طَلَاقَةٌ بَاهِرَةٌ',
+      date: '2026/09/24'
+    },
+    {
+      id: 4,
+      subject: '📸 كراس الدرس اليومي',
+      title: 'تَصْوِيرُ وَرَفْعُ كُرَّاسِ الدَّرْسِ اليَوْمِيِّ',
+      score: 19,
+      note: 'عَمَلٌ مُتْقَنٌ وَخَطٌّ وَاضِحٌ 📸',
+      date: '2026/09/23'
+    },
+    {
+      id: 5,
+      subject: '✍️ قواعد ولغة',
+      title: 'أَنْشِطَةُ قَوَاعِدِ اللُّغَةِ وَتَمْيِيزِ أَقْسَامِ الكَلَامِ',
+      score: 18,
+      note: 'أَحْسَنْتِ يَا عَبْقَرِيَّةُ ✍️',
+      date: '2026/09/22'
+    }
+  ];
+
+  let studentGrades = [];
+  let editingGradeId = null;
+
+  function initGradesSystem() {
+    try {
+      const stored = localStorage.getItem(getGradesKey());
+      if (stored) {
+        studentGrades = JSON.parse(stored);
+      } else {
+        // ترحيل من المفتاح القديم إن وُجد
+        const legacy = localStorage.getItem(GRADES_STORAGE_KEY_BASE);
+        if (legacy && (!activeStudentId || activeStudentId === 'mira-default')) {
+          studentGrades = JSON.parse(legacy);
+          saveGradesToStorage();
+        } else {
+          studentGrades = [...DEFAULT_GRADES];
+          saveGradesToStorage();
+        }
+      }
+    } catch (e) {
+      studentGrades = [...DEFAULT_GRADES];
+    }
+    renderGradesUI();
+  }
+
+  function saveGradesToStorage() {
+    try {
+      localStorage.setItem(getGradesKey(), JSON.stringify(studentGrades));
+    } catch (e) {
+      console.warn('LocalStorage error', e);
+    }
+  }
+
+  function renderGradesUI() {
+    const container = document.getElementById('grades-list-container');
+    if (!container) return;
+
+    if (studentGrades.length === 0) {
+      container.innerHTML = `
+        <div class="p-4 text-center text-xs font-bold text-slate-500 bg-slate-50 rounded-xl border border-slate-200">
+          لَا تُوجَدُ أَعْدَادٌ مُسَجَّلَةٌ حَالِيًّا. اِسْتَعْمِلِ الاِسْتِمَارَةَ أَعْلَاهُ لِرَصْدِ عَدَدٍ جَدِيدٍ!
+        </div>
+      `;
+      updateAverageDisplay(0, 0);
+      return;
+    }
+
+    let sum = 0;
+    let html = '';
+
+    studentGrades.forEach(g => {
+      sum += parseFloat(g.score) || 0;
+      const scoreVal = parseFloat(g.score);
+      let scoreColor = 'text-emerald-700 bg-emerald-50 border-emerald-300';
+      if (scoreVal >= 19) scoreColor = 'text-amber-800 bg-amber-100 border-amber-300';
+      else if (scoreVal < 14) scoreColor = 'text-blue-800 bg-blue-50 border-blue-300';
+
+      html += `
+        <div class="bg-white border-2 border-slate-200 hover:border-amber-300 p-2.5 rounded-xl shadow-xs flex items-center justify-between gap-2 flex-wrap sm:flex-nowrap transition">
+          <div class="flex items-center gap-2.5 overflow-hidden flex-1">
+            <div class="px-2 py-1 rounded-xl border text-xs font-black font-mono shrink-0 ${scoreColor}">
+              ${scoreVal} / 20
+            </div>
+            <div class="text-right overflow-hidden">
+              <div class="flex items-center gap-1.5 flex-wrap">
+                <span class="text-[10px] font-bold bg-slate-100 text-slate-700 px-1.5 py-0.5 rounded-md">${g.subject}</span>
+                <span class="text-xs font-black text-slate-900 truncate">${g.title}</span>
+              </div>
+              <div class="text-[10px] text-slate-500 font-bold flex items-center gap-2 mt-0.5">
+                <span class="text-amber-900 font-black">💬 ${g.note || 'عَمَلٌ مُمَيَّزٌ'}</span>
+                <span>📅 ${g.date || 'اليَوْم'}</span>
+              </div>
+            </div>
+          </div>
+          <div class="flex items-center gap-1 shrink-0">
+            <button class="px-2 py-1 bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 rounded-lg text-[11px] font-black cursor-pointer transition" onclick="editGradeItem(${g.id})">
+              ✏️ تَعْدِيلٌ
+            </button>
+            <button class="px-2 py-1 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 rounded-lg text-[11px] font-black cursor-pointer transition" onclick="deleteGradeItem(${g.id})">
+              🗑️ حَذْفٌ
+            </button>
+          </div>
+        </div>
+      `;
+    });
+
+    container.innerHTML = html;
+    const avg = sum / studentGrades.length;
+    updateAverageDisplay(avg, studentGrades.length);
+  }
+
+  function updateAverageDisplay(avg, totalCount) {
+    const formatted = avg.toFixed(2);
+    const shortFormatted = avg.toFixed(1);
+    const pct = ((avg / 20) * 100).toFixed(1);
+
+    const avgBadges = [document.getElementById('avg-grade-display'), document.getElementById('grades-top-avg'), document.getElementById('grade-circle-avg')];
+    if (avgBadges[0]) avgBadges[0].innerText = shortFormatted;
+    if (avgBadges[1]) avgBadges[1].innerText = `${formatted} / 20`;
+    if (avgBadges[2]) avgBadges[2].innerText = shortFormatted;
+
+    const countEl = document.getElementById('grades-total-count');
+    if (countEl) countEl.innerText = `${totalCount} أَعْمَال`;
+
+    const pctEl = document.getElementById('grades-pct-text');
+    const progEl = document.getElementById('grades-progress-bar');
+    if (pctEl) pctEl.innerText = `${pct}%`;
+    if (progEl) progEl.style.width = `${Math.min(100, Math.max(0, pct))}%`;
+
+    const statusEl = document.getElementById('grades-status-text');
+    if (statusEl) {
+      if (avg >= 18) statusEl.innerText = 'مُتَفَوِّقَةٌ جِدًّا (حَسَنٌ جِدًّا 🌟)';
+      else if (avg >= 16) statusEl.innerText = 'نَتَائِجُ مُمْتَازَةٌ (حَسَنٌ 🥇)';
+      else if (avg >= 14) statusEl.innerText = 'جَيِّدٌ جِدًّا (قَرِيبٌ مِنَ الحَسَنِ ✨)';
+      else statusEl.innerText = 'عَمَلٌ مُشَجِّعٌ مَعَ مُوَاصَلَةِ الاِجْتِهَادِ 💪';
+    }
+  }
+
+  function saveGradeItem() {
+    const subEl = document.getElementById('grade-input-subject');
+    const titleEl = document.getElementById('grade-input-title');
+    const scoreEl = document.getElementById('grade-input-score');
+    const noteEl = document.getElementById('grade-input-note');
+
+    const subject = subEl ? subEl.value : '📐 رياضيات وحساب';
+    const title = (titleEl && titleEl.value.trim()) ? titleEl.value.trim() : 'إِنْجَازٌ مَدْرَسِيٌّ جَدِيدٌ';
+    let score = parseFloat(scoreEl ? scoreEl.value : 20);
+    if (isNaN(score)) score = 20;
+    if (score > 20) score = 20;
+    if (score < 1) score = 1;
+    const note = (noteEl && noteEl.value.trim()) ? noteEl.value.trim() : 'أَحْسَنْتِ يَا بَطَلَة 🌟';
+
+    const today = new Date();
+    const dateStr = `${today.getFullYear()}/${String(today.getMonth() + 1).padStart(2, '0')}/${String(today.getDate()).padStart(2, '0')}`;
+
+    if (editingGradeId !== null) {
+      const idx = studentGrades.findIndex(g => g.id === editingGradeId);
+      if (idx !== -1) {
+        studentGrades[idx] = {
+          ...studentGrades[idx],
+          subject,
+          title,
+          score,
+          note
+        };
+      }
+      editingGradeId = null;
+      document.getElementById('grade-cancel-edit-btn')?.classList.add('hidden');
+      document.getElementById('grade-form-mode-title').innerText = 'رَصْدُ وَتَسْجِيلُ عَدَدِ إِنجَازٍ جَدِيدٍ (مِنْ 1 إِلَى 20):';
+      document.getElementById('grade-save-btn-text').innerText = 'تَسْجِيلُ العَدَدِ فِي الذَّاكِرَةِ (+حفظ دائم)';
+    } else {
+      const newGrade = {
+        id: Date.now(),
+        subject,
+        title,
+        score,
+        note,
+        date: dateStr
+      };
+      studentGrades.unshift(newGrade);
+      addStars(5);
+    }
+
+    saveGradesToStorage();
+    renderGradesUI();
+
+    if (titleEl) titleEl.value = '';
+    if (noteEl) noteEl.value = '';
+    if (scoreEl) scoreEl.value = '20';
+
+    if (typeof confetti === 'function') confetti({ particleCount: 40, spread: 60 });
+    speakVoice(`تَمَّ تَسْجِيلُ العَدَدِ ${score} مِنْ 20 لِمِيرَا بِنَجَاحٍ!`);
+  }
+
+  function editGradeItem(id) {
+    const item = studentGrades.find(g => g.id === id);
+    if (!item) return;
+    editingGradeId = id;
+    document.getElementById('grade-input-subject').value = item.subject;
+    document.getElementById('grade-input-title').value = item.title;
+    document.getElementById('grade-input-score').value = item.score;
+    document.getElementById('grade-input-note').value = item.note;
+
+    document.getElementById('grade-cancel-edit-btn')?.classList.remove('hidden');
+    document.getElementById('grade-form-mode-title').innerText = `تَعْدِيلُ عَدَدِ: ${item.title}`;
+    document.getElementById('grade-save-btn-text').innerText = 'حِفْظُ التَّعْدِيلِ فِي الذَّاكِرَةِ 💾';
+
+    document.getElementById('grades-system-container')?.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function cancelEditGrade() {
+    editingGradeId = null;
+    document.getElementById('grade-input-title').value = '';
+    document.getElementById('grade-input-note').value = '';
+    document.getElementById('grade-input-score').value = '20';
+    document.getElementById('grade-cancel-edit-btn')?.classList.add('hidden');
+    document.getElementById('grade-form-mode-title').innerText = 'رَصْدُ وَتَسْجِيلُ عَدَدِ إِنجَازٍ جَدِيدٍ (مِنْ 1 إِلَى 20):';
+    document.getElementById('grade-save-btn-text').innerText = 'تَسْجِيلُ العَدَدِ فِي الذَّاكِرَةِ (+حفظ دائم)';
+  }
+
+  function deleteGradeItem(id) {
+    if (!confirm('هَلْ تَرْغَبُ حَقًّا فِي حَذْفِ هَذَا العَدَدِ مِنَ السِّجِلِّ؟')) return;
+    studentGrades = studentGrades.filter(g => g.id !== id);
+    saveGradesToStorage();
+    renderGradesUI();
+    if (editingGradeId === id) cancelEditGrade();
+  }
+
+  // Initialize grading system on load
+  window.addEventListener('DOMContentLoaded', () => {
+    initGradesSystem();
+  });
+  // Also execute immediately in case DOMContentLoaded already fired
+  initGradesSystem();
+</script>
+<script>
+/* ========== إدارة التلاميذ (إضافة / تعديل / حذف / تبديل) ========== */
+const STUDENTS_KEY = 'mira_tunisia_students_list';
+const ACTIVE_STUDENT_KEY = 'mira_tunisia_active_student_id';
+const LESSONS_KEY = 'mira_tunisia_lessons';
+
+let studentsList = [];
+let activeStudentId = null;
+let isAddingNewStudent = false;
+let studentLessons = [];
+let editingLessonId = null;
+let tempLessonPhoto = '';
+
+function createDefaultStudent() {
+  return {
+    id: 'mira-default',
+    name: "مِيرَا الأَمُورِي",
+    school: "المَدْرَسَةُ الابْتِدَائِيَّةُ مِلْيَار - أَرِيَانَة",
+    grade: "السَّنَةُ الثَّالِثَةُ أَسَاسِي - فَوْج (أ)",
+    idCode: "TN-2026-AR-8012",
+    birthdate: "2017-04-14",
+    blood: "A+",
+    phone: "98 223 344",
+    guardian: "السَّيِّد الأَمُورِي (وَلِيُّ الأَمْرِ)",
+    height: "126 سم",
+    weight: "25 كغ",
+    allergy: "لَا تُوجَدُ حَسَاسِيَّةٌ دَوَائِيَّةٌ مَعْلُومَةٌ. تُفَضَّلُ اللَّمْجَةُ الصِّحِّيَّةُ الطَّازَجَةُ.",
+    avatar: "https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=300&q=80",
+    isEmoji: false
+  };
+}
+
+function loadStudentsList() {
+  try {
+    const raw = localStorage.getItem(STUDENTS_KEY);
+    if (raw) {
+      studentsList = JSON.parse(raw);
+    } else {
+      studentsList = [createDefaultStudent()];
+      saveStudentsList();
+    }
+  } catch (e) {
+    studentsList = [createDefaultStudent()];
+  }
+  try {
+    activeStudentId = localStorage.getItem(ACTIVE_STUDENT_KEY) || studentsList[0]?.id || null;
+  } catch (e) {
+    activeStudentId = studentsList[0]?.id || null;
+  }
+  // مزامنة studentProfile من التلميذ النشط
+  const active = studentsList.find(s => s.id === activeStudentId) || studentsList[0];
+  if (active) {
+    activeStudentId = active.id;
+    applyStudentToProfile(active);
+  }
+}
+
+function saveStudentsList() {
+  try {
+    const payload = JSON.stringify(studentsList);
+    if (typeof safeLocalSet === 'function') {
+      safeLocalSet(STUDENTS_KEY, payload);
+    } else {
+      localStorage.setItem(STUDENTS_KEY, payload);
+    }
+    if (activeStudentId) localStorage.setItem(ACTIVE_STUDENT_KEY, activeStudentId);
+  } catch (e) {
+    console.warn('students storage error', e);
+    // إزالة الصور الكبيرة وإعادة المحاولة
+    try {
+      studentsList.forEach(s => {
+        if (s.avatar && String(s.avatar).startsWith('data:') && s.avatar.length > 4000) {
+          s.avatar = '🌸'; s.isEmoji = true;
+        }
+      });
+      localStorage.setItem(STUDENTS_KEY, JSON.stringify(studentsList));
+    } catch (e2) {
+      alert('تَعَذَّرَ الحِفْظُ: الذَّاكِرَةُ مُمْتَلِئَةٌ. اِحْذِفِي بَعْضَ الصُّوَرِ.');
+    }
+  }
+}
+
+function applyStudentToProfile(s) {
+  studentProfile = {
+    name: s.name,
+    school: s.school,
+    grade: s.grade,
+    id: s.idCode || s.id,
+    birthdate: s.birthdate || "2017-04-14",
+    blood: s.blood || "A+",
+    phone: s.phone || "",
+    guardian: s.guardian || "",
+    height: s.height || "120 سم",
+    weight: s.weight || "25 كغ",
+    allergy: s.allergy || "",
+    avatar: s.avatar || "🌸",
+    isEmoji: !!s.isEmoji
+  };
+}
+
+function syncActiveStudentFromProfile() {
+  const idx = studentsList.findIndex(s => s.id === activeStudentId);
+  if (idx === -1) return;
+  studentsList[idx] = {
+    ...studentsList[idx],
+    name: studentProfile.name,
+    school: studentProfile.school,
+    grade: studentProfile.grade,
+    idCode: studentProfile.id,
+    birthdate: studentProfile.birthdate,
+    blood: studentProfile.blood,
+    phone: studentProfile.phone,
+    guardian: studentProfile.guardian,
+    height: studentProfile.height,
+    weight: studentProfile.weight,
+    allergy: studentProfile.allergy,
+    avatar: studentProfile.avatar,
+    isEmoji: studentProfile.isEmoji
+  };
+  saveStudentsList();
+}
+
+function renderStudentsList() {
+  const box = document.getElementById('students-list-container');
+  const badge = document.getElementById('students-count-badge');
+  if (!box) return;
+  if (badge) badge.innerText = `${studentsList.length} تِلْمِيذ`;
+
+  if (studentsList.length === 0) {
+    box.innerHTML = `<div class="p-3 text-center text-xs font-bold text-slate-500 bg-slate-50 rounded-xl">لَا يُوجَدُ تَلَامِيذٌ. اِضْغَطْ «إِضَافَةُ تِلْمِيذٍ»</div>`;
+    return;
+  }
+
+  box.innerHTML = studentsList.map(s => {
+    const isActive = s.id === activeStudentId;
+    const avatarHtml = s.isEmoji
+      ? `<span class="text-2xl">${s.avatar || '🌸'}</span>`
+      : `<img src="${s.avatar}" class="w-full h-full object-cover rounded-lg" alt=""/>`;
+    return `
+      <div class="flex items-center justify-between gap-2 p-2 rounded-xl border-2 ${isActive ? 'border-pink-400 bg-pink-50' : 'border-slate-200 bg-white'} transition">
+        <button class="flex items-center gap-2 flex-1 text-right cursor-pointer min-w-0" onclick="switchStudent('${s.id}')">
+          <div class="w-10 h-10 rounded-lg bg-white border border-pink-200 overflow-hidden flex items-center justify-center shrink-0">${avatarHtml}</div>
+          <div class="overflow-hidden">
+            <div class="text-xs font-black text-slate-900 truncate">${s.name} ${isActive ? '⭐' : ''}</div>
+            <div class="text-[10px] text-slate-500 font-bold truncate">${s.grade || ''}</div>
+          </div>
+        </button>
+        <div class="flex items-center gap-1 shrink-0">
+          <button class="px-2 py-1 bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 rounded-lg text-[10px] font-black cursor-pointer" onclick="editStudentById('${s.id}')">✏️</button>
+          <button class="px-2 py-1 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 rounded-lg text-[10px] font-black cursor-pointer" onclick="deleteStudentById('${s.id}')">🗑️</button>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function switchStudent(id) {
+  const s = studentsList.find(x => x.id === id);
+  if (!s) return;
+  // حفظ التلميذ الحالي قبل التبديل
+  syncActiveStudentFromProfile();
+  activeStudentId = id;
+  applyStudentToProfile(s);
+  saveProfileToStorage();
+  saveStudentsList();
+  renderProfileUI();
+  renderStudentsList();
+  loadLessonsForActive();
+  if (typeof initGradesSystem === 'function') initGradesSystem();
+  speakVoice(`تَمَّ التَّبْدِيلُ إِلَى ${s.name}`);
+}
+
+function openAddStudentModal() {
+  isAddingNewStudent = true;
+  tempAvatarSrc = "🌸";
+  document.getElementById('modal-input-name').value = '';
+  document.getElementById('modal-input-school').value = 'المَدْرَسَةُ الابْتِدَائِيَّةُ مِلْيَار - أَرِيَانَة';
+  document.getElementById('modal-input-grade').value = 'السَّنَةُ الثَّالِثَةُ أَسَاسِي - فَوْج (أ)';
+  document.getElementById('modal-input-id').value = 'TN-2026-AR-' + Math.floor(1000 + Math.random() * 9000);
+  document.getElementById('modal-input-birthdate').value = '2017-01-01';
+  document.getElementById('modal-input-blood').value = 'A+';
+  document.getElementById('modal-input-phone').value = '';
+  document.getElementById('modal-input-guardian').value = '';
+  document.getElementById('modal-input-allergy').value = 'لَا تُوجَدُ حَسَاسِيَّةٌ مَعْلُومَةٌ.';
+  const hInput = document.getElementById('modal-input-height');
+  const wInput = document.getElementById('modal-input-weight');
+  if (hInput) hInput.value = 120;
+  if (wInput) wInput.value = 25;
+  const preview = document.getElementById('modal-avatar-preview');
+  if (preview) preview.src = "https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=300&q=80";
+  document.getElementById('edit-profile-modal').classList.remove('hidden');
+}
+
+function editStudentById(id) {
+  switchStudent(id);
+  isAddingNewStudent = false;
+  openEditModal();
+}
+
+function deleteStudentById(id) {
+  if (studentsList.length <= 1) {
+    alert('لَا يُمْكِنُ حَذْفُ التِّلْمِيذِ الوَحِيدِ. أَضِفْ تِلْمِيذًا آخَرَ أَوَّلًا.');
+    return;
+  }
+  if (!confirm('هَلْ تَرْغَبُ حَقًّا فِي حَذْفِ هَذَا التِّلْمِيذِ؟')) return;
+  studentsList = studentsList.filter(s => s.id !== id);
+  if (activeStudentId === id) {
+    activeStudentId = studentsList[0].id;
+    applyStudentToProfile(studentsList[0]);
+    renderProfileUI();
+  }
+  saveStudentsList();
+  renderStudentsList();
+  loadLessonsForActive();
+  speakVoice('تَمَّ حَذْفُ التِّلْمِيذِ');
+}
+
+// تجاوز حفظ الملف لدعم الإضافة
+const _origSaveProfileFromModal = typeof saveProfileFromModal === 'function' ? saveProfileFromModal : null;
+
+function saveProfileFromModal() {
+  const name = document.getElementById('modal-input-name').value.trim();
+  const school = document.getElementById('modal-input-school').value.trim();
+  const grade = document.getElementById('modal-input-grade').value.trim();
+  const id = document.getElementById('modal-input-id').value.trim();
+  const birthdate = document.getElementById('modal-input-birthdate').value;
+  const blood = document.getElementById('modal-input-blood').value;
+  const phone = document.getElementById('modal-input-phone').value.trim();
+  const guardian = document.getElementById('modal-input-guardian').value.trim();
+  const allergy = document.getElementById('modal-input-allergy').value.trim();
+  const heightVal = document.getElementById('modal-input-height')?.value;
+  const weightVal = document.getElementById('modal-input-weight')?.value;
+
+  if (!name) {
+    alert('الرَّجَاءُ إِدْخَالُ اسْمِ التِّلْمِيذِ');
+    return;
+  }
+
+  if (isAddingNewStudent) {
+    const newId = 'stu-' + Date.now();
+    const newStu = {
+      id: newId,
+      name,
+      school: school || DEFAULT_STUDENT_PROFILE.school,
+      grade: grade || DEFAULT_STUDENT_PROFILE.grade,
+      idCode: id || ('TN-' + Date.now()),
+      birthdate: birthdate || '2017-01-01',
+      blood: blood || 'A+',
+      phone: phone || '',
+      guardian: guardian || '',
+      height: heightVal ? `${parseFloat(heightVal)} سم` : '120 سم',
+      weight: weightVal ? `${parseFloat(weightVal)} كغ` : '25 كغ',
+      allergy: allergy || '',
+      avatar: (tempAvatarSrc === '🌸' || !tempAvatarSrc) ? '🌸' : tempAvatarSrc,
+      isEmoji: (tempAvatarSrc === '🌸' || !tempAvatarSrc)
+    };
+    studentsList.push(newStu);
+    activeStudentId = newId;
+    applyStudentToProfile(newStu);
+    isAddingNewStudent = false;
+    saveStudentsList();
+    saveProfileToStorage();
+    renderProfileUI();
+    renderStudentsList();
+    loadLessonsForActive();
+    closeEditModal();
+    if (typeof confetti === 'function') confetti({ particleCount: 50, spread: 70 });
+    speakVoice(`تَمَّتْ إِضَافَةُ التِّلْمِيذِ ${name} بِنَجَاحٍ!`);
+    return;
+  }
+
+  // تعديل التلميذ الحالي — حفظ كل الحقول صراحة
+  studentProfile.name = name;
+  studentProfile.school = school || studentProfile.school;
+  studentProfile.grade = grade || studentProfile.grade;
+  studentProfile.id = id || studentProfile.id;
+  if (birthdate) studentProfile.birthdate = birthdate;
+  if (blood) studentProfile.blood = blood;
+  studentProfile.phone = phone;
+  studentProfile.guardian = guardian;
+  studentProfile.allergy = allergy;
+  if (heightVal) studentProfile.height = `${parseFloat(heightVal) || 126} سم`;
+  if (weightVal) studentProfile.weight = `${parseFloat(weightVal) || 25} كغ`;
+  if (tempAvatarSrc) {
+    if (tempAvatarSrc === "🌸") {
+      studentProfile.avatar = "🌸";
+      studentProfile.isEmoji = true;
+    } else {
+      studentProfile.avatar = tempAvatarSrc;
+      studentProfile.isEmoji = false;
+    }
+  }
+  // إن لم تكن قائمة التلاميذ جاهزة
+  if (!studentsList || studentsList.length === 0) {
+    studentsList = [createDefaultStudent()];
+    activeStudentId = studentsList[0].id;
+  }
+  // إن لم يوجد التلميذ النشط في القائمة أضفه
+  if (!studentsList.find(s => s.id === activeStudentId)) {
+    const newId = activeStudentId || ('stu-' + Date.now());
+    activeStudentId = newId;
+    studentsList.push({
+      id: newId,
+      name: studentProfile.name,
+      school: studentProfile.school,
+      grade: studentProfile.grade,
+      idCode: studentProfile.id,
+      birthdate: studentProfile.birthdate,
+      blood: studentProfile.blood,
+      phone: studentProfile.phone,
+      guardian: studentProfile.guardian,
+      height: studentProfile.height,
+      weight: studentProfile.weight,
+      allergy: studentProfile.allergy,
+      avatar: studentProfile.avatar,
+      isEmoji: studentProfile.isEmoji
+    });
+  }
+  syncActiveStudentFromProfile();
+  saveStudentsList();
+  saveProfileToStorage();
+  renderProfileUI();
+  renderStudentsList();
+  closeEditModal();
+  if (typeof confetti === 'function') confetti({ particleCount: 50, spread: 70 });
+  speakVoice('تَمَّ حِفْظُ تَعْدِيلَاتِ المِلَفِّ بِنَجَاحٍ!');
+}
+
+/* ========== دفتر الدروس مع الكاميرا ========== */
+function loadLessonsForActive() {
+  try {
+    const all = JSON.parse(localStorage.getItem(LESSONS_KEY) || '{}');
+    studentLessons = all[activeStudentId] || [];
+  } catch (e) {
+    studentLessons = [];
+  }
+  renderLessonsUI();
+}
+
+function saveLessonsForActive() {
+  try {
+    const all = JSON.parse(localStorage.getItem(LESSONS_KEY) || '{}');
+    all[activeStudentId] = studentLessons;
+    localStorage.setItem(LESSONS_KEY, JSON.stringify(all));
+  } catch (e) {
+    console.warn('lessons storage', e);
+  }
+}
+
+function handleLessonPhoto(event) {
+  const file = event.target.files?.[0];
+  if (!file) return;
+  if (!file.type || !file.type.startsWith('image/')) {
+    alert('الرَّجَاءُ اخْتِيَارُ صُورَةٍ');
+    return;
+  }
+  const applyPhoto = (dataUrl) => {
+    tempLessonPhoto = dataUrl;
+    const box = document.getElementById('lesson-photo-preview-box');
+    const img = document.getElementById('lesson-photo-preview');
+    const st = document.getElementById('lesson-photo-status');
+    if (img) img.src = tempLessonPhoto;
+    if (box) box.classList.remove('hidden');
+    if (st) st.innerText = '✅ تَمَّ اخْتِيَارُ الصُّورَةِ';
+  };
+  if (typeof compressImageToDataUrl === 'function') {
+    compressImageToDataUrl(file, 600, 0.7, applyPhoto);
+  } else {
+    const reader = new FileReader();
+    reader.onload = (e) => applyPhoto(e.target.result);
+    reader.readAsDataURL(file);
+  }
+}
+
+function clearLessonPhoto() {
+  tempLessonPhoto = '';
+  const box = document.getElementById('lesson-photo-preview-box');
+  const st = document.getElementById('lesson-photo-status');
+  if (box) box.classList.add('hidden');
+  if (st) st.innerText = 'لَمْ تُخْتَرْ صُورَةٌ بَعْدُ';
+  const cam = document.getElementById('lesson-camera-input');
+  const gal = document.getElementById('lesson-gallery-input');
+  if (cam) cam.value = '';
+  if (gal) gal.value = '';
+}
+
+function saveLessonItem() {
+  const subject = document.getElementById('lesson-input-subject')?.value || '📝 أخرى';
+  const title = (document.getElementById('lesson-input-title')?.value || '').trim() || 'دَرْسٌ جَدِيدٌ';
+  const note = (document.getElementById('lesson-input-note')?.value || '').trim();
+  const today = new Date();
+  const dateStr = `${today.getFullYear()}/${String(today.getMonth()+1).padStart(2,'0')}/${String(today.getDate()).padStart(2,'0')}`;
+
+  if (editingLessonId !== null) {
+    const idx = studentLessons.findIndex(l => l.id === editingLessonId);
+    if (idx !== -1) {
+      studentLessons[idx] = {
+        ...studentLessons[idx],
+        subject, title, note,
+        photo: tempLessonPhoto || studentLessons[idx].photo || ''
+      };
+    }
+    editingLessonId = null;
+    document.getElementById('lesson-cancel-edit-btn')?.classList.add('hidden');
+    document.getElementById('lesson-form-title').innerText = 'إِضَافَةُ دَرْسٍ جَدِيدٍ بِصُورَةٍ:';
+    document.getElementById('lesson-save-btn-text').innerText = 'حِفْظُ الدَّرْسِ فِي الذَّاكِرَةِ';
+  } else {
+    studentLessons.unshift({
+      id: Date.now(),
+      subject, title, note,
+      photo: tempLessonPhoto || '',
+      date: dateStr
+    });
+    if (typeof addStars === 'function') addStars(5);
+  }
+
+  saveLessonsForActive();
+  renderLessonsUI();
+  document.getElementById('lesson-input-title').value = '';
+  document.getElementById('lesson-input-note').value = '';
+  clearLessonPhoto();
+  if (typeof confetti === 'function') confetti({ particleCount: 35, spread: 55 });
+  speakVoice('تَمَّ حِفْظُ الدَّرْسِ بِنَجَاحٍ!');
+}
+
+function editLessonItem(id) {
+  const item = studentLessons.find(l => l.id === id);
+  if (!item) return;
+  editingLessonId = id;
+  document.getElementById('lesson-input-subject').value = item.subject;
+  document.getElementById('lesson-input-title').value = item.title;
+  document.getElementById('lesson-input-note').value = item.note || '';
+  tempLessonPhoto = item.photo || '';
+  if (item.photo) {
+    const box = document.getElementById('lesson-photo-preview-box');
+    const img = document.getElementById('lesson-photo-preview');
+    const st = document.getElementById('lesson-photo-status');
+    if (img) img.src = item.photo;
+    if (box) box.classList.remove('hidden');
+    if (st) st.innerText = '✅ صُورَةٌ مَوْجُودَةٌ';
+  } else {
+    clearLessonPhoto();
+  }
+  document.getElementById('lesson-cancel-edit-btn')?.classList.remove('hidden');
+  document.getElementById('lesson-form-title').innerText = `تَعْدِيلُ الدَّرْسِ: ${item.title}`;
+  document.getElementById('lesson-save-btn-text').innerText = 'حِفْظُ التَّعْدِيلِ 💾';
+  document.getElementById('lesson-form-box')?.scrollIntoView({ behavior: 'smooth' });
+}
+
+function cancelEditLesson() {
+  editingLessonId = null;
+  document.getElementById('lesson-input-title').value = '';
+  document.getElementById('lesson-input-note').value = '';
+  clearLessonPhoto();
+  document.getElementById('lesson-cancel-edit-btn')?.classList.add('hidden');
+  document.getElementById('lesson-form-title').innerText = 'إِضَافَةُ دَرْسٍ جَدِيدٍ بِصُورَةٍ:';
+  document.getElementById('lesson-save-btn-text').innerText = 'حِفْظُ الدَّرْسِ فِي الذَّاكِرَةِ';
+}
+
+function deleteLessonItem(id) {
+  if (!confirm('هَلْ تَرْغَبُ حَقًّا فِي حَذْفِ هَذَا الدَّرْسِ؟')) return;
+  studentLessons = studentLessons.filter(l => l.id !== id);
+  saveLessonsForActive();
+  renderLessonsUI();
+  if (editingLessonId === id) cancelEditLesson();
+}
+
+function renderLessonsUI() {
+  const container = document.getElementById('notebook-lessons-container');
+  const countEl = document.getElementById('lessons-count-text');
+  if (countEl) countEl.innerText = `${studentLessons.length} دَرْس`;
+  if (!container) return;
+
+  if (studentLessons.length === 0) {
+    container.innerHTML = `
+      <div class="p-4 text-center text-xs font-bold text-slate-500 bg-slate-50 rounded-xl border border-slate-200">
+        لَا تُوجَدُ دُرُوسٌ بَعْدُ. اِسْتَعْمِلِ الاِسْتِمَارَةَ أَعْلَاهُ مَعَ الكَامِيرَا لِإِضَافَةِ دَرْسٍ!
+      </div>`;
+    return;
+  }
+
+  container.innerHTML = studentLessons.map(l => `
+    <div class="bg-white border-2 border-amber-200 rounded-2xl p-3.5 shadow-sm space-y-2">
+      <div class="flex items-center justify-between flex-wrap gap-1">
+        <span class="px-2 py-0.5 rounded-lg border text-xs font-black bg-blue-100 text-blue-800 border-blue-300">${l.subject}</span>
+        <span class="text-[11px] font-bold text-slate-500">📅 ${l.date || ''}</span>
+      </div>
+      <h4 class="text-sm font-black text-slate-900">${l.title}</h4>
+      ${l.note ? `<p class="text-xs text-slate-700 bg-amber-50/60 p-2 rounded-xl border border-amber-100">${l.note}</p>` : ''}
+      ${l.photo ? `<div class="rounded-xl overflow-hidden border-2 border-amber-200 h-40 bg-slate-100"><img alt="صورة الدرس" class="w-full h-full object-cover" src="${l.photo}"/></div>` : ''}
+      <div class="flex items-center gap-1.5 pt-1 flex-wrap">
+        <button class="px-2.5 py-1 bg-green-50 hover:bg-green-100 text-green-800 border border-green-300 rounded-lg text-[11px] font-black cursor-pointer" onclick="shareLessonWhatsApp(${l.id})">💬 وَاتْسَاب</button>
+        <button class="px-2.5 py-1 bg-teal-50 hover:bg-teal-100 text-teal-800 border border-teal-200 rounded-lg text-[11px] font-black cursor-pointer" onclick="copyLessonLink(${l.id})">🔗 نَسْخُ الرَّابِطِ</button>
+        <button class="px-2.5 py-1 bg-sky-50 hover:bg-sky-100 text-sky-800 border border-sky-200 rounded-lg text-[11px] font-black cursor-pointer" onclick="speakVoice('${(l.title || '').replace(/'/g, "\\'").replace(/\n/g, ' ')}. ${(l.note || '').replace(/'/g, "\\'").replace(/\n/g, ' ')}')">🔊 صَوْتٌ</button>
+        <button class="px-2.5 py-1 bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 rounded-lg text-[11px] font-black cursor-pointer" onclick="editLessonItem(${l.id})">✏️ تَعْدِيلٌ</button>
+        <button class="px-2.5 py-1 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 rounded-lg text-[11px] font-black cursor-pointer" onclick="deleteLessonItem(${l.id})">🗑️ حَذْفٌ</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+// تهيئة عند التحميل
+window.addEventListener('DOMContentLoaded', () => {
+  loadStudentsList();
+  renderStudentsList();
+  loadLessonsForActive();
+  if (typeof initGradesSystem === 'function') initGradesSystem();
+  if (typeof renderProfileUI === 'function') renderProfileUI();
+  if (typeof importLessonFromHash === 'function') setTimeout(importLessonFromHash, 400);
+});
+window.addEventListener('hashchange', () => {
+  if (typeof importLessonFromHash === 'function') importLessonFromHash();
+});
+// تنفيذ فوري أيضاً
+loadStudentsList();
+renderStudentsList();
+loadLessonsForActive();
+if (typeof initGradesSystem === 'function') initGradesSystem();
+</script>
+</body></html>
